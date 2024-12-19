@@ -1,0 +1,86 @@
+/* Custom styling for the hero section */
+.hero {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  
+  .nav .nav-link{
+    color: #000; /* Default color */
+    transition: color 0.3s ease; /* Smooth transition */
+  
+  
+  }
+
+  .nav .nav-link:hover {
+    color: #007bff; /* Hover color */
+    text-decoration: underline;
+  }
+  
+  .nav .btn{
+    color: black;
+    background-color: hsla(255, 82%, 84%, 0.4);
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+  
+  }
+
+  .nav .btn:hover {
+    background-color: hsla(255, 82%, 84%, 1);
+  }
+  
+  
+  
+  /* Adjust button styles if needed */
+  
+  .buttons .btn-custom1{
+    background-color: hsla(255, 82%, 84%, 0.4);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+  
+  }
+  
+  .buttons .btn-custom2{
+    padding: 10px 20px;
+    border: 1;
+    border-color: hsla(255, 82%, 84%, 0.4) ;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+  
+  }
+  .buttons button:hover {
+    background-color: hsla(255, 82%, 84%, 1);
+  }
+  
+  
+  
+  
+  .custom-footer {
+   
+    padding: 20px;
+    border-radius: 10px;
+    
+   
+    
+  }
+  
+  
+  
+  .custom-footer .container{
+    background-color: hsla(255, 82%, 84%, 0.4);
+    margin-bottom: 10px;
+    padding: 20px;
+  }
+  
+  
+  
+  
+  
+  
