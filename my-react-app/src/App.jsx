@@ -7,7 +7,8 @@ import LoginParent from './components/LoginParent';
 import Profile from './components/Profile';
 import Register from './components/Register';
 import PreLoginPage from './components/PreLoginPage';
-
+import ProfileParent from './components/ProfileParent';
+import Contact from './components/Contact';
 
 import {
     BrowserRouter as Router,
@@ -23,11 +24,15 @@ function App() {
         {/*Implementing Routes for respective Path */}
         <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="preLoginPage" element={<PreLoginPage/>} />
+            <Route path="/preLoginPage" element={<PreLoginPage/>} />
             <Route path="/loginNanny"element={<LoginNanny />} />
             <Route path="/loginParent"element={<LoginParent />} />
+            <Route path="/profileParent" element={<ProfileParent />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="register" element={<Register/>} />
+            <Route path="/contact" element={<Contact />} />
+
+
+            <Route path="/register" element={<Register/>} />
 
             <Route path="/becomeNanny" element={<BecomeNanny />}/>
             <Route path="/findNanny" element={<FindNanny />} />
