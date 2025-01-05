@@ -1,19 +1,16 @@
 // Home Page Component
-import Header from "../Header";
-import Footer from "../Footer";
+import Header from "./Header";
+import Footer from "./Footer";
 import { useNavigate } from "react-router-dom";
 
-export default function FindNanny  ()  {
+function FindNanny  ()  {
 
     const nav = useNavigate();
-
     const handleContactClick
         = function(){
         nav('/Contact')
         }
 
-
-   
 
   
     return (
@@ -24,5 +21,7 @@ export default function FindNanny  ()  {
             <Footer />     
         </div>
     );
-  };
+  }
   
+
+  export default FindNanny;
