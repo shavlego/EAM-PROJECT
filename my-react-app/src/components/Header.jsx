@@ -1,29 +1,64 @@
-import { useNavigate } from "react-router-dom";
+import './Header.css';
+import { useNavigate, Link } from "react-router-dom";
 
 function Header() {
   const navigate = useNavigate();
-    return (
-      <header className="bg-light py-3">
-        <div className="container d-flex justify-content-between align-items-center">
-          <div className="logo" onClick={() =>
-                 navigate("/")}>
-            <img src="/logo.png" alt="Logo" className="img-fluid" style={{ width: '100px' }} />
-          </div>
-          <nav>
-            <ul className="nav fw-bold">
-              <li className="nav-item"><a href="#" className="nav-link">Νταντάδες</a></li>
-              <li className="nav-item"><a href="#" className="nav-link">Γονείς</a></li>
-              <li className="nav-item"><a href="#" className="nav-link">Πληροφορίες</a></li>
-              <li className="nav-item"><a href="#" className="nav-link">Βοήθεια</a></li>
-              <li className="nav-item"><a href="#" className="nav-link">Επικοινωνία</a></li>
-              <li className="nav-item"><a href="#" className="btn" onClick={() =>
-                 navigate("/PreLoginPage")}>Σύνδεση</a></li>
-            </ul>
-          </nav>
+
+  return (
+    <header className="bg-light py-3 border-bottom">
+      <div className="container d-flex align-items-center">
+        {/* Logo on the Left */}
+        <div className="logo d-flex align-items-center" onClick={() => navigate("/")}>
+          <img
+            src="/Images/logo.png"
+            alt="Logo"
+            className="img-fluid"
+          />
         </div>
-      </header>
-    );
-  }
-  
-  export default Header;
-   
+
+        {/* Menu Next to the Logo */}
+        <nav className="ms-3"> {/* Added margin-start (Bootstrap utility) */}
+          <ul className="nav fw-bold">
+            <li className="nav-item">
+              <Link to="/" className="nav-link">
+                Νταντάδες
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/parents" className="nav-link">
+                Γονείς
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/info" className="nav-link">
+                Πληροφορίες
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/help" className="nav-link">
+                Βοήθεια
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/contact" className="nav-link">
+                Επικοινωνία
+              </Link>
+            </li>
+          </ul>
+        </nav>
+
+        {/* "Σύνδεση" Button on the Right */}
+        <div className="ms-auto"> {/* Push the button to the far right */}
+          <button
+            className="btn btn-primary"
+            onClick={() => navigate("/PreLoginPage")}
+          >
+            Σύνδεση
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+export default Header;

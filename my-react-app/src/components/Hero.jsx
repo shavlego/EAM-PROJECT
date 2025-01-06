@@ -26,7 +26,7 @@ function Hero() {
           <div className="row">
             <div className="col-md-6">
               <img
-                src="nannies.jpg"
+                src=".\public\Images\main_page_main_img.png"
                 alt="Image of Nannies"
                 className="img-fluid rounded"
               />
