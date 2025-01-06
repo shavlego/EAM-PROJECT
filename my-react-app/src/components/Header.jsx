@@ -43,22 +43,84 @@ function Header() {
                     Γίνε Νταντά
                   </a>
                 </li>
-        </ul>
+              </ul>
             </li>
-            <li className="nav-item">
-              <Link to="/parents" className="nav-link">
+            <li className="nav-item dropdown">
+            <a
+              href="#"
+              className="nav-link dropdown-toggle"
+              id="parrentsDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              >
                 Γονείς
-              </Link>
+              </a>
+              <ul className="dropdown-menu" aria-labelledby="parentsDropdown">
+                <li>
+                  <a className="dropdown-item" href="#">
+                    Οδηγίες για Γονείς
+                  </a>
+                </li>
+                <li>
+                  <a className="dropdown-item" href="#">
+                    Βρές Νταντά
+                  </a>
+                </li>
+              </ul>
             </li>
-            <li className="nav-item">
-              <Link to="/info" className="nav-link">
+            <li className="nav-item dropdown">
+            <a
+              href="#"
+              className="nav-link dropdown-toggle"
+              id="infoDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              >
                 Πληροφορίες
-              </Link>
+              </a>
+              <ul className="dropdown-menu" aria-labelledby="infoDropdown">
+                <li>
+                  <a className="dropdown-item" href="#">
+                    Ανακοινώσεις
+                  </a>
+                </li>
+                <li>
+                  <a className="dropdown-item" href="#">
+                    Οδηγίες για Νταντάδες
+                  </a>
+                </li>
+                <li>
+                  <a className="dropdown-item" href="#">
+                    Οδηγίες για Γονείς
+                  </a>
+                </li>
+              </ul>
             </li>
-            <li className="nav-item">
-              <Link to="/help" className="nav-link">
+            <li className="nav-item dropdown">
+            <a
+              href="#"
+              className="nav-link dropdown-toggle"
+              id="helpDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              >
                 Βοήθεια
-              </Link>
+              </a>
+              <ul className="dropdown-menu" aria-labelledby="helpDropdown">
+                <li>
+                  <a className="dropdown-item" href="#">
+                    Συχνές Ερωτήσεις
+                  </a>
+                </li>
+                <li>
+                  <a className="dropdown-item" href="#">
+                    Χάρτης Ιστοχώρου 
+                  </a>
+                </li>
+              </ul>
             </li>
             <li className="nav-item">
               <Link to="/contact" className="nav-link">
