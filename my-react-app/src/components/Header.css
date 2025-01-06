@@ -28,3 +28,10 @@ header {
     font-size: 16px;
     padding: 5px 15px;
   }
+
+  /* Open the dropdown on hover */
+.nav-item.dropdown:hover .dropdown-menu {
+  display: block;
+  background-color: #f8f9fa;        /* Same background as the menu */
+  margin-top: 0;                      /* Optional: Remove any gap between the dropdown toggle and menu */
+}

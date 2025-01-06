@@ -1,4 +1,6 @@
 import './Header.css';
+import 'bootstrap/dist/css/bootstrap.min.css';        /*For dropdown menu*/
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';   /*For dropdown menu*/
 import { useNavigate, Link } from "react-router-dom";
 
 function Header() {
@@ -19,10 +21,29 @@ function Header() {
         {/* Menu Next to the Logo */}
         <nav className="ms-3"> {/* Added margin-start (Bootstrap utility) */}
           <ul className="nav fw-bold">
-            <li className="nav-item">
-              <Link to="/" className="nav-link">
+            <li className="nav-item dropdown">
+              <a
+              href="#"
+              className="nav-link dropdown-toggle"
+              id="nanniesDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              >
                 Νταντάδες
-              </Link>
+              </a>
+              <ul className="dropdown-menu" aria-labelledby="nanniesDropdown">
+                <li>
+                  <a className="dropdown-item" href="#">
+                    Οδηγίες για Νταντάδες
+                  </a>
+                </li>
+                <li>
+                  <a className="dropdown-item" href="#">
+                    Γίνε Νταντά
+                  </a>
+                </li>
+        </ul>
             </li>
             <li className="nav-item">
               <Link to="/parents" className="nav-link">

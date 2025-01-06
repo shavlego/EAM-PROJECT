@@ -38,20 +38,12 @@
   
   .buttons .btn-custom1{
     background-color: hsla(255, 82%, 84%, 0.4);
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
     cursor: pointer;
   
   }
   
   .buttons .btn-custom2{
-    padding: 10px 20px;
-    border: 1;
     border-color: hsla(255, 82%, 84%, 0.4) ;
-    border-radius: 5px;
-    font-size: 1rem;
     cursor: pointer;
   
   }
@@ -59,16 +51,10 @@
     background-color: hsla(255, 82%, 84%, 1);
   }
   
-  
-  
-  
   .custom-footer {
    
     padding: 20px;
     border-radius: 10px;
-    
-   
-    
   }
   
   

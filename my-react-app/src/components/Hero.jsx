@@ -32,14 +32,15 @@ function Hero() {
               />
             </div>
             <div className="col-md-6 ">
-              <p>
+              <p className="fs-5">
                 Πρόσβαση έχουν οι γονείς και τα φυσικά πρόσωπα που έχουν την επιμέλεια
                 βρεφών και νηπίων, καθώς και τα φυσικά πρόσωπα που επιθυμούν να εγγραφούν
                 στο μητρώο σαν επαγγελματίες.
               </p>
-              <div className="buttons d-flex gap-2">
-                <button className="btn-custom1" onClick={handleBecomeNannyClick}>Γίνε νταντά</button>
-                <button className="btn-custom2 " onClick={handleFindNannyClick}>Βρες νταντά</button>
+              <div className="buttons d-flex  justify-content-center gap-2">
+                {/* px-lg for larger screens px-md for medium screens and px-sm for small screens */}
+                <button className="btn-custom1 px-lg-5 px-md-4 px-sm-3 py-3 fs-4 rounded-pill" onClick={handleBecomeNannyClick}>Γίνε νταντά</button>
+                <button className="btn-custom2 px-lg-5 px-md-4 px-sm-3 py-3 fs-4 rounded-pill" onClick={handleFindNannyClick}>Βρες νταντά</button>
               </div>
               <p className="text-muted mt-3">Απαιτείται σύνδεση με κωδικούς taxisnet.</p>
             </div>
