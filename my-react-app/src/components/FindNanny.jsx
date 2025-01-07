@@ -2,6 +2,8 @@
 import Header from "./Header";
 import Footer from "./Footer";
 import { useNavigate } from "react-router-dom";
+import ProgressBar from "./ProgressBar";
+import StepProgressBar from "./ProgressBar";
 
 function FindNanny  ()  {
 
@@ -17,7 +19,7 @@ function FindNanny  ()  {
         <div>
             <Header />
             <h2>Home Page</h2>
-            <button onClick={handleContactClick}>Go to Contact</button>
+            <ProgressBar/>
             <Footer />     
         </div>
     );
