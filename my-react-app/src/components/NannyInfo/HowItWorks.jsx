@@ -3,19 +3,19 @@ import React from "react";
 function HowItWorks() {
   const steps = [
     {
-      icon: "fa-file-alt", // Font Awesome icon class
+      image: "/Images/taxis_login.png", 
       title: "Σύνδεση με TaxisNet και συμπλήρωση Αίτησης",
     },
     {
-      icon: "fa-user-circle",
+      image: "/Images/profile_creation.png", 
       title: "Δημιουργία προφίλ στο Νταντάδες και ανάρτηση του.",
     },
     {
-      icon: "fa-handshake",
+      image: "/Images/deal.png", 
       title: "Συμφωνία με γονείς και έναρξη συνεργασίας",
     },
     {
-      icon: "fa-ticket-alt",
+      image: "/Images/voucher.png", 
       title: "Παραλαβή voucher στο τέλος του μήνα",
     },
   ];
@@ -26,9 +26,15 @@ function HowItWorks() {
       <div className="row text-center">
         {steps.map((step, index) => (
           <div className="col-md-3 my-3" key={index}>
-            <div className="card bg-light border-0">
+            <div className="card border-0"style={{ backgroundColor: "#A5953D" }}>
               <div className="card-body">
-                <i className={`fas ${step.icon} fa-3x mb-3`}></i>
+                {/* Rounded Image */}
+                <img
+                  src={step.image}
+                  alt={step.title}
+                  className="img-fluid rounded-circle mb-3"
+                  style={{ width: "100px", height: "100px", objectFit: "cover" }} // Adjust size as needed
+                />
                 <p>{step.title}</p>
               </div>
             </div>

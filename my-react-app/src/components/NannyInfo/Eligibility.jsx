@@ -51,7 +51,7 @@ function Eligibility() {
         </div>
 
         {/* Buttons */}
-        <div className="d-flex justify-content-center gap-6 mt-4">
+        <div className="d-flex justify-content-center gap-1 mt-4">
           <button className="btn btn-primary rounded-pill">Απαραίτητες Σπουδές</button>
           <button className="btn btn-primary rounded-pill">Πρόγραμμα Επιμόρφωσης</button>
         </div>
