@@ -10,7 +10,7 @@ function Hero() {
   }
 
   const handleBecomeNannyClick = function(){
-    nav('/BecomeNanny')
+    nav('/nannyInfo')
   }
 
 

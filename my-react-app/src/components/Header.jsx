@@ -1,11 +1,16 @@
 import './Header.css';
+import './nanny_info/nanny_info';
 import 'bootstrap/dist/css/bootstrap.min.css';        /*For dropdown menu*/
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';   /*For dropdown menu*/
 import { useNavigate, Link } from "react-router-dom";
 
+
 function Header() {
   const navigate = useNavigate();
 
+  const handleNannyInfoClick = function(){
+    nav('/LoginParent')
+  }
   return (
     <header className="bg-light py-3 border-bottom">
       <div className="container d-flex align-items-center">
@@ -34,7 +39,7 @@ function Header() {
               </a>
               <ul className="dropdown-menu" aria-labelledby="nanniesDropdown">
                 <li>
-                  <a className="dropdown-item" href="#">
+                  <a className="dropdown-item" href="./nanny_info">
                     Οδηγίες για Νταντάδες
                   </a>
                 </li>
