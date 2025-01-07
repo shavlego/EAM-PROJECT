@@ -2,8 +2,9 @@
 import Header from "../Header";
 import Footer from "../Footer";
 import { useNavigate } from "react-router-dom";
+import Breadcrumb from "./Breadcrumb";
 
-function nannyInfo  ()  {
+export default function NannyInfo  ()  {
 
     const navigate = useNavigate();
   
@@ -11,9 +12,9 @@ function nannyInfo  ()  {
         <div>
             <Header />
             <h2>Οδηγίες για Νταντάδες</h2>
+            <Breadcrumb/>
             <Footer />     
         </div>
     );
-  }
-  export default nannyInfo;
+  };
   

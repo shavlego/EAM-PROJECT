@@ -1,5 +1,4 @@
 import './Header.css';
-import './nanny_info/nanny_info';
 import 'bootstrap/dist/css/bootstrap.min.css';        /*For dropdown menu*/
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';   /*For dropdown menu*/
 import { useNavigate, Link } from "react-router-dom";
@@ -39,7 +38,7 @@ function Header() {
               </a>
               <ul className="dropdown-menu" aria-labelledby="nanniesDropdown">
                 <li>
-                  <a className="dropdown-item" href="./nanny_info">
+                  <a className="dropdown-item" href="./nannyInfo">
                     Οδηγίες για Νταντάδες
                   </a>
                 </li>
