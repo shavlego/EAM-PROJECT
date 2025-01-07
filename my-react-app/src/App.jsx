@@ -12,6 +12,7 @@ import Contact from './components/Contact';
 import NannyInfo from './components/nannyInfo';
 import ParentInfo from './components/ParentInfo';
 import Faq from './components/Faq';
+import SiteMap from './components/SiteMap';
 
 
 
@@ -27,7 +28,7 @@ import {
 function App() {
   return (
     <Router>  
-        {/*Implementing Routes for respective Path */}
+        {/*Routes for each page with URL*/}
         <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/preLoginPage" element={<PreLoginPage/>} />
@@ -39,9 +40,8 @@ function App() {
             <Route path="/NannyInfo" element={<NannyInfo />} />
             <Route path = "/ParentInfo" element={<ParentInfo />}/>
             <Route path ="/Faq" element={<Faq />}/>
-
+            <Route path ="/SiteMap" element={<SiteMap />}/>
             <Route path="/register" element={<Register/>} />
-
             <Route path="/becomeNanny" element={<BecomeNanny />}/>
             <Route path="/findNanny" element={<FindNanny />} />
         </Routes>

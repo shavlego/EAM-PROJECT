@@ -2,6 +2,7 @@
 import Header from "../Header";
 import Footer from "../Footer";
 import { useNavigate } from "react-router-dom";
+import Breadcrumb from "./Breadcrumb";
 
 export default function Contact  ()  {
 
@@ -10,7 +11,8 @@ export default function Contact  ()  {
     return (
         <div>
             <Header />
-            <h1>Home Page 2</h1>
+            <h1>Change Title</h1>
+            <Breadcrumb/>
             <Footer />     
         </div>
     );

@@ -41,7 +41,10 @@ function Footer() {
           <div className="col-md-3 text-center">
             <div className="mt-3 fw-bold">Βοήθεια</div>
             <a href = "/Faq" className="mt-3">Συχνές ερωτήσεις</a>
-            <div className="mt-3">Sitemap</div>
+            {/*added div to go bellow*/}
+            <div>
+              <a href = "/SiteMap" className="mt-3">Χάρτης Ιστοχώρου</a>
+            </div>
           </div>
         </div>
       </div>
