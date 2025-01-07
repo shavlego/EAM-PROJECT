@@ -91,12 +91,12 @@ function Header() {
                   </a>
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#">
+                  <a className="dropdown-item" href="./NannyInfo">
                     Οδηγίες για Νταντάδες
                   </a>
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#">
+                  <a className="dropdown-item" href="./ParentInfo">
                     Οδηγίες για Γονείς
                   </a>
                 </li>
@@ -115,7 +115,7 @@ function Header() {
               </a>
               <ul className="dropdown-menu" aria-labelledby="helpDropdown">
                 <li>
-                  <a className="dropdown-item" href="#">
+                  <a className="dropdown-item" href="./Faq">
                     Συχνές Ερωτήσεις
                   </a>
                 </li>
