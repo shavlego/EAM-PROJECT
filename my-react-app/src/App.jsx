@@ -13,6 +13,7 @@ import NannyInfo from './components/nannyInfo';
 import ParentInfo from './components/ParentInfo';
 import Faq from './components/Faq';
 import SiteMap from './components/SiteMap';
+import Anouncements from './components/Anouncements';
 
 
 
@@ -44,6 +45,7 @@ function App() {
             <Route path="/register" element={<Register/>} />
             <Route path="/becomeNanny" element={<BecomeNanny />}/>
             <Route path="/findNanny" element={<FindNanny />} />
+            <Route path="/Anouncements" element={<Anouncements />} />
         </Routes>
     </Router>
   );

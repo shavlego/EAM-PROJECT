@@ -31,8 +31,11 @@ function Footer() {
           </div>
           <div className="col-md-3 text-center">
             <div className="mt-3 fw-bold">Πληροφορίες</div>
-            <div className="mt-3">Ανακοινώσεις</div>
-            <a href = "/NannyInfo" className="mt-3">Οδηγίες για νταντάδες</a>
+            <a href = "/Anouncements" className="mt-3">Ανακοινώσεις</a>
+            {/*added div to go bellow*/}
+            <div>
+              <a href = "/NannyInfo" className="mt-3">Οδηγίες για νταντάδες</a>
+            </div>
             {/*added div to go bellow*/}
             <div>
               <a href = "/ParentInfo" className="mt-3">Οδηγίες για γονείς</a>
