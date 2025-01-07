@@ -9,10 +9,10 @@ function Breadcrumb() {
           <a href="/">Αρχική</a>
         </li>
         <li className="breadcrumb-item">
-          <a href="/nannies">Νταντάδες</a>
+          <a href="/parents">Νταντάδες</a>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Οδηγίες για Νταντάδες
+          Οδηγίες για γονείς
         </li>
       </ol>
     </nav>

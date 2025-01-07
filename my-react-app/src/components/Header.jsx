@@ -38,7 +38,7 @@ function Header() {
               </a>
               <ul className="dropdown-menu" aria-labelledby="nanniesDropdown">
                 <li>
-                  <a className="dropdown-item" href="./nannyInfo">
+                  <a className="dropdown-item" href="./NannyInfo">
                     Οδηγίες για Νταντάδες
                   </a>
                 </li>
@@ -62,7 +62,7 @@ function Header() {
               </a>
               <ul className="dropdown-menu" aria-labelledby="parentsDropdown">
                 <li>
-                  <a className="dropdown-item" href="#">
+                  <a className="dropdown-item" href="./ParentInfo">
                     Οδηγίες για Γονείς
                   </a>
                 </li>

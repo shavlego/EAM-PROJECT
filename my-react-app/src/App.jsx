@@ -10,6 +10,7 @@ import PreLoginPage from './components/PreLoginPage';
 import ProfileParent from './components/ProfileParent';
 import Contact from './components/Contact';
 import NannyInfo from './components/nannyInfo';
+import ParentInfo from './components/ParentInfo';
 
 
 
@@ -35,6 +36,7 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/NannyInfo" element={<NannyInfo />} />
+            <Route path = "/ParentInfo" element={<ParentInfo />}/>
 
             <Route path="/register" element={<Register/>} />
 

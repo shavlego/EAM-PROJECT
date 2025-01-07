@@ -21,9 +21,9 @@ function HowItWorks() {
   ];
 
   return (
-    <section className="my-5">
-      <h2 className="text-center">Πως λειτουργεί το Πρόγραμμα “Νταντάδες της Γειτονιάς”</h2>
-      <div className="row text-center d-flex align-items-stretch">
+    <section className="my-5 container">
+      <h2 className="text-center ">Πως λειτουργεί το Πρόγραμμα “Νταντάδες της Γειτονιάς”</h2>
+      <div className="row  text-center d-flex align-items-stretch">
         {steps.map((step, index) => (
           <div className="col-md-3 my-3 d-flex" key={index}>
             <div className="card border-0 flex-fill"style={{ backgroundColor: "#A5953D" }}>

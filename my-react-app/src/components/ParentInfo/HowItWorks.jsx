@@ -4,24 +4,24 @@ function HowItWorks() {
   const steps = [
     {
       image: "/Images/taxis_login.png", 
-      title: "Σύνδεση με TaxisNet και συμπλήρωση Αίτησης",
+      title: "Σύνδεση με TaxisNet και δημιουργία προφίλ",
     },
     {
       image: "/Images/profile_creation.png", 
-      title: "Δημιουργία προφίλ στο Νταντάδες και ανάρτηση του.",
+      title: "Αναζήτηση Νταντάδων στο βρές Νταντά επικοινωνία και αίτηση συνεργασίας.",
     },
     {
       image: "/Images/deal.png", 
-      title: "Συμφωνία με γονείς και έναρξη συνεργασίας",
+      title: "Αποδοχή αίτησης απο Νταντά και υπογραφή συμφωνητικού συνεργασίας",
     },
     {
       image: "/Images/voucher.png", 
-      title: "Παραλαβή voucher στο τέλος του μήνα",
+      title: "Κατάθεση voucher και πληρωμή επαγγελματία",
     },
   ];
 
   return (
-    <section className="my-5">
+    <section className="my-5 container">
       <h2 className="text-center">Πως λειτουργεί το Πρόγραμμα “Νταντάδες της Γειτονιάς”</h2>
       <div className="row text-center d-flex align-items-stretch">
         {steps.map((step, index) => (
