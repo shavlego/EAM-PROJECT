@@ -52,7 +52,6 @@ export default function ParentProfile() {
 
   // Form submission handler
   const handleFormSubmit = async (e) => {
-    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
     e.preventDefault();
     setLoading(true);
     setError("");
@@ -102,7 +101,17 @@ export default function ParentProfile() {
         ...doc.data(),
       }));
       setUserData(users);
-    } catch (error) {
+      //If user data exists, populate the form fields
+      if (users.length > 0) {
+        const user = users[0]; // Assuming there's only one document per user
+        setFullName(user.fullName || "");
+        setAddress(user.address || "");
+        setAge(user.age || "");
+        setPhone(user.phone || "");
+      
+       }
+    } 
+    catch (error) {
       console.error("Error fetching user data:", error);
     }
   };

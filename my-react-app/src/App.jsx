@@ -9,11 +9,12 @@ import Register from './components/Register';
 import PreLoginPage from './components/PreLoginPage';
 import ProfileParent from './components/ProfileParent';
 import Contact from './components/Contact';
-import NannyInfo from './components/nannyInfo';
+import NannyInfo from './components/NannyInfo';
 import ParentInfo from './components/ParentInfo';
 import Faq from './components/Faq';
 import SiteMap from './components/SiteMap';
 import Anouncements from './components/Anouncements';
+import SandBox from './components/SandBox';
 
 
 
@@ -46,6 +47,7 @@ function App() {
             <Route path="/becomeNanny" element={<BecomeNanny />}/>
             <Route path="/findNanny" element={<FindNanny />} />
             <Route path="/Anouncements" element={<Anouncements />} />
+            <Route path="/SandBox" element={<SandBox />} />
         </Routes>
     </Router>
   );

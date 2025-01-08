@@ -17,7 +17,6 @@ function FindNanny  ()  {
         <div>
             <Header />
             <h2>Home Page</h2>
-            <button onClick={handleContactClick}>Go to Contact</button>
             <Footer />     
         </div>
     );
