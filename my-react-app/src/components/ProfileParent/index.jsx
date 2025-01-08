@@ -4,7 +4,7 @@ import "./index.css";
 import { useEffect, useState } from "react";
 import { FIREBASE_AUTH, FIREBASE_DB } from "../../firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
+import { collection, doc,setDoc , query, where, getDocs } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 
 export default function ParentProfile() {
@@ -71,11 +71,10 @@ export default function ParentProfile() {
         userId,
         createdAt: new Date(),
       };
-
-      await addDoc(collection(FIREBASE_DB, "user"), payload)
-
-      
-
+      if (userData.length > 0) {
+        const existingDocId = userData[0].id; // Assuming only one document per user
+        await setDoc(doc(FIREBASE_DB, "user", existingDocId), payload, { merge: true });
+      }
       // Reset form fields
       setFullName("");
       setAddress("");
