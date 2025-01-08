@@ -81,7 +81,7 @@ export default function SandBox(){
             console.error('Error fetching user data:', error);
         }
     };
-
+        
     return (
         <div className='courses'>
         <h1>Welcome</h1>
