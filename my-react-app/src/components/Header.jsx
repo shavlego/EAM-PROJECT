@@ -14,12 +14,14 @@ function Header() {
   const [userName,setUserName] = useState(null);
   const [userId,setUserId] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login state locally
+  const [userMail,setUserMail] = useState(false);
 
  // Listen to auth state changes
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, async (user) => {
       if (user) {
         setUserId(user.uid); // Store user ID
+        setUserMail(user.email)
         await fetchUsername(user.uid); // Fetch and set the username
         setIsLoggedIn(true); // Mark as logged in
       } else {
@@ -204,7 +206,7 @@ const fetchUsername = async (userId) => {
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                {userName}
+                {userName ||userMail}
               </button>
               <ul className="dropdown-menu" aria-labelledby="userDropdown">
                 <li>

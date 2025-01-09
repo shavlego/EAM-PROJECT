@@ -16,6 +16,7 @@ import SiteMap from './components/SiteMap';
 import Anouncements from './components/Anouncements';
 import SandBox from './components/SandBox';
 import ProfileNanny from './components/ProfileNanny';
+import RegFormNanny from './components/RegFormNanny';
 import "bootstrap/dist/css/bootstrap.min.css";
 
 
@@ -51,6 +52,7 @@ function App() {
             <Route path="/findNanny" element={<FindNanny />} />
             <Route path="/Anouncements" element={<Anouncements />} />
             <Route path="/SandBox" element={<SandBox />} />
+            <Route path="/reg" element={<RegFormNanny />} />
         </Routes>
     </Router>
   );

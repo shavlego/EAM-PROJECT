@@ -7,7 +7,7 @@ import Breadcrumb from "./Breadcrumb";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap styles
 import React, { useState } from "react";
 
-export default function Contact  ()  {
+export default function RegFormNanny  ()  {
 
     const navigate = useNavigate();
   
@@ -35,7 +35,7 @@ export default function Contact  ()  {
         <div>
             <Header />
             <h1>Αίτηση Εγγραφής ως υποψήδια Ννταντά</h1>
-            <h3>Για την ολοκλήρωση της αίτησης σας θα πρέπει να συμπληρώσετε όλα τα πεδία με ένδειξη * και να επισυνάψετε τα κατάλληλα έγγραφα</h3>
+            <h6 className="container" >Για την ολοκλήρωση της αίτησης σας θα πρέπει να συμπληρώσετε όλα τα πεδία με ένδειξη <span style={{ color: "red" }}>* </span>και να επισυνάψετε τα κατάλληλα έγγραφα</h6>
             <Breadcrumb/>
             <div className="container my-5">
         <Box sx={{ width: "100%", textAlign: "center", padding: "5px" }}>
@@ -54,14 +54,20 @@ export default function Contact  ()  {
         <Box sx={{ marginTop: "20px" }}>
             {activeStep === 0 && (
             <div>
-                <Typography variant="h6">Fill out the required data for Stage 1:</Typography>
+                <Typography variant="h6">Προσωπικά στοιχεία</Typography>
+                {/*form controls here*/}
+                <div style={{ display: "flex", flexDirection: "column", marginTop: "20px", width: "300px" }}>
+                <label htmlFor="textBox" style={{ marginBottom: "8px", fontSize: "16px" }}>
+                    Όνομα  <span style={{ color: "red" }}>* </span>
+                </label>
                 <TextField
-                label="Enter some data"
-                variant="outlined"
-                value={formData}
-                onChange={(e) => setFormData(e.target.value)}
-                sx={{ marginTop: "20px", width: "300px" }}
+                    id="textBox"
+                    variant="outlined"
+                    value={formData}
+                    onChange={(e) => setFormData(e.target.value)}
+                    fullWidth
                 />
+                </div>
                 {formData.trim() === "" && (
                 <Typography variant="body2" color="error" sx={{ marginTop: "10px" }}>
                     Please fill out the field to proceed.

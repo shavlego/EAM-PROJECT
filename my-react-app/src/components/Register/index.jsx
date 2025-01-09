@@ -18,6 +18,7 @@ export default function Register(){
     // Check if password and repeat match
     if (password !== repeatPassword) {
       setError('Passwords do not match!');
+      alert('passwords does not match');
       return; //validation fails
     }
 
