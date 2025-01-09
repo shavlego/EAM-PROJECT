@@ -69,7 +69,7 @@ export default function ParentProfile() {
         age,
         phone,
         userId,
-        role: true,
+        role: false,
         createdAt: new Date(),
       };
 
@@ -122,11 +122,11 @@ export default function ParentProfile() {
   return (
     <div className="profile-page">
       <Header />
-      <h1>Δημιουργία Επεξεργασία Προφίλ - Γονέα/Κηδεμόνα</h1>
+      <h1>Δημιουργία Επεξεργασία Προφίλ - Νταντάς</h1>
 
       {/* Breadcrumb */}
       <div className="breadcrumb">
-        <a href="/">Αρχική</a> &gt; <span>Προφίλ - Γονέα/Κηδεμόνα</span>
+        <a href="/">Αρχική</a> &gt; <span>Προφίλ -  Νταντάς</span>
       </div>
 
       {/* Error message */}

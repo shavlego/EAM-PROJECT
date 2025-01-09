@@ -13,6 +13,7 @@ function Header() {
   const navigate = useNavigate();
   const [userName,setUserName] = useState(null);
   const [userId,setUserId] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login state locally
 
  // Listen to auth state changes
   useEffect(() => {
@@ -20,9 +21,11 @@ function Header() {
       if (user) {
         setUserId(user.uid); // Store user ID
         await fetchUsername(user.uid); // Fetch and set the username
+        setIsLoggedIn(true); // Mark as logged in
       } else {
         setUserId(null);
         setUserName(null);
+        setIsLoggedIn(false); 
       }
     });
     return () => unsubscribe();
@@ -192,7 +195,7 @@ const fetchUsername = async (userId) => {
 
         {/* Dynamic Login/Username Section */}
         <div className="ms-auto"> {/* Push the button/username to the far right */}
-          {userName ? (
+          {isLoggedIn ? (
             <div className="dropdown">
               <button
                 className="btn btn-secondary dropdown-toggle"
