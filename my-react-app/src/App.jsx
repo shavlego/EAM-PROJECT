@@ -15,6 +15,8 @@ import Faq from './components/Faq';
 import SiteMap from './components/SiteMap';
 import Anouncements from './components/Anouncements';
 import SandBox from './components/SandBox';
+import ProfileNanny from './components/ProfileNanny';
+import "bootstrap/dist/css/bootstrap.min.css";
 
 
 
@@ -37,6 +39,7 @@ function App() {
             <Route path="/loginNanny"element={<LoginNanny />} />
             <Route path="/loginParent"element={<LoginParent />} />
             <Route path="/profileParent" element={<ProfileParent />} />
+            <Route path="/profileNanny" element={<ProfileNanny />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/NannyInfo" element={<NannyInfo />} />

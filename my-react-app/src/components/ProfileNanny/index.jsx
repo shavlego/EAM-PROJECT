@@ -4,7 +4,7 @@ import "./index.css";
 import { useEffect, useState } from "react";
 import { FIREBASE_AUTH, FIREBASE_DB } from "../../firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { collection, doc,setDoc , query, where, getDocs } from "firebase/firestore";
+import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 
 export default function ParentProfile() {
@@ -69,13 +69,14 @@ export default function ParentProfile() {
         age,
         phone,
         userId,
-        role: true,
+        role: false,
         createdAt: new Date(),
       };
-      if (userData.length > 0) {
-        const existingDocId = userData[0].id; // Assuming only one document per user
-        await setDoc(doc(FIREBASE_DB, "user", existingDocId), payload, { merge: true });
-      }
+
+      await addDoc(collection(FIREBASE_DB, "user"), payload)
+
+      
+
       // Reset form fields
       setFullName("");
       setAddress("");
@@ -121,11 +122,11 @@ export default function ParentProfile() {
   return (
     <div className="profile-page">
       <Header />
-      <h1>Δημιουργία Επεξεργασία Προφίλ - Γονέα/Κηδεμόνα</h1>
+      <h1>Δημιουργία Επεξεργασία Προφίλ - Νταντάς</h1>
 
       {/* Breadcrumb */}
       <div className="breadcrumb">
-        <a href="/">Αρχική</a> &gt; <span>Προφίλ - Γονέα/Κηδεμόνα</span>
+        <a href="/">Αρχική</a> &gt; <span>Προφίλ -  Νταντάς</span>
       </div>
 
       {/* Error message */}
