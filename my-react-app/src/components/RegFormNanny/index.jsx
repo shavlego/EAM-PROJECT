@@ -13,6 +13,12 @@ export default function RegFormNanny  ()  {
   
      const steps = ["Έλεγχος Στοιχείων TaxisNet", "Συμπλήρωση στοιχείων Νταντάς", "Επισύναψη Δικαιολογητικών","Έλεγχος και Υποβολή"];                 // Define stages
       const [activeStep, setActiveStep] = useState(0);
+      //metablites forms
+      const [onoma,setOnoma] = useState("");
+      const [eponymo,setEponymo] = useState ("");
+      const [onomaPatera,setOnomaPatera] = useState("");
+      const [onomaMiteras,setOnomaMiteras] = useState("");
+      const [genisi,setGenisi] = useState("");
       const [formData, setFormData] = useState(""); // Input data for validation
     
       // Handle the Next button click
@@ -56,18 +62,58 @@ export default function RegFormNanny  ()  {
             <div>
                 <Typography variant="h6">Προσωπικά στοιχεία</Typography>
                 {/*form controls here*/}
-                <div style={{ display: "flex", flexDirection: "column", marginTop: "20px", width: "300px" }}>
-                <label htmlFor="textBox" style={{ marginBottom: "8px", fontSize: "16px" }}>
-                    Όνομα  <span style={{ color: "red" }}>* </span>
-                </label>
-                <TextField
-                    id="textBox"
-                    variant="outlined"
-                    value={formData}
-                    onChange={(e) => setFormData(e.target.value)}
-                    fullWidth
-                />
-                </div>
+                <div className="d-flex flex-column mt-3 align-items-start" style={{ width: "100%" }}>
+                    <label htmlFor="textBox" className="form-label" style={{ fontSize: "16px" }}>
+                        Όνομα <span style={{ color: "red" }}>* </span>
+                    </label>
+                    <div className="w-50"> {/* Bootstrap class for width (adjust as needed) */}
+                        <TextField
+                            id="textBox"
+                            variant="outlined"
+                            value={onoma}
+                            onChange={(e) => setOnoma(e.target.value)}
+                            fullWidth
+                        />
+                    </div>
+                    <label htmlFor="textBox" className="form-label" style={{ fontSize: "16px" }}>
+                        Επώνυμο <span style={{ color: "red" }}>* </span>
+                    </label>
+                    <div className="w-50"> {/* Bootstrap class for width (adjust as needed) */}
+                        <TextField
+                            id="textBox"
+                            variant="outlined"
+                            value={eponymo}
+                            onChange={(e) => setEponymo(e.target.value)}
+                            fullWidth
+                        />
+                    </div>
+                    <label htmlFor="textBox" className="form-label" style={{ fontSize: "16px" }}>
+                        Όνομα Πατέρα <span style={{ color: "red" }}>* </span>
+                    </label>
+                    <div className="w-50"> {/* Bootstrap class for width (adjust as needed) */}
+                        <TextField
+                            id="textBox"
+                            variant="outlined"
+                            value={onomaPatera}
+                            onChange={(e) => setOnomaPatera(e.target.value)}
+                            fullWidth
+                        />
+                    </div>
+                    <label htmlFor="textBox" className="form-label" style={{ fontSize: "16px" }}>
+                        Όνομα Μητέρας <span style={{ color: "red" }}>* </span>
+                    </label>
+                    <div className="w-50"> {/* Bootstrap class for width (adjust as needed) */}
+                        <TextField
+                            id="textBox"
+                            variant="outlined"
+                            value={onomaMiteras}
+                            onChange={(e) => setOnomaMiteras(e.target.value)}
+                            fullWidth
+                        />
+                    </div>
+                    
+            </div>
+
                 {formData.trim() === "" && (
                 <Typography variant="body2" color="error" sx={{ marginTop: "10px" }}>
                     Please fill out the field to proceed.
