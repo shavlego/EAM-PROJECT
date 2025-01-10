@@ -100,7 +100,7 @@ export default function LoginNanny() {
                 <button type="submit" disabled={loading}>
                     {loading ? 'Logging in...' : 'Login'}
                 </button>
-                <a href="/register">Create new user</a>
+                <a href="/registerNanny">Create new user</a>
             </form>
         </div>
     );

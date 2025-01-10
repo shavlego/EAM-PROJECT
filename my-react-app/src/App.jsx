@@ -5,7 +5,8 @@ import Home from './components/Home';
 import LoginNanny from './components/LoginNanny';
 import LoginParent from './components/LoginParent';
 import Profile from './components/Profile';
-import Register from './components/Register';
+import RegisterParent from './components/RegisterParent';
+import RegisterNanny from './components/RegisterNanny';
 import PreLoginPage from './components/PreLoginPage';
 import ProfileParent from './components/ProfileParent';
 import Contact from './components/Contact';
@@ -46,7 +47,8 @@ function App() {
             <Route path = "/ParentInfo" element={<ParentInfo />}/>
             <Route path ="/Faq" element={<Faq />}/>
             <Route path ="/SiteMap" element={<SiteMap />}/>
-            <Route path="/register" element={<Register/>} />
+            <Route path="/registerNanny" element={<RegisterNanny/>} />
+            <Route path="/registerParent" element={<RegisterParent/>} />
             <Route path="/becomeNanny" element={<BecomeNanny />}/>
             <Route path="/findNanny" element={<FindNanny />} />
             <Route path="/Anouncements" element={<Anouncements />} />

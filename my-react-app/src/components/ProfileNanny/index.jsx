@@ -69,7 +69,6 @@ export default function ParentProfile() {
         age,
         phone,
         userId,
-        role: false,
         createdAt: new Date(),
       };
 

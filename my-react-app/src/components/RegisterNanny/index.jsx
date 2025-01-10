@@ -1,7 +1,8 @@
 import  { useState } from 'react';
 import './index.css'
-import { FIREBASE_AUTH } from '../../firebase';
+import { FIREBASE_AUTH ,FIREBASE_DB} from '../../firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { setDoc, doc } from 'firebase/firestore';
 
 export default function Register(){
 
@@ -24,13 +25,25 @@ export default function Register(){
 
     setLoading(true);
     try {
+      // Create user with email and password
       const res = await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
-      console.log("User registered:", res.user);
-      window.location.href = "/";
+      const user = res.user;
+  
+      // Add user details to Firestore
+      await setDoc(doc(FIREBASE_DB, 'user', user.uid), {
+        userId: user.uid, // Store user ID
+        email: user.email, // Store user email
+        role: false, // Initialize role as null or some default value
+        createdAt: new Date().toISOString(), // Optional: track creation date
+      });
+  
+      console.log("User registered:", user);
+      window.location.href = "/profileParent"; // Redirect after successful registration
     } catch (error) {
-      alert(error.message);
+      console.error("Registration error:", error.message);
+      setError(error.message); // Set error message
     } finally {
-      setLoading(false);
+      setLoading(false); // End loading state
     }
   }
 

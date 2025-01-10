@@ -12,6 +12,7 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 function Header() {
   const navigate = useNavigate();
   const [userName,setUserName] = useState(null);
+  const [email,setEmail] = useState(null);
   const [userId,setUserId] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login state locally
 
@@ -48,6 +49,7 @@ const fetchUsername = async (userId) => {
 
       console.log("User data fetched from Firestore:", userData);
       setUserName(userData.fullName); // Assuming the username is stored as "fullName"
+      setEmail(userData.email);
     } else {
       console.log("No user document found for the provided userId.");
     }
@@ -204,7 +206,7 @@ const fetchUsername = async (userId) => {
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                {userName}
+                {userName ? userName : email}
               </button>
               <ul className="dropdown-menu" aria-labelledby="userDropdown">
                 <li>
