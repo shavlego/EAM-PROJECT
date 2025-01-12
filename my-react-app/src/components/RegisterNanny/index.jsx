@@ -38,7 +38,7 @@ export default function Register(){
       });
   
       console.log("User registered:", user);
-      window.location.href = "/profileParent"; // Redirect after successful registration
+      window.location.href = "/profileNanny"; // Redirect after successful registration
     } catch (error) {
       console.error("Registration error:", error.message);
       setError(error.message); // Set error message

@@ -93,7 +93,7 @@
   /* Message Section */
   .about-textarea {
     justify-content: center;
-    width: 20%;
+    width: 100%;
     height: 100px;
     margin-top: 10px;
     padding: 10px;
@@ -130,3 +130,18 @@
     color: white;
   }
   
+  .role-button {
+    padding: 10px 20px;
+    margin: 0 5px;
+    border: 1px solid #ddd;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .role-button.selected {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    border: 1px solid #007bff;
+  }

@@ -1,0 +1,160 @@
+/* Styling for the container */
+.container {
+    background-color: #f9f9f9; /* Matches the hero section background */
+    border: 1px solid #ddd; /* Subtle border for structure */
+    border-radius: 10px; /* Smooth corners */
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  /* Table styling for nanny availability */
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  .table th,
+  .table td {
+    border: 1px solid #ddd;
+    padding: 5px;
+    text-align: center;
+  }
+  
+  .table th {
+    background-color: hsla(255, 82%, 84%, 0.4); /* Consistent highlight */
+    color: #000;
+    font-weight: bold;
+  }
+  
+  .table td.bg-success {
+    background-color: hsla(120, 80%, 80%, 0.5); /* Light green for availability */
+  }
+  
+  .table td.bg-light {
+    background-color: #f9f9f9; /* Matches page background */
+  }
+  
+  /* Card styling for nanny details */
+  .card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fff;
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle hover effect */
+  }
+  
+  .card-body {
+    padding: 15px;
+  }
+  
+  .card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .card-text {
+    font-size: 0.9rem;
+    color: #555; /* Muted text color */
+  }
+  
+  /* Buttons inside cards */
+  .card .btn {
+    margin-right: 10px;
+    padding: 8px 15px;
+    font-size: 0.9rem;
+    border-radius: 5px;
+    border: none;
+  }
+  
+  .card .btn-primary {
+    background-color: hsla(255, 82%, 84%, 0.4);
+    color: #000;
+  }
+  
+  .card .btn-primary:hover {
+    background-color: hsla(255, 82%, 84%, 1);
+  }
+  
+  .card .btn-success {
+    background-color: hsla(120, 40%, 70%, 0.5); /* Soft green */
+    color: #000;
+  }
+  
+  .card .btn-success:hover {
+    background-color: hsla(120, 40%, 70%, 1);
+  }
+  
+  /* Form and filters section */
+  form {
+    background-color: hsla(255, 82%, 84%, 0.1); /* Light tint */
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+  
+  form label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  form select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+  }
+  
+  /* Buttons for filters */
+  form .btn-primary {
+    background-color: hsla(255, 82%, 84%, 0.4);
+    border: none;
+  }
+  
+  form .btn-primary:hover {
+    background-color: hsla(255, 82%, 84%, 1);
+  }
+  
+  form .btn-secondary {
+    background-color: #ddd;
+    border: none;
+  }
+  
+  form .btn-secondary:hover {
+    background-color: #ccc;
+  }
+  
+  /* Text Centering */
+  .text-center {
+    text-align: center;
+  }
+  
+  .text-warning {
+    color: #f0ad4e;
+  }
+  
+  .text-danger {
+    color: #d9534f;
+  }
+  
+  .text-muted {
+    color: #777;
+  }
+  
+  /* Error and loading messages */
+  .error-message {
+    color: #d9534f; /* Bootstrap danger color */
+    text-align: center;
+  }
+  
+  .loading-message {
+    color: #5bc0de; /* Bootstrap info color */
+    text-align: center;
+  }
+  
