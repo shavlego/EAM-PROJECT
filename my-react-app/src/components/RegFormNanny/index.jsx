@@ -22,18 +22,34 @@ export default function RegFormNanny  ()  {
     const [onomaMiteras,setOnomaMiteras] = useState("");
     const [genisi,setGenisi] = useState("");
     const [formData, setFormData] = useState(""); // Input data for validation
+    //vars of step 1
+    const [tilefwno,setTilefwno] = useState("");
+    const [kinito,setKinito] = useState("");
+    const [mail,setMail] = useState("");
+    const [address,setAddress] =useState();
 
     //check the validity of the data
     const isValidName = (value) => /^[A-Za-zΑ-Ωα-ωΆ-Ώά-ώ\s]*$/.test(value);                 //i will use the same for eponymo,onoma patros,mitros  
-    const isValidDate =(value) => {
-        
-    }
+    const isValidEmail = (value) => /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(value);
+    const isValidNumber = (value, minLength = 1, maxLength = Infinity) => {
+        // Check if the value contains only digits
+        const isNumber = /^[0-9]*$/.test(value);
+        // Check if the length is within the specified range
+        const isCorrectLength = value.length >= minLength && value.length <= maxLength;
+        return isNumber && isCorrectLength;
+      };
+
 
     const [nameError, setNameError] = useState(""); // State for error message
     const [SurNameError, setSurNameError] = useState(""); // State for error message
     const [FatherNameError, setFatherNameError] = useState(""); // State for error message
     const [MotherNameError, setMotherNameError] = useState(""); // State for error message
-    
+    //step 1
+    const [tilefwnoError,setTilefwnoError] = useState("");
+    const [kinitoError,setKinitoError] = useState("");
+    const [mailError,setMailError] = useState("");
+    const [addressError,setAddressError] = useState("");
+
      // Calculate the minimum date (18 years ago)
     const eighteenYearsAgo = new Date();
     eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
@@ -87,10 +103,52 @@ export default function RegFormNanny  ()  {
             setMotherNameError("Στο πεδίο \" Όνομα Μητέρας \" επιτρέπονται μόνο ελληνικοί,λατινικοί χαρακτήρες και κενά");
         }
     };
+    const handleTilefwnoChange = (e) => {
+        const value = e.target.value;
+        if(isValidNumber(value,0,10)){                 //only numbers and 10 digits
+            setTilefwno(value);                         //set the val
+            setTilefwnoError("");                       //reset error
+        }
+        else{
+            setTilefwnoError("Ο αριθμός τηλεφώνου πρέπει να περιέχει 10 ψηφία.");
+        }
+    };
+    const handleKinitoChange = (e) =>{
+        const value = e.target.value;
+        if(isValidNumber(value,0,10)){                 //only numbers and 10 digits
+            setKinito(value);                         //set the val
+            setKinitoError("");                       //reset error
+        }
+        else{
+            setKinitoError("Ο αριθμός κινητού τηλεφώνου πρέπει να περιέχει 10 ψηφία.");
+        }
+    };
+    const handleMailChange = (e) => {
+        const value = e.target.value;
+        setMail(value);
+    };
     
+    // Handle validation when the field loses focus
+    const handleTilefwnoBlur = () => {
+        if (isValidNumber(tilefwno))
+            setTilefwnoError("" ); // Update error state
+    };
+    const handleKinitoBlur = () => {
+        if (isValidNumber(kinito))
+            setKinitoError("" ); // Update error state
+    };
+    const handleMailBlur = () => {
+        if (isValidEmail(mail))
+            setMailError("" ); // Update error state
+        else
+            setMailError("Fill a valid Email Address");
+    };
       // Handle the Next button click
       const handleNext = () => {
-        setActiveStep(activeStep +1); // Proceed to the next step
+        if (activeStep === 0 && !validateStep0()) return; // Validate Step 0
+        if (activeStep === 1 && !validateStep1()) return; // Validate Step 2
+      
+        setActiveStep(activeStep + 1); // Proceed to the next step if valid
       };
       //Handle the prev button click
       const handlePrev = ()=>{
@@ -132,6 +190,39 @@ export default function RegFormNanny  ()  {
         return isValid;
     };
 
+    const validateStep1 = () => {
+        let isValid = true;
+      
+        if (!mail.trim()) {
+          setMailError("Το πεδίο \"Mail\" είναι υποχρεωτικό.");
+          isValid = false;
+        } else {
+          setMailError("");
+        }
+        if(! isValidEmail(mail)){
+            setMailError("Το πεδίο \"Mail\" πρέπει να περιέχει έγκυρη διεύθυνση ηλεκτρονικού ταχυδρομίου");
+            isValid = false;
+        }
+        else {
+            setMailError("");
+          }
+      
+        if (!/^[0-9]{10}$/.test(tilefwno)) {
+          setTilefwnoError("Το πεδίο \"Αριθμός Τηλεφώνου\" πρέπει να έχει 10 ψηφία.");
+          isValid = false;
+        } else {
+          setTilefwnoError("");
+        }
+        if (!/^[0-9]{10}$/.test(kinito)) {
+            setKinitoError("Το πεδίο \"Κινητό Τηλέφωνο\" πρέπει να έχει 10 ψηφία.");
+            isValid = false;
+          } else {
+            setKinitoError("");
+          }
+      
+        return isValid;
+      };
+
     return (
         <div>
             <Header />
@@ -155,7 +246,7 @@ export default function RegFormNanny  ()  {
         <Box sx={{ marginTop: "20px" }}>
             {activeStep === 0 && (
             <div>
-                <Typography variant="h6">Προσωπικά στοιχεία</Typography>
+                <Typography variant="h6">Προσωπικά Στοιχεία</Typography>
                 {/*form controls here*/}
                 <div className="d-flex flex-column mt-3 align-items-start" style={{ width: "100%" }}>
                     <label htmlFor="textBox" className="form-label" style={{ fontSize: "16px" }}>
@@ -214,27 +305,86 @@ export default function RegFormNanny  ()  {
                             helperText={MotherNameError} // Display error message below the input
                         />
                     </div>
+                    &nbsp;
                     {/* Date Picker Field */}
-                    {/* Date of Birth */}
-        <label htmlFor="textBox" className="form-label" style={{ fontSize: "16px" }}>
-          Ημερομηνία Γέννησης <span style={{ color: "red" }}>*</span>
-        </label>
-        <DatePicker
-        id="genisi"
-        className="form-control"
-        selected={genisi}
-        onChange={(date) => setGenisi(date)}
-        dateFormat="dd/MM/yyyy"
-        placeholderText="Επιλέξτε ημερομηνία"
-        maxDate={new Date()} // Prevent future dates
-        minDate={eighteenYearsAgo}
-        showYearDropdown // Enables year dropdown
-        scrollableYearDropdown // Allows scrolling through the years
-        yearDropdownItemNumber={100} // Number of years to show in the dropdown
-        showMonthDropdown // Enables month dropdown
-        required
-/>
+                    {/*	&nbsp; Date of Birth */}
+                    <label htmlFor="textBox" className="form-label" style={{ fontSize: "16px" }}>
+                        Ημερομηνία Γέννησης <span style={{ color: "red" }}>*</span>
+                    </label>
+                        <DatePicker
+                        id="genisi"
+                        className="form-control"
+                        selected={genisi}
+                        onChange={(date) => setGenisi(date)}
+                        dateFormat="dd/MM/yyyy"
+                        placeholderText="Επιλέξτε ημερομηνία"
+                        maxDate={new Date()} // Prevent future dates
+                        minDate={eighteenYearsAgo}
+                        showYearDropdown // Enables year dropdown
+                        scrollableYearDropdown // Allows scrolling through the years
+                        yearDropdownItemNumber={100} // Number of years to show in the dropdown
+                        showMonthDropdown // Enables month dropdown
+                        required
+                    />
+                    </div>
+
+                {formData.trim() === "" && (
+                <Typography variant="body2" color="error" sx={{ marginTop: "10px" }}>
+                    Please fill out the field to proceed.
+                </Typography>
+                )}
             </div>
+            )}
+            {activeStep === 1 && (
+                <div>
+                <Typography variant="h6">Στοιχεία Επικοινωνίας</Typography>
+                {/*form controls here*/}
+                <div className="d-flex flex-column mt-3 align-items-start" style={{ width: "100%" }}>
+                    <label htmlFor="textBox" className="form-label" style={{ fontSize: "16px" }}>
+                        Σταθερό Τηλέφωνο <span style={{ color: "red" }}>* </span>
+                    </label>
+                    <div className="w-50"> 
+                        <TextField
+                            id="tilefwno"
+                            variant="outlined"
+                            value={tilefwno}
+                            onChange={handleTilefwnoChange}
+                            fullWidth
+                            onBlur={handleTilefwnoBlur}
+                            error={Boolean(tilefwnoError)} // Highlight input if there's an error
+                            helperText={tilefwnoError} // Display error message below the input
+                        />
+                    </div>
+                    <label htmlFor="textBox" className="form-label" style={{ fontSize: "16px" }}>
+                        Αριθμός Κινητού Τηλεφώνου <span style={{ color: "red" }}>* </span>
+                    </label>
+                    <div className="w-50">
+                        <TextField
+                            id="kinito"
+                            variant="outlined"
+                            value={kinito}
+                            onChange={handleKinitoChange}
+                            onBlur={handleKinitoBlur}
+                            fullWidth
+                            error={Boolean(kinitoError)} // Highlight input if there's an error
+                            helperText={kinitoError} // Display error message below the input
+                        />
+                    </div>
+                    <label htmlFor="textBox" className="form-label" style={{ fontSize: "16px" }}>
+                        Διεύθυνση Ηλεκτρονικού ταχυδρομίου E-Mail <span style={{ color: "red" }}>* </span>
+                    </label>
+                    <div className="w-50"> 
+                        <TextField
+                            id="mail"
+                            variant="outlined"
+                            value={mail}
+                            onChange={handleMailChange}
+                            fullWidth
+                            error={Boolean(mailError)} // Highlight input if there's an error
+                            helperText={mailError} // Display error message below the input
+                        />
+                    </div>
+                    </div>
 
                 {formData.trim() === "" && (
                 <Typography variant="body2" color="error" sx={{ marginTop: "10px" }}>
