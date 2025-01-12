@@ -2,7 +2,7 @@
 import Header from "../Header";
 import Footer from "../Footer";
 import { useNavigate } from "react-router-dom";
-import { Stepper, Step, StepLabel, Box, Button, Typography, TextField } from "@mui/material";
+import { Stepper, Step, StepLabel, Box, Button, Typography, TextField, useStepContext } from "@mui/material";
 import Breadcrumb from "./Breadcrumb";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap styles
 import React, { useState } from "react";
@@ -16,6 +16,7 @@ export default function RegFormNanny  ()  {
     const steps = ["Έλεγχος Στοιχείων TaxisNet", "Συμπλήρωση στοιχείων Νταντάς", "Επισύναψη Δικαιολογητικών","Έλεγχος και Υποβολή"];                 // Define stages
     const [activeStep, setActiveStep] = useState(0);
     //metablites forms
+    //vars of step 0
     const [onoma,setOnoma] = useState("");
     const [eponymo,setEponymo] = useState ("");
     const [onomaPatera,setOnomaPatera] = useState("");
@@ -26,7 +27,9 @@ export default function RegFormNanny  ()  {
     const [tilefwno,setTilefwno] = useState("");
     const [kinito,setKinito] = useState("");
     const [mail,setMail] = useState("");
-    const [address,setAddress] =useState();
+    const [address,setAddress] =useState("");
+    const [tk,setTk] = useState("");
+    const [perioxi,setPerioxi] = useState("");
 
     //check the validity of the data
     const isValidName = (value) => /^[A-Za-zΑ-Ωα-ωΆ-Ώά-ώ\s]*$/.test(value);                 //i will use the same for eponymo,onoma patros,mitros  
@@ -49,6 +52,8 @@ export default function RegFormNanny  ()  {
     const [kinitoError,setKinitoError] = useState("");
     const [mailError,setMailError] = useState("");
     const [addressError,setAddressError] = useState("");
+    const [perioxiError,setPerioxiError] = useState("");
+    const [tkError, setTkError] =useState("");
 
      // Calculate the minimum date (18 years ago)
     const eighteenYearsAgo = new Date();
@@ -127,6 +132,36 @@ export default function RegFormNanny  ()  {
         const value = e.target.value;
         setMail(value);
     };
+    const handleAddressChange = (e) => {
+        const value = e.target.value;
+        if (isValidName(value)) {
+            setAddress(value); // Update state if valid
+            setAddressError(""); // Clear error message
+        } 
+        else {
+            setAddressError("Στο πεδίο \" Διεύθυνση \" επιτρέπονται μόνο ελληνικοί,λατινικοί χαρακτήρες και κενά");
+        }
+    };
+    const handleTκChange = (e) => {
+        const value = e.target.value;
+        if(isValidNumber(value,0,8)){                 //only numbers
+            setTk(value);                         //set the val
+            setTkError("");                       //reset error
+        }
+        else{
+            setTkError("Ο Ταχυδρομικός κώδικας αποτελείται μόνο απο αριθμούς");
+        }
+    };
+    const handlePerioxiChange = (e) => {
+        const value = e.target.value;
+        if (isValidName(value)) {
+            setPerioxi(value); // Update state if valid
+            setPerioxiError(""); // Clear error message
+        } 
+        else {
+            setPerioxiError("Στο πεδίο \" Διεύθυνση \" επιτρέπονται μόνο ελληνικοί,λατινικοί χαρακτήρες και κενά");
+        }
+    };
     
     // Handle validation when the field loses focus
     const handleTilefwnoBlur = () => {
@@ -143,6 +178,7 @@ export default function RegFormNanny  ()  {
         else
             setMailError("Fill a valid Email Address");
     };
+
       // Handle the Next button click
       const handleNext = () => {
         if (activeStep === 0 && !validateStep0()) return; // Validate Step 0
@@ -222,6 +258,26 @@ export default function RegFormNanny  ()  {
       
         return isValid;
       };
+    
+      const validateStep1OnlyFilled = () => {
+        let isValid = true;
+    
+        if (!tilefwno.trim()) {
+        isValid = false;
+        }
+    
+        if (!kinito.trim()) {
+        isValid = false;
+        }
+    
+        if (!mail.trim()) {
+        isValid = false;
+        }
+    
+        return isValid;
+    }
+
+
 
     return (
         <div>
@@ -384,6 +440,48 @@ export default function RegFormNanny  ()  {
                             helperText={mailError} // Display error message below the input
                         />
                     </div>
+                    <label htmlFor="textBox" className="form-label" style={{ fontSize: "16px" }}>
+                        Διεύθυνση Κατοικίας <span style={{ color: "red" }}>* </span>
+                    </label>
+                    <div className="w-50"> 
+                        <TextField
+                            id="address"
+                            variant="outlined"
+                            value={address}
+                            onChange={handleAddressChange}
+                            fullWidth
+                            error={Boolean(addressError)} // Highlight input if there's an error
+                            helperText={addressError} // Display error message below the input
+                        />
+                    </div>
+                    <label htmlFor="textBox" className="form-label" style={{ fontSize: "16px" }}>
+                        Περιοχή <span style={{ color: "red" }}>* </span>
+                    </label>
+                    <div className="w-50"> 
+                        <TextField
+                            id="perioxi"
+                            variant="outlined"
+                            value={perioxi}
+                            onChange={handlePerioxiChange}
+                            fullWidth
+                            error={Boolean(perioxiError)} // Highlight input if there's an error
+                            helperText={perioxiError} // Display error message below the input
+                        />
+                    </div>
+                     <label htmlFor="textBox" className="form-label" style={{ fontSize: "16px" }}>
+                        Ταχυδρομικός Κώδικας <span style={{ color: "red" }}>* </span>
+                    </label>
+                    <div className="w-50"> 
+                        <TextField
+                            id="tk"
+                            variant="outlined"
+                            value={tk}
+                            onChange={handleTκChange}
+                            fullWidth
+                            error={Boolean(tkError)} // Highlight input if there's an error
+                            helperText={tkError} // Display error message below the input
+                        />
+                    </div>  
                     </div>
 
                 {formData.trim() === "" && (
@@ -412,7 +510,7 @@ export default function RegFormNanny  ()  {
                 variant="contained"
                 color="primary"
                 onClick={handleNext}
-                disabled={activeStep === 0 && !validateStep0() }
+                disabled={(activeStep === 0 && !validateStep0()) || (activeStep === 1 && !validateStep1OnlyFilled())}
             >
                 Next
             </Button>
