@@ -2,7 +2,7 @@
 import Header from "../Header";
 import Footer from "../Footer";
 import { useNavigate } from "react-router-dom";
-import { Stepper, Step, StepLabel, Box, Button, Typography, TextField, useStepContext } from "@mui/material";
+import { Stepper, Step, StepLabel, Box, Button, Typography, TextField, useStepContext,Select,MenuItem,FormControl,InputLabel,Grid } from "@mui/material";
 import Breadcrumb from "./Breadcrumb";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap styles
 import React, { useState } from "react";
@@ -30,6 +30,7 @@ export default function RegFormNanny  ()  {
     const [address,setAddress] =useState("");
     const [tk,setTk] = useState("");
     const [perioxi,setPerioxi] = useState("");
+    const[host,setHost]= useState("");
 
     //check the validity of the data
     const isValidName = (value) => /^[A-Za-zΑ-Ωα-ωΆ-Ώά-ώ\s]*$/.test(value);                 //i will use the same for eponymo,onoma patros,mitros  
@@ -162,6 +163,9 @@ export default function RegFormNanny  ()  {
             setPerioxiError("Στο πεδίο \" Διεύθυνση \" επιτρέπονται μόνο ελληνικοί,λατινικοί χαρακτήρες και κενά");
         }
     };
+    const handleHostChange = (event) => {
+        setHost(event.target.value); // Update state when the user selects an option
+    };
     
     // Handle validation when the field loses focus
     const handleTilefwnoBlur = () => {
@@ -178,7 +182,7 @@ export default function RegFormNanny  ()  {
         else
             setMailError("Fill a valid Email Address");
     };
-
+    
       // Handle the Next button click
       const handleNext = () => {
         if (activeStep === 0 && !validateStep0()) return; // Validate Step 0
@@ -468,20 +472,91 @@ export default function RegFormNanny  ()  {
                             helperText={perioxiError} // Display error message below the input
                         />
                     </div>
-                     <label htmlFor="textBox" className="form-label" style={{ fontSize: "16px" }}>
-                        Ταχυδρομικός Κώδικας <span style={{ color: "red" }}>* </span>
-                    </label>
-                    <div className="w-50"> 
-                        <TextField
-                            id="tk"
-                            variant="outlined"
-                            value={tk}
-                            onChange={handleTκChange}
-                            fullWidth
-                            error={Boolean(tkError)} // Highlight input if there's an error
-                            helperText={tkError} // Display error message below the input
-                        />
-                    </div>  
+                        <label htmlFor="textBox" className="form-label" style={{ fontSize: "16px" }}>
+                            Ταχυδρομικός Κώδικας <span style={{ color: "red" }}>* </span>
+                        </label>
+                        <div className="w-50"> 
+                            <TextField
+                                id="tk"
+                                variant="outlined"
+                                value={tk}
+                                onChange={handleTκChange}
+                                fullWidth
+                                error={Boolean(tkError)} // Highlight input if there's an error
+                                helperText={tkError} // Display error message below the input
+                            />
+                        </div> 
+
+                        {/* Pedia ta opoia aforoun tin diathesimotita kai to plaisio paroxis ypiresiwn */}
+                        <Typography variant="h6">Διαθεσιμότητα και Πλαίσιο παροχής υπηρεσίας</Typography>
+                        &nbsp;
+                        <div className="d-flex align-items-center" style={{ gap: "16px", marginBottom: "16px" }}>
+                        {/* Combobox dynatotita filoksenias */}
+                        <FormControl style={{ flexGrow: 2, minWidth: "320px" }} fullWidth variant="outlined">
+                            {/* Label for the combobox */}
+                            <label htmlFor="host" className="form-label" style={{ fontSize: "16px", marginBottom: "8px", display: "block" }}>
+                            Δυνατότητα Φιλοξενίας στην οικία μου
+                            </label>
+                            {/* Combobox */}
+                            <Select
+                            id="host"
+                            value={host} // Bind the current state to the Select value
+                            onChange={handleHostChange} // Handle selection change
+                            displayEmpty
+                            >
+                            {/* Dropdown options */}
+                            <MenuItem value="">
+                            </MenuItem>
+                            <MenuItem value="option1">ΝΑΙ</MenuItem>
+                            <MenuItem value="option2">ΟΧΙ</MenuItem>
+                            </Select>
+                        </FormControl>
+
+                        {/* Combobox 2 */}
+                        <FormControl style={{ flexGrow: 4, minWidth: "250px" }} fullWidth variant="outlined">
+                            {/* Label for the combobox */}
+                            <label htmlFor="cohabitants" className="form-label" style={{ fontSize: "16px", marginBottom: "8px", display: "block" }}>
+                                Υπάρχουν Συνοικούντες;
+                            </label>
+                            {/* Combobox */}
+                            <Select
+                            id="cohabitants"
+                            // value={cohabitants} // Bind the current state to the Select value
+                            // onChange={handleCohabitantsChange} // Handle selection change
+                            displayEmpty
+                            >
+                            {/* Dropdown options */}
+                            <MenuItem value="">
+                                <em>None</em>
+                            </MenuItem>
+                            <MenuItem value="yes">ΝΑΙ</MenuItem>
+                            <MenuItem value="no">ΟΧΙ</MenuItem>
+                            </Select>
+                        </FormControl>
+
+                        {/* Combobox 3 */}
+                        <FormControl style={{ flexGrow: 4, minWidth: "320px" }} fullWidth variant="outlined">
+                            {/* Label for the combobox */}
+                            <label htmlFor="childAges" className="form-label" style={{ fontSize: "16px", marginBottom: "8px", display: "block" }}>
+                            Ηλικίες παιδιών που δύναται να φροντίσει:
+                            </label>
+                            {/* Combobox */}
+                            <Select
+                            id="childAges"
+                            // value={childAges} // Bind the current state to the Select value
+                            //onChange={handleChildAgesChange} // Handle selection change
+                            displayEmpty
+                            >
+                            {/* Dropdown options */}
+                            <MenuItem value="">
+                                <em>None</em>
+                            </MenuItem>
+                            <MenuItem value="0-3">0-3 Έτη</MenuItem>
+                            <MenuItem value="4-7">4-7 Έτη</MenuItem>
+                            <MenuItem value="8-12">8-12 Έτη</MenuItem>
+                            </Select>
+                        </FormControl>
+                        </div>
                     </div>
 
                 {formData.trim() === "" && (
