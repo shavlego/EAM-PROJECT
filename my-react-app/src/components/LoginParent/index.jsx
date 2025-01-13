@@ -102,7 +102,7 @@ export default function LoginParent() {
                 <button type="submit" disabled={loading}>
                     {loading ? 'Logging in...' : 'Login'}
                 </button>
-                <a href="/register">Create new user</a>
+                <a href="/registerParent">Create new user</a>
             </form>
         </div>
     );

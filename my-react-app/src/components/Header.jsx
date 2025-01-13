@@ -14,6 +14,7 @@ function Header() {
   const [userName,setUserName] = useState(null);
   const [email,setEmail] = useState(null);
   const [userId,setUserId] = useState(null);
+  const [userRole,setUserRole] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login state locally
   const [userMail,setUserMail] = useState(false);
 
@@ -23,11 +24,13 @@ function Header() {
       if (user) {
         setUserId(user.uid); // Store user ID
         setUserMail(user.email)
+        setUserRole(user.role)
         await fetchUsername(user.uid); // Fetch and set the username
         setIsLoggedIn(true); // Mark as logged in
       } else {
         setUserId(null);
         setUserName(null);
+        setUserRole(null);
         setIsLoggedIn(false); 
       }
     });
@@ -212,9 +215,20 @@ const fetchUsername = async (userId) => {
               </button>
               <ul className="dropdown-menu" aria-labelledby="userDropdown">
                 <li>
-                  <a className="dropdown-item" href="#" onClick={() => navigate("/profile")}>
-                    Προφίλ
-                  </a>
+                <a 
+                  className="dropdown-item" 
+                  href="#" 
+                  onClick={() => {
+                    // Navigate based on user role
+                    if (userRole === false) {
+                      navigate("/profileNanny");
+                    } else {
+                      navigate("/profileParent");
+                    }
+                  }}
+                >
+                  Προφίλ
+                </a>
                 </li>
                 <li>
                   <a className="dropdown-item" href="#" onClick={() => navigate("/settings")}>

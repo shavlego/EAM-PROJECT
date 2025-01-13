@@ -18,6 +18,7 @@ import Anouncements from './components/Anouncements';
 import SandBox from './components/SandBox';
 import ProfileNanny from './components/ProfileNanny';
 import RegFormNanny from './components/RegFormNanny';
+import ScheduleAppointment from './components/ScheduleAppointment';
 import "bootstrap/dist/css/bootstrap.min.css";
 
 
@@ -54,6 +55,7 @@ function App() {
             <Route path="/findNanny" element={<FindNanny />} />
             <Route path="/Anouncements" element={<Anouncements />} />
             <Route path="/SandBox" element={<SandBox />} />
+            <Route path="/scheduleAppointment/:nannyId" element={<ScheduleAppointment />} />
             <Route path="/reg" element={<RegFormNanny />} />
         </Routes>
     </Router>

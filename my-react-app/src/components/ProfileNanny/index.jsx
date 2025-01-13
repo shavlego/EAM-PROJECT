@@ -4,7 +4,7 @@ import "./index.css";
 import { useEffect, useState } from "react";
 import { FIREBASE_AUTH, FIREBASE_DB } from "../../firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
+import { collection,  query, where, getDocs, setDoc,doc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 
 export default function ParentProfile() {
@@ -17,8 +17,25 @@ export default function ParentProfile() {
   // Form fields
   const [fullName, setFullName] = useState("");
   const [address, setAddress] = useState("");
-  const [age, setAge] = useState("");
+  const [type, setType] = useState("");
   const [phone, setPhone] = useState("");
+  const [bio, setBio] = useState(""); // State for additional text
+  const [region, setRegion] = useState("");
+  const [expertise, setExpertise] = useState("");
+
+  const citiesInGreece = [
+    "Αθήνα",
+    "Θεσσαλονίκη",
+    "Πάτρα",
+    "Ηράκλειο",
+    "Λάρισα",
+    "Βόλος",
+    "Ιωάννινα",
+    "Χανιά",
+    "Καβάλα",
+    "Ρόδος",
+  ];
+
   const [userData, setUserData] = useState([]); // For fetched data
 
   // Track authentication
@@ -28,7 +45,7 @@ export default function ParentProfile() {
         setEmail(user.email);
         setUserId(user.uid);
       } else {
-        navigate("/login");
+        navigate("/loginNanny");
       }
     });
     return () => unsubscribe();
@@ -56,7 +73,7 @@ export default function ParentProfile() {
     setLoading(true);
     setError("");
 
-    if (!fullName || !address || !phone || !age || !userId) {
+    if (!fullName || !address || !phone || !type || !userId || !region) {
       setError("Παρακαλώ συμπληρώστε όλα τα απαιτούμενα πεδία.");
       setLoading(false);
       return;
@@ -66,23 +83,35 @@ export default function ParentProfile() {
       const payload = {
         fullName,
         address,
-        age,
+        type,
         phone,
         userId,
+        role : false,
+        bio,
+        region,
+        expertise,
+        appointments : [],
         createdAt: new Date(),
       };
 
-      await addDoc(collection(FIREBASE_DB, "user"), payload)
+      if (userData.length > 0) {
+        const existingDocId = userData[0].id; // Assuming only one document per user
+        await setDoc(doc(FIREBASE_DB, "user", existingDocId), payload, { merge: true });
+      }
+  
 
       
 
       // Reset form fields
       setFullName("");
       setAddress("");
-      setAge("");
+      setType("");
       setPhone("");
+      setBio("");
+      setRegion("");
+      setExpertise("");
       fetchUserData(); // Refresh data
-      navigate("/findNanny");
+      navigate("/");
     } catch (error) {
       console.error("Error adding document:", error);
       setError("Αποτυχία αποθήκευσης. Παρακαλώ προσπαθήστε ξανά.");
@@ -106,8 +135,12 @@ export default function ParentProfile() {
         const user = users[0]; // Assuming there's only one document per user
         setFullName(user.fullName || "");
         setAddress(user.address || "");
-        setAge(user.age || "");
+        setType(user.age || "");
         setPhone(user.phone || "");
+        setBio(user.bio || "");
+        setRegion(user.region || "");
+        setExpertise(user.expertise || "");
+        
       
        }
     } 
@@ -160,21 +193,39 @@ export default function ParentProfile() {
               required
             />
 
+            <label>Περιοχή</label>
+              <select
+                value={region}
+                onChange={(e) => setRegion(e.target.value)}
+                required
+              >
+                <option value="" disabled>
+                  Επιλέξτε την πόλη σας
+                </option>
+                {citiesInGreece.map((city) => (
+                  <option key={city} value={city}>
+                    {city}
+                  </option>
+                ))}
+              </select>
+
             <label>Επιθυμητή Τοποθεσία Φύλαξης</label>
             <select>
               <option>Στο χώρο μου</option>
-              <option>Στο χώρο της νταντάς</option>
+              <option>Στο χώρο του κηδεμόνα</option>
             </select>
 
-            <label>Ηλικία παιδιού προς φύλαξης</label>
+            <label>Τύπος Απασχόλησης</label>
             <select
-              value={age}
-              onChange={(e) => setAge(e.target.value)}
+              value={type}
+              onChange={(e) => setType(e.target.value)}
               required
             >
-              <option value="">Επιλέξτε ηλικία</option>
-              <option>6-12 μηνών</option>
-              <option>1-2 ετών</option>
+              <option value="" disabled>
+                Επιλέξτε είδος απασχόλησης
+              </option>
+              <option >Πλήρης</option>
+              <option >Μερική</option>
             </select>
           </div>
 
@@ -190,14 +241,37 @@ export default function ParentProfile() {
               required
             />
 
+            <label>Επιλέξτε ιδιότητα:</label>
+              <div>
+                <button
+                  type="button"
+                  className={`role-button ${!expertise ? "selected" : ""}`}
+                  onClick={() => setExpertise(false)}
+                >
+                  Φοιτήτρια
+                </button>
+                <button
+                  type="button"
+                  className={`role-button ${expertise? "selected" : ""}`}
+                  onClick={() => setExpertise(true)}
+                >
+                  Επαγγελματίας
+                </button>
+              </div>
+
             <label>Διεύθυνση Ηλεκτρονικού Ταχυδρομείου -email</label>
             <input type="email" value={email} />
           </div>
+          <div>
+            <label>About Me (Bio):</label>
+            <textarea
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
+              placeholder="Λίγα λόγια για εσάς"
+              className="about-textarea"
+            ></textarea>
+          </div>
 
-          <textarea
-            placeholder="Λίγα λόγια για εσάς"
-            className="about-textarea"
-          ></textarea>
 
           {/* Buttons */}
           <div className="buttons">

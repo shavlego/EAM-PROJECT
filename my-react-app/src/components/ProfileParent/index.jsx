@@ -19,6 +19,7 @@ export default function ParentProfile() {
   const [address, setAddress] = useState("");
   const [age, setAge] = useState("");
   const [phone, setPhone] = useState("");
+  const [bio, setBio] = useState(""); // State for additional text
   const [userData, setUserData] = useState([]); // For fetched data
 
   // Track authentication
@@ -28,7 +29,7 @@ export default function ParentProfile() {
         setEmail(user.email);
         setUserId(user.uid);
       } else {
-        navigate("/login");
+        navigate("/loginParent");
       }
     });
     return () => unsubscribe();
@@ -70,6 +71,7 @@ export default function ParentProfile() {
         phone,
         userId,
         role: true,
+        bio,
         createdAt: new Date(),
       };
       if (userData.length > 0) {
@@ -81,6 +83,7 @@ export default function ParentProfile() {
       setAddress("");
       setAge("");
       setPhone("");
+      setBio("");
       fetchUserData(); // Refresh data
       navigate("/findNanny");
     } catch (error) {
@@ -108,6 +111,7 @@ export default function ParentProfile() {
         setAddress(user.address || "");
         setAge(user.age || "");
         setPhone(user.phone || "");
+        setBio(user.bio || "");
       
        }
     } 
@@ -194,10 +198,15 @@ export default function ParentProfile() {
             <input type="email" value={email} />
           </div>
 
-          <textarea
-            placeholder="Λίγα λόγια για εσάς"
-            className="about-textarea"
-          ></textarea>
+          <div>
+            <label>About Me (Bio):</label>
+            <textarea
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
+              placeholder="Λίγα λόγια για εσάς"
+              className="about-textarea"
+            ></textarea>
+          </div>
 
           {/* Buttons */}
           <div className="buttons">
