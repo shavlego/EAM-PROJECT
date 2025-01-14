@@ -82,10 +82,10 @@ export default function RegFormNanny() {
     setCancelModalOpen(false); // Close the modal without canceling
   };
   const handleCloseSave = () => {
-    setSubmitModalOpen(false); // Close the modal without canceling
+    setSaveModalOpen(false); // Close the modal without canceling
   };
   const handleCloseSubmit = () => {
-    setSaveModalOpen(false); // Close the modal without canceling
+    setSubmitModalOpen(false); // Close the modal without canceling
   };
   //metablites forms
   //vars of step 0
@@ -305,6 +305,9 @@ export default function RegFormNanny() {
   };
   const handleCancel = () => {
     setCancelModalOpen(true); // Show the modal
+  };
+  const handleSubmit = () => {
+    setSubmitModalOpen(true); // Show the modal
   };
 
   // Allow users to directly select a step
@@ -1261,6 +1264,20 @@ export default function RegFormNanny() {
                 }}
               >
                 ΕΠΟΜΕΝΟ
+              </Button>
+            )}
+            {activeStep == steps.length - 1 && (
+              <Button
+                variant="contained"
+                onClick={handleSubmit}
+                style={{
+                  backgroundColor: "#007BFF",
+                  color: "white",
+                  flexGrow: 1, // Allow buttons to grow equally
+                  minWidth: "180px",
+                }}
+              >
+                ΚΑΤΑΘΕΣΗ
               </Button>
             )}
             {/* Modal Dialog cancel button */}
