@@ -8,6 +8,7 @@ import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap styles
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import './index.css'
 
 export default function RegFormNanny  ()  {
 
@@ -45,7 +46,7 @@ export default function RegFormNanny  ()  {
     const [address,setAddress] =useState("");
     const [tk,setTk] = useState("");
     const [perioxi,setPerioxi] = useState("");
-    const[host,setHost]= useState("");
+    const [host,setHost]= useState("");
     const [coHost,setCoHost] = useState("");
     const [childAges,setChildAges] = useState("");
     //vars of step 2
@@ -56,6 +57,8 @@ export default function RegFormNanny  ()  {
     const [fileUploadPathol,setFileUploadPathol] = useState("");
     const [fileUploadDerm,setFileUploadDerm] = useState("");
     const [fileUploadPsi,setFileUploadPsi] = useState("");
+    const [fileUploadYd, setFileUploadYd] = useState("");
+    const [fileUploadAlo, setFileUploadAlo] = useState("");
     
     //step 0 error messages
     const [nameError, setNameError] = useState(""); // State for error message
@@ -73,7 +76,7 @@ export default function RegFormNanny  ()  {
     
 
     //step 2 error messages
-    
+    //Maybe add errors for 
     
     //------------------------------------------------------------------------------------------------------------------------
     //step 0 handlers
@@ -227,6 +230,12 @@ export default function RegFormNanny  ()  {
     const handleFileUploadPsi = (event) => {
         setFileUploadPsi(event.target.value); // Update state when the user selects an option
     };
+    const handleFileUploadYd = (event) => {
+        setFileUploadYd(event.target.value); // Update state when the user selects an option
+    };
+    const handleFileUploadAlo = (event) => {
+        setFileUploadAlo(event.target.value); // Update state when the user selects an option
+    };
     //----------------------------------------------------------------------------------------------------------------------
 
       // Handle the Next button click
@@ -350,6 +359,9 @@ export default function RegFormNanny  ()  {
         if (!fileUploadDerm.trim()) {
             isValid = false;
         }
+        if (!fileUploadYd.trim()) {
+            isValid = false;
+        }
     
         return isValid;
     };
@@ -465,6 +477,7 @@ export default function RegFormNanny  ()  {
                 )}
             </div>
             )}
+            {/* ----------------------------------------------------------------------------------------------------------- */}
             {/* Step 1 */}
             {activeStep === 1 && (
                 <div>
@@ -529,7 +542,6 @@ export default function RegFormNanny  ()  {
                             helperText={addressError} // Display error message below the input
                         />
                     </div>
-
                     <div className="d-flex align-items-center" style={{ gap: "16px", marginBottom: "16px" }}>
                         <FormControl style={{ flexGrow: 2, minWidth: "500px" }} fullWidth variant="outlined">
                             <label htmlFor="textBox" className="form-label" style={{ fontSize: "16px" }}>
@@ -597,6 +609,7 @@ export default function RegFormNanny  ()  {
                             value={coHost} 
                             onChange={handleCoHostChange}
                             displayEmpty
+                            disabled = {host != "yes"}
                             >
                             {/* Dropdown options */}
                             <MenuItem value="">
@@ -741,13 +754,112 @@ export default function RegFormNanny  ()  {
                             style={{ marginBottom: "8px" }}
                         />
                             &nbsp;
+                        <Typography variant="h6">Υπεύθυνη Δήλωση</Typography>
+                        <label htmlFor="textBox" className="form-label" style={{ fontSize: "16px" }}>
+                            Υπεύθυνη Δήλωση Συμμετοχής Στο πρόγραμμα "Νταντάδες της γειτονιάς" <span style={{ color: "red" }}>* </span>
+                        </label>
+                        <input
+                            id="fileUploadYd"
+                            type="file"
+                            className="form-control"
+                            onChange={handleFileUploadYd}
+                            style={{ marginBottom: "8px" }}
+                        />
+                        &nbsp;
+                        <Typography variant="h6">Πιστοποιητικά για αλλοδαπούς</Typography>
+                        <label htmlFor="textBox" className="form-label" style={{ fontSize: "16px" }}>
+                            Υπεύθυνη Δήλωση Συμμετοχής Στο πρόγραμμα "Νταντάδες της γειτονιάς" <span style={{ color: "red" }}>* </span>
+                        </label>
+                        <input
+                            id="fileUploadAlo"
+                            type="file"
+                            className="form-control"
+                            onChange={handleFileUploadAlo}
+                            style={{ marginBottom: "8px" }}
+                        />
+                        &nbsp;
                     </div>
 
                 {formData.trim() === "" && (
+                    <Typography variant="body2" color="error" sx={{ marginTop: "10px" }}>
+                        Please fill out the field to proceed.
+                    </Typography>
+                )}
+                
+            
+            </div>
+            )}
+            {/* ------------------------------------------------------------------------------------------------------------------------- */}
+            {/* Step 3 */}
+            {activeStep === 3 && (
+                <div>
+                <Typography variant="h4">Ανασκόπηση Επιλογών:</Typography>
+                <div className="d-flex flex-column mt-4 align-items-start" style={{ width: "100%" }}>
+  <div
+    style={{
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr", // Two equal columns
+      gap: "16px", // Space between items
+    }}
+  >             {/* First Column */}
+                <div className="summary-container "> 
+                    <Typography variant="h5">Βασικά Στοιχεία:</Typography>
+                    <div className="summary-item"  style={{textAlign:'left' }}>
+                        <strong>Όνομα:</strong> {onoma || "Δεν συμπληρώθηκε"}
+                    </div>
+                    <div className="summary-item"  style={{textAlign:'left' }}>
+                        <strong>Επώνυμο:</strong> {eponymo || "Δεν συμπληρώθηκε"}
+                    </div>
+                    <div className="summary-item"  style={{textAlign:'left' }}>
+                        <strong>Πατρώνυμο:</strong> {onomaPatera || "Δεν συμπληρώθηκε"}
+                    </div>
+                    <div className="summary-item"  style={{textAlign:'left' }}>
+                        <strong>Μητρώνυμο:</strong> {onomaMiteras || "Δεν συμπληρώθηκε"}
+                    </div>
+                    <div className="summary-item"  style={{textAlign:'left' }}>
+                            <strong>Ημερομηνία Γέννησης:</strong>{" "}
+                            {genisi ? genisi.toLocaleDateString("el-GR") : "Δεν συμπληρώθηκε"}
+                    </div>
+                </div>
+                    {/* Second Column */}
+                    <div className="summary-container"> 
+                        <Typography variant="h5">Στοιχεία Επικοινωνίας:</Typography>
+                        <div className="summary-item"  style={{textAlign:'left' }}>
+                            <strong>Σταθερό Τηλέφωνο:</strong> {tilefwno || "Δεν συμπληρώθηκε"}
+                        </div>
+                        <div className="summary-item"  style={{textAlign:'left' }}>
+                            <strong>Κινητό Τηλέφωνο:</strong> {kinito || "Δεν συμπληρώθηκε"}
+                        </div>
+                        <div className="summary-item"  style={{textAlign:'left' }}>
+                            <strong>email:</strong> {mail || "Δεν συμπληρώθηκε"}
+                        </div>
+                    </div>
+        </div>
+        <div className="summary-container" style={{ width: "100%" }} > 
+            <Typography variant="h5">Διεύθυνση και πληροφορίες φιλοξενίας</Typography>
+            <div className="summary-item"  style={{textAlign:'left' }}>
+                <strong>Διεύθυνση:</strong> {address || "Δεν συμπληρώθηκε"}
+            </div>
+            <div className="summary-item"  style={{textAlign:'left' }}>
+                <strong>Περιοχή:</strong> {perioxi || "Δεν συμπληρώθηκε"}
+            </div>
+            <div className="summary-item"  style={{textAlign:'left' }}>
+                <strong>Ταχυδρομικός Κώδικας:</strong> {tk || "Δεν συμπληρώθηκε"}
+            </div>
+            <div className="summary-item"  style={{textAlign:'left' }}>
+                <strong>Δυνατότητα φιλοξενίας στον χώρο μου::</strong> {host || "Δεν συμπληρώθηκε"}
+            </div>
+        </div>
+    </div>
+
+                {formData.trim() === "" && (
+                
                 <Typography variant="body2" color="error" sx={{ marginTop: "10px" }}>
                     Please fill out the field to proceed.
                 </Typography>
                 )}
+                
+            
             </div>
             )}
         </Box>
