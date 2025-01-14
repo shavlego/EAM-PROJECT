@@ -18,3 +18,15 @@
     font-weight: 600; /* Bold labels */
     color: #000; /* Label color */
   }
+
+  .common-button {
+    padding: 10px 20px;
+    min-width: 150px; /* Ensure all buttons have the same minimum width */
+    text-align: center;
+  }
+  button:disabled {
+    background-color: #B0BEC5; /* Gray background */
+    color: #ECEFF1; /* Light text */
+    cursor: not-allowed; /* Disabled cursor */
+    opacity: 0.4; /* Optional: reduce opacity */
+  }
