@@ -2,7 +2,7 @@
 import Header from "../Header";
 import Footer from "../Footer";
 import { useNavigate } from "react-router-dom";
-import { Stepper, Step, StepLabel, Box, Button, Typography, TextField, useStepContext,Select,MenuItem,FormControl,InputLabel,Grid } from "@mui/material";
+import { Stepper, Step, StepLabel, Box, Button, Typography, TextField, useStepContext,Select,MenuItem,FormControl,InputLabel,Grid, Dialog,DialogActions,DialogContent ,DialogContentText,DialogTitle } from "@mui/material";
 import Breadcrumb from "./Breadcrumb";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap styles
 import React, { useState } from "react";
@@ -17,6 +17,7 @@ export default function RegFormNanny  ()  {
 
     const steps = ["Έλεγχος Στοιχείων TaxisNet", "Συμπλήρωση στοιχείων Νταντάς", "Επισύναψη Δικαιολογητικών","Έλεγχος και Υποβολή"];                 // Define stages
     const [activeStep, setActiveStep] = useState(0);
+    const [open, setOpen] = useState(false);
 
     //check the validity of the data
     const isValidName = (value) => /^[A-Za-zΑ-Ωα-ωΆ-Ώά-ώ\s]*$/.test(value);                 //i will use the same for eponymo,onoma patros,mitros  
@@ -31,6 +32,16 @@ export default function RegFormNanny  ()  {
     const eighteenYearsAgo = new Date();
     eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);  // Calculate the minimum date (18 years ago)
     
+    const handleConfirm = () => {
+        console.log("User confirmed cancellation.");
+        setOpen(false); // Close the modal
+        // Perform cancel action, e.g., navigate or reset form
+        //navigate("/home");
+      };
+    
+      const handleClose = () => {
+        setOpen(false); // Close the modal without canceling
+      };
     //metablites forms
     //vars of step 0
     const [onoma,setOnoma] = useState("");
@@ -248,6 +259,12 @@ export default function RegFormNanny  ()  {
       //Handle the prev button click
       const handlePrev = ()=>{
         setActiveStep(activeStep -1); // Go Back
+      };
+      const handleSave = ()=>{
+        setActiveStep(activeStep -1); // Go Back
+      };
+      const handleCancel  = ()=>{
+        setOpen(true); // Show the modal
       };
     
       // Allow users to directly select a step
@@ -835,21 +852,50 @@ export default function RegFormNanny  ()  {
                         </div>
                     </div>
         </div>
-        <div className="summary-container" style={{ width: "100%" }} > 
-            <Typography variant="h5">Διεύθυνση και πληροφορίες φιλοξενίας</Typography>
-            <div className="summary-item"  style={{textAlign:'left' }}>
-                <strong>Διεύθυνση:</strong> {address || "Δεν συμπληρώθηκε"}
+            <div className="summary-container" style={{ width: "100%" }} > 
+                <Typography variant="h5">Διεύθυνση και πληροφορίες φιλοξενίας</Typography>
+                <div className="summary-item"  style={{textAlign:'left' }}>
+                    <strong>Διεύθυνση:</strong> {address || "Δεν συμπληρώθηκε"}
+                </div>
+                <div className="summary-item"  style={{textAlign:'left' }}>
+                    <strong>Περιοχή:</strong> {perioxi || "Δεν συμπληρώθηκε"}
+                </div>
+                <div className="summary-item"  style={{textAlign:'left' }}>
+                    <strong>Ταχυδρομικός Κώδικας:</strong> {tk || "Δεν συμπληρώθηκε"}
+                </div>
+                <div className="summary-item"  style={{textAlign:'left' }}>
+                    <strong>Δυνατότητα φιλοξενίας στον χώρο μου::</strong> {host || "Δεν συμπληρώθηκε"}
+                </div>
             </div>
-            <div className="summary-item"  style={{textAlign:'left' }}>
-                <strong>Περιοχή:</strong> {perioxi || "Δεν συμπληρώθηκε"}
+            <div className="summary-container" style={{ width: "100%" }} >
+                <div className="summary-item"  style={{textAlign:'left' }}>
+                    <strong>Ηλικίες παιδιών που δύνασται να φροντίσετε ως Νταντά:</strong> {childAges || "Δεν συμπληρώθηκε"}
+                </div>
             </div>
-            <div className="summary-item"  style={{textAlign:'left' }}>
-                <strong>Ταχυδρομικός Κώδικας:</strong> {tk || "Δεν συμπληρώθηκε"}
+            <div className="summary-container" style={{ width: "100%" }} >
+                <Typography variant="h5">Σπουδές και Πιστοποιητικά:</Typography>
+                <div className="summary-item"  style={{textAlign:'left' }}>
+                    <strong>Ανώτερο επίπεδο σπουδών:</strong> {ekpaideusi || "Δεν συμπληρώθηκε"}
+                </div>
+                <div className="summary-item"  style={{textAlign:'left' }}>
+                    <strong>Πιστοποιητικό Σπουδών:</strong> {fileUploadSpoudes || "Δεν συμπληρώθηκε"}
+                </div>
+                <div className="summary-item"  style={{textAlign:'left' }}>
+                    <strong>Πιστοποιητικό Υγείας -Παθολόγος/Γενικός Ιατρός:</strong> {fileUploadPathol|| "Δεν συμπληρώθηκε"}
+                </div>
+                <div className="summary-item"  style={{textAlign:'left' }}>
+                    <strong>Πιστοποιητικό Υγείας -Δερματολόγος:</strong> {fileUploadDerm|| "Δεν συμπληρώθηκε"}
+                </div>
+                <div className="summary-item"  style={{textAlign:'left' }}>
+                    <strong>Πιστοποιητικό Υγείας -Ψυχίατρος:</strong> {fileUploadPsi|| "Δεν συμπληρώθηκε"}
+                </div>
+                <div className="summary-item"  style={{textAlign:'left' }}>
+                    <strong>Υπεύθυνη Δήλωση</strong> {fileUploadYd|| "Δεν συμπληρώθηκε"}
+                </div>
+                <div className="summary-item"  style={{textAlign:'left' }}>
+                    <strong>Υπεύθυνη Δήλωση Γλωσσομάθειας (Μονο για αλλοδαπούς)</strong> {fileUploadAlo|| "Δεν συμπληρώθηκε"}
+                </div>
             </div>
-            <div className="summary-item"  style={{textAlign:'left' }}>
-                <strong>Δυνατότητα φιλοξενίας στον χώρο μου::</strong> {host || "Δεν συμπληρώθηκε"}
-            </div>
-        </div>
     </div>
 
                 {formData.trim() === "" && (
@@ -867,25 +913,61 @@ export default function RegFormNanny  ()  {
         {/* Prev Button */}
         {/*Mporei na beltiwthei me thn xrhsh MUI: theme*/}
         <Box sx={{ marginTop: "20px", display: "flex", justifyContent: "center", gap: "1.5rem"}}>
+            <Button
+                variant="contained"
+                onClick={handleCancel}
+                style={{ backgroundColor: "#E53935", color: "white", padding: "10px 20px" }}
+            >
+                ΑΚΥΡΩΣΗ ΑΙΤΗΣΗΣ
+            </Button>
             {activeStep > 0 && (
             <Button
                 variant="contained"
-                color=  "secondary"
                 onClick={handlePrev}
+                style={{ backgroundColor: "#B0C4DE", color: "black", padding: "10px 20px" }}
             >
-                Prev
+                ΠΡΟΗΓΟΥΜΕΝΟ
             </Button>
             )}
+            <Button
+                variant="contained"
+                onClick={handleSave}
+                style={{ backgroundColor: "#4CAF50", color: "white", padding: "10px 20px" }}
+            >
+                ΑΠΟΘΗΚΕΥΣΗ
+            </Button>
             {activeStep < steps.length - 1 && (
             <Button
                 variant="contained"
-                color="primary"
                 onClick={handleNext}
                 disabled={(activeStep === 0 && !validateStep0()) || (activeStep === 1 && !validateStep1OnlyFilled())|| (activeStep === 2 && !validateStep2()) }
+                style={{ backgroundColor: "#007BFF", color: "white", padding: "10px 20px" }}
             >
-                Next
+                ΕΠΟΜΕΝΟ
             </Button>
             )}
+            {/* Modal Dialog */}
+      <Dialog
+        open={open}
+        onClose={handleClose} // Allow closing by clicking outside
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">Επιβεβαίωση Ακύρωσης</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Είστε σίγουροι ότι θέλετε να ακυρώσετε; Όλες οι αλλαγές σας θα χαθούν.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} style={{ color: "#007BFF" }}>
+            Όχι
+          </Button>
+          <Button onClick={handleConfirm} style={{ color: "#E53935" }} autoFocus>
+            Ναι, Ακύρωση
+          </Button>
+        </DialogActions>
+      </Dialog>
 
         </Box>
         </Box>
