@@ -51,6 +51,11 @@ export default function RegFormNanny  ()  {
     //vars of step 2
     const [ekpaideusi,setEkpaideusi] = useState("");
     const [fileUploadSpoudes,setFileUploadSpoudes] = useState("");
+    const [firstAid,setFirstAid] = useState("");
+    const [fileUploadFirstAid,setFileUploadFirstAid] = useState("");
+    const [fileUploadPathol,setFileUploadPathol] = useState("");
+    const [fileUploadDerm,setFileUploadDerm] = useState("");
+    const [fileUploadPsi,setFileUploadPsi] = useState("");
     
     //step 0 error messages
     const [nameError, setNameError] = useState(""); // State for error message
@@ -207,6 +212,21 @@ export default function RegFormNanny  ()  {
     const handleFileUploadSpoudes = (event) => {
         setFileUploadSpoudes(event.target.value); // Update state when the user selects an option
     };
+    const handleFirstAidChange = (event) => {
+        setFirstAid(event.target.value); // Update state when the user selects an option
+    };
+    const handleFileUploadFirstAid = (event) => {
+        setFileUploadFirstAid(event.target.value); // Update state when the user selects an option
+    };
+    const handleFileUploadPathol = (event) => {
+        setFileUploadPathol(event.target.value); // Update state when the user selects an option
+    };
+    const handleFileUploadDerm = (event) => {
+        setFileUploadDerm(event.target.value); // Update state when the user selects an option
+    };
+    const handleFileUploadPsi = (event) => {
+        setFileUploadPsi(event.target.value); // Update state when the user selects an option
+    };
     //----------------------------------------------------------------------------------------------------------------------
 
       // Handle the Next button click
@@ -228,34 +248,35 @@ export default function RegFormNanny  ()  {
         }
       };
 
-      //Validate functions for next button 
-      // Validation function for Step 0
+    //-------------------------------------------------------------------------------------------------------------------------------
+    //Validate functions for next button 
+    // Validation function for Step 0
     const validateStep0 = () => {
         let isValid = true;
     
         if (!onoma.trim()) {
-        isValid = false;
+            isValid = false;
         }
     
         if (!eponymo.trim()) {
-        isValid = false;
+            isValid = false;
         }
     
         if (!onomaPatera.trim()) {
-        isValid = false;
+            isValid = false;
         }
     
         if (!onomaMiteras.trim()) {
-        isValid = false;
+            isValid = false;
         }
     
         if (!genisi) {
-        isValid = false;
+            isValid = false;
         }
     
         return isValid;
     };
-
+    // Validation functions for Step 1
     const validateStep1 = () => {
         let isValid = true;
       
@@ -293,20 +314,45 @@ export default function RegFormNanny  ()  {
         let isValid = true;
     
         if (!tilefwno.trim()) {
-        isValid = false;
+            isValid = false;
         }
     
         if (!kinito.trim()) {
-        isValid = false;
+            isValid = false;
         }
     
         if (!mail.trim()) {
-        isValid = false;
+            isValid = false;
         }
     
         return isValid;
     }
-
+    // Validation function for Step 2
+    const validateStep2 = () => {
+        let isValid = true;
+    
+        if (!ekpaideusi.trim()) {
+            isValid = false;
+        }
+    
+        if (!fileUploadSpoudes.trim()) {
+            isValid = false;
+        }
+    
+        if (!fileUploadPathol.trim()) {
+            isValid = false;
+        }
+    
+        if (!fileUploadDerm.trim()) {
+            isValid = false;
+        }
+    
+        if (!fileUploadDerm.trim()) {
+            isValid = false;
+        }
+    
+        return isValid;
+    };
     return (
         <div>
             <Header />
@@ -628,29 +674,19 @@ export default function RegFormNanny  ()  {
                         onChange={handleFileUploadSpoudes}
                         style={{ marginBottom: "8px" }}
                     />
-                    {fileUploadSpoudes && (
-                        <p style={{ fontSize: "14px", color: "#555" }}>
-                            Selected file: <strong>{fileUploadSpoudes.name}</strong>
-                        </p>
-                    )}
-                    <button onClick={handleFileUploadSpoudes} className="btn btn-primary">
-                        Upload
-                    </button>
-                        {/* Pedia ta opoia aforoun tin diathesimotita kai to plaisio paroxis ypiresiwn */}
-                        <Typography variant="h6">Διαθεσιμότητα και Πλαίσιο παροχής υπηρεσίας</Typography>
                         &nbsp;
                         <div className="d-flex align-items-center" style={{ gap: "16px", marginBottom: "16px" }}>
                         {/* Combobox dynatotita filoksenias */}
                         <FormControl style={{ flexGrow: 2, minWidth: "320px" }} fullWidth variant="outlined">
                             {/* Label for the combobox */}
-                            <label htmlFor="host" className="form-label" style={{ fontSize: "16px", marginBottom: "8px", display: "block" }}>
-                            Δυνατότητα Φιλοξενίας στην οικία μου
+                            <label htmlFor="firstAid" className="form-label" style={{ fontSize: "16px", marginBottom: "8px", display: "block" }}>
+                                Γνώση Πρώτων Βοηθειών
                             </label>
                             {/* Combobox */}
                             <Select
-                            id="host"
-                            value={host} // Bind the current state to the Select value
-                            onChange={handleHostChange} // Handle selection change
+                            id="firstAid"
+                            value={firstAid} // Bind the current state to the Select value
+                            onChange={handleFirstAidChange} // Handle selection change
                             displayEmpty
                             >
                             {/* Dropdown options */}
@@ -661,6 +697,50 @@ export default function RegFormNanny  ()  {
                             </Select>
                         </FormControl>
                         </div>
+                        <label htmlFor="textBox" className="form-label" style={{ fontSize: "16px" }}>
+                            Πιστοποιητικό Πρώτων Βοηθειών
+                        </label>
+                        <input
+                            id="fileUploadFirstAid"
+                            type="file"
+                            className="form-control"
+                            onChange={handleFileUploadFirstAid}
+                            style={{ marginBottom: "8px" }}
+                            disabled = {(firstAid != "yes")}
+                        />
+                            &nbsp;
+                       <Typography variant="h4">Πιστοποιητικά Υγείας</Typography>
+                       <label htmlFor="textBox" className="form-label" style={{ fontSize: "16px" }}>
+                            Πιστοποιητικό Υγείας - Παθολόγος/Γενικός Ιατρός <span style={{ color: "red" }}>* </span>
+                        </label>
+                        <input
+                            id="fileUploadPathol"
+                            type="file"
+                            className="form-control"
+                            onChange={handleFileUploadPathol}
+                            style={{ marginBottom: "8px" }}
+                        />
+                        <label htmlFor="textBox" className="form-label" style={{ fontSize: "16px" }}>
+                            Πιστοποιητικό Υγείας - Δερματολόγος <span style={{ color: "red" }}>* </span>
+                        </label>
+                        <input
+                            id="fileUploadDerm"
+                            type="file"
+                            className="form-control"
+                            onChange={handleFileUploadDerm}
+                            style={{ marginBottom: "8px" }}
+                        />
+                        <label htmlFor="textBox" className="form-label" style={{ fontSize: "16px" }}>
+                            Πιστοποιητικό Υγείας - Ψυχίατρος <span style={{ color: "red" }}>* </span>
+                        </label>
+                        <input
+                            id="fileUploadPsi"
+                            type="file"
+                            className="form-control"
+                            onChange={handleFileUploadPsi}
+                            style={{ marginBottom: "8px" }}
+                        />
+                            &nbsp;
                     </div>
 
                 {formData.trim() === "" && (
@@ -689,7 +769,7 @@ export default function RegFormNanny  ()  {
                 variant="contained"
                 color="primary"
                 onClick={handleNext}
-                disabled={(activeStep === 0 && !validateStep0()) || (activeStep === 1 && !validateStep1OnlyFilled())}
+                disabled={(activeStep === 0 && !validateStep0()) || (activeStep === 1 && !validateStep1OnlyFilled())|| (activeStep === 2 && !validateStep2()) }
             >
                 Next
             </Button>
