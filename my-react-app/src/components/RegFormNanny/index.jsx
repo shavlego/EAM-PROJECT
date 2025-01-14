@@ -13,8 +13,23 @@ export default function RegFormNanny  ()  {
 
     const navigate = useNavigate();
   
+
     const steps = ["Έλεγχος Στοιχείων TaxisNet", "Συμπλήρωση στοιχείων Νταντάς", "Επισύναψη Δικαιολογητικών","Έλεγχος και Υποβολή"];                 // Define stages
     const [activeStep, setActiveStep] = useState(0);
+
+    //check the validity of the data
+    const isValidName = (value) => /^[A-Za-zΑ-Ωα-ωΆ-Ώά-ώ\s]*$/.test(value);                 //i will use the same for eponymo,onoma patros,mitros  
+    const isValidEmail = (value) => /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(value);
+    const isValidNumber = (value, minLength = 1, maxLength = Infinity) => {
+        // Check if the value contains only digits
+        const isNumber = /^[0-9]*$/.test(value);
+        // Check if the length is within the specified range
+        const isCorrectLength = value.length >= minLength && value.length <= maxLength;
+        return isNumber && isCorrectLength;
+      };
+    const eighteenYearsAgo = new Date();
+    eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);  // Calculate the minimum date (18 years ago)
+    
     //metablites forms
     //vars of step 0
     const [onoma,setOnoma] = useState("");
@@ -31,24 +46,18 @@ export default function RegFormNanny  ()  {
     const [tk,setTk] = useState("");
     const [perioxi,setPerioxi] = useState("");
     const[host,setHost]= useState("");
-
-    //check the validity of the data
-    const isValidName = (value) => /^[A-Za-zΑ-Ωα-ωΆ-Ώά-ώ\s]*$/.test(value);                 //i will use the same for eponymo,onoma patros,mitros  
-    const isValidEmail = (value) => /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(value);
-    const isValidNumber = (value, minLength = 1, maxLength = Infinity) => {
-        // Check if the value contains only digits
-        const isNumber = /^[0-9]*$/.test(value);
-        // Check if the length is within the specified range
-        const isCorrectLength = value.length >= minLength && value.length <= maxLength;
-        return isNumber && isCorrectLength;
-      };
-
-
+    const [coHost,setCoHost] = useState("");
+    const [childAges,setChildAges] = useState("");
+    //vars of step 2
+    const [ekpaideusi,setEkpaideusi] = useState("");
+    const [fileUploadSpoudes,setFileUploadSpoudes] = useState("");
+    
+    //step 0 error messages
     const [nameError, setNameError] = useState(""); // State for error message
     const [SurNameError, setSurNameError] = useState(""); // State for error message
     const [FatherNameError, setFatherNameError] = useState(""); // State for error message
     const [MotherNameError, setMotherNameError] = useState(""); // State for error message
-    //step 1
+    //step 1 error messages
     const [tilefwnoError,setTilefwnoError] = useState("");
     const [kinitoError,setKinitoError] = useState("");
     const [mailError,setMailError] = useState("");
@@ -56,9 +65,13 @@ export default function RegFormNanny  ()  {
     const [perioxiError,setPerioxiError] = useState("");
     const [tkError, setTkError] =useState("");
 
-     // Calculate the minimum date (18 years ago)
-    const eighteenYearsAgo = new Date();
-    eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
+    
+
+    //step 2 error messages
+    
+    
+    //------------------------------------------------------------------------------------------------------------------------
+    //step 0 handlers
     const handleNameChange = (e) => {
         const value = e.target.value;
         if (isValidName(value)) {
@@ -109,6 +122,8 @@ export default function RegFormNanny  ()  {
             setMotherNameError("Στο πεδίο \" Όνομα Μητέρας \" επιτρέπονται μόνο ελληνικοί,λατινικοί χαρακτήρες και κενά");
         }
     };
+    //----------------------------------------------------------------------------------------------------------------------------
+    //step 1 handlers
     const handleTilefwnoChange = (e) => {
         const value = e.target.value;
         if(isValidNumber(value,0,10)){                 //only numbers and 10 digits
@@ -129,6 +144,18 @@ export default function RegFormNanny  ()  {
             setKinitoError("Ο αριθμός κινητού τηλεφώνου πρέπει να περιέχει 10 ψηφία.");
         }
     };
+
+    // Handle validation when the field loses focus
+    const handleTilefwnoBlur = () => {
+        if (isValidNumber(tilefwno))
+            setTilefwnoError("" ); // Update error state
+    };
+
+    const handleKinitoBlur = () => {
+        if (isValidNumber(kinito))
+            setKinitoError("" ); // Update error state
+    };
+
     const handleMailChange = (e) => {
         const value = e.target.value;
         setMail(value);
@@ -166,23 +193,22 @@ export default function RegFormNanny  ()  {
     const handleHostChange = (event) => {
         setHost(event.target.value); // Update state when the user selects an option
     };
-    
-    // Handle validation when the field loses focus
-    const handleTilefwnoBlur = () => {
-        if (isValidNumber(tilefwno))
-            setTilefwnoError("" ); // Update error state
+    const handleCoHostChange= (event) => {
+        setCoHost(event.target.value); // Update state when the user selects an option
     };
-    const handleKinitoBlur = () => {
-        if (isValidNumber(kinito))
-            setKinitoError("" ); // Update error state
+    const handleChildAgesChange = (event) => {
+        setChildAges(event.target.value); // Update state when the user selects an option
     };
-    const handleMailBlur = () => {
-        if (isValidEmail(mail))
-            setMailError("" ); // Update error state
-        else
-            setMailError("Fill a valid Email Address");
+
+    //Step 2 Handlers
+    const handleEkpaideusiChange = (event) => {
+        setEkpaideusi(event.target.value); // Update state when the user selects an option
     };
-    
+    const handleFileUploadSpoudes = (event) => {
+        setFileUploadSpoudes(event.target.value); // Update state when the user selects an option
+    };
+    //----------------------------------------------------------------------------------------------------------------------
+
       // Handle the Next button click
       const handleNext = () => {
         if (activeStep === 0 && !validateStep0()) return; // Validate Step 0
@@ -197,11 +223,11 @@ export default function RegFormNanny  ()  {
     
       // Allow users to directly select a step
       const handleStepClick = (index) => {
-        if (index < activeStep) {
+        if (index != activeStep) {
           setActiveStep(index); // Allow only going back to previous steps
         }
       };
-      console.log("18 years ago:", eighteenYearsAgo);
+
       //Validate functions for next button 
       // Validation function for Step 0
     const validateStep0 = () => {
@@ -280,8 +306,6 @@ export default function RegFormNanny  ()  {
     
         return isValid;
     }
-
-
 
     return (
         <div>
@@ -395,6 +419,7 @@ export default function RegFormNanny  ()  {
                 )}
             </div>
             )}
+            {/* Step 1 */}
             {activeStep === 1 && (
                 <div>
                 <Typography variant="h6">Στοιχεία Επικοινωνίας</Typography>
@@ -458,35 +483,37 @@ export default function RegFormNanny  ()  {
                             helperText={addressError} // Display error message below the input
                         />
                     </div>
-                    <label htmlFor="textBox" className="form-label" style={{ fontSize: "16px" }}>
-                        Περιοχή <span style={{ color: "red" }}>* </span>
-                    </label>
-                    <div className="w-50"> 
-                        <TextField
-                            id="perioxi"
-                            variant="outlined"
-                            value={perioxi}
-                            onChange={handlePerioxiChange}
-                            fullWidth
-                            error={Boolean(perioxiError)} // Highlight input if there's an error
-                            helperText={perioxiError} // Display error message below the input
-                        />
-                    </div>
-                        <label htmlFor="textBox" className="form-label" style={{ fontSize: "16px" }}>
-                            Ταχυδρομικός Κώδικας <span style={{ color: "red" }}>* </span>
-                        </label>
-                        <div className="w-50"> 
-                            <TextField
-                                id="tk"
-                                variant="outlined"
-                                value={tk}
-                                onChange={handleTκChange}
-                                fullWidth
-                                error={Boolean(tkError)} // Highlight input if there's an error
-                                helperText={tkError} // Display error message below the input
-                            />
-                        </div> 
 
+                    <div className="d-flex align-items-center" style={{ gap: "16px", marginBottom: "16px" }}>
+                        <FormControl style={{ flexGrow: 2, minWidth: "500px" }} fullWidth variant="outlined">
+                            <label htmlFor="textBox" className="form-label" style={{ fontSize: "16px" }}>
+                                Περιοχή <span style={{ color: "red" }}>* </span>
+                            </label>
+                                <TextField
+                                    id="perioxi"
+                                    variant="outlined"
+                                    value={perioxi}
+                                    onChange={handlePerioxiChange}
+                                    fullWidth
+                                    error={Boolean(perioxiError)} // Highlight input if there's an error
+                                    helperText={perioxiError} // Display error message below the input
+                                />
+                        </FormControl>
+                        <FormControl style={{ flexGrow: 2, minWidth: "280px" }} fullWidth variant="outlined">
+                            <label htmlFor="textBox" className="form-label" style={{ fontSize: "16px" }}>
+                                Ταχυδρομικός Κώδικας <span style={{ color: "red" }}>* </span>
+                            </label>
+                                <TextField
+                                    id="tk"
+                                    variant="outlined"
+                                    value={tk}
+                                    onChange={handleTκChange}
+                                    fullWidth
+                                    error={Boolean(tkError)} // Highlight input if there's an error
+                                    helperText={tkError} // Display error message below the input
+                                />
+                        </FormControl>
+                        </div>
                         {/* Pedia ta opoia aforoun tin diathesimotita kai to plaisio paroxis ypiresiwn */}
                         <Typography variant="h6">Διαθεσιμότητα και Πλαίσιο παροχής υπηρεσίας</Typography>
                         &nbsp;
@@ -507,8 +534,8 @@ export default function RegFormNanny  ()  {
                             {/* Dropdown options */}
                             <MenuItem value="">
                             </MenuItem>
-                            <MenuItem value="option1">ΝΑΙ</MenuItem>
-                            <MenuItem value="option2">ΟΧΙ</MenuItem>
+                            <MenuItem value="yes">ΝΑΙ</MenuItem>
+                            <MenuItem value="no">ΟΧΙ</MenuItem>
                             </Select>
                         </FormControl>
 
@@ -521,13 +548,12 @@ export default function RegFormNanny  ()  {
                             {/* Combobox */}
                             <Select
                             id="cohabitants"
-                            // value={cohabitants} // Bind the current state to the Select value
-                            // onChange={handleCohabitantsChange} // Handle selection change
+                            value={coHost} 
+                            onChange={handleCoHostChange}
                             displayEmpty
                             >
                             {/* Dropdown options */}
                             <MenuItem value="">
-                                <em>None</em>
                             </MenuItem>
                             <MenuItem value="yes">ΝΑΙ</MenuItem>
                             <MenuItem value="no">ΟΧΙ</MenuItem>
@@ -543,17 +569,95 @@ export default function RegFormNanny  ()  {
                             {/* Combobox */}
                             <Select
                             id="childAges"
-                            // value={childAges} // Bind the current state to the Select value
-                            //onChange={handleChildAgesChange} // Handle selection change
+                            value={childAges} 
+                            onChange={handleChildAgesChange} 
                             displayEmpty
                             >
                             {/* Dropdown options */}
                             <MenuItem value="">
-                                <em>None</em>
                             </MenuItem>
-                            <MenuItem value="0-3">0-3 Έτη</MenuItem>
-                            <MenuItem value="4-7">4-7 Έτη</MenuItem>
-                            <MenuItem value="8-12">8-12 Έτη</MenuItem>
+                            <MenuItem value="0-6">0-6 Μηνών</MenuItem>
+                            <MenuItem value="6-12">6-12 Μηνών</MenuItem>
+                            <MenuItem value="1-2.5">1-2,5 Έτη</MenuItem>
+                            <MenuItem value="0-2.5">0-2,5 Έτη</MenuItem>
+                            </Select>
+                        </FormControl>
+                        </div>
+                    </div>
+
+                {formData.trim() === "" && (
+                <Typography variant="body2" color="error" sx={{ marginTop: "10px" }}>
+                    Please fill out the field to proceed.
+                </Typography>
+                )}
+            </div>
+            )}
+            {/* ------------------------------------------------------------------------------------------------------------------------- */}
+            {/* Step 2 */}
+            {activeStep === 2 && (
+                <div>
+                <Typography variant="h6">Εκπαίδευση και Πιστοποιητικά</Typography>
+                {/*form controls here*/}
+                <div className="d-flex flex-column mt-4 align-items-start " style={{ width: "80%" }}>
+                    <label htmlFor="textBox" className="form-label" style={{ fontSize: "16px" }}>
+                        Επίπεδο Εκπαίδευσης <span style={{ color: "red" }}>* </span>
+                    </label>
+                    <Select
+                            id="ekpaideusi"
+                            value={ekpaideusi} // Bind the current state to the Select value
+                            onChange={handleEkpaideusiChange} // Handle selection change
+                            displayEmpty
+                            style={{ width: "100%" }} // Set the width to 100% of the container
+                            >
+                            {/* Dropdown options */}
+                            <MenuItem value="">
+                            </MenuItem>
+                            <MenuItem value="likio">Απόφοιτος/Απόφοιτη Λυκείου</MenuItem>
+                            <MenuItem value="iek">Απόφοιτος/Απόφοιτη ΙΕΚ</MenuItem>
+                            <MenuItem value="tei">Απόφοιτος/Απόφοιτη ΤΕΙ</MenuItem>
+                            <MenuItem value="aei">Απόφοιτος/Απόφοιτη ΑΕΙ</MenuItem>
+                        </Select>
+
+                    <label htmlFor="textBox" className="form-label" style={{ fontSize: "16px" }}>
+                        Πιστοποιητικό Σπουδών που επιλέξατα στο προηγούμενο πεδίο <span style={{ color: "red" }}>* </span>
+                    </label>
+                    <input
+                        id="fileUploadSpoudes"
+                        type="file"
+                        className="form-control"
+                        onChange={handleFileUploadSpoudes}
+                        style={{ marginBottom: "8px" }}
+                    />
+                    {fileUploadSpoudes && (
+                        <p style={{ fontSize: "14px", color: "#555" }}>
+                            Selected file: <strong>{fileUploadSpoudes.name}</strong>
+                        </p>
+                    )}
+                    <button onClick={handleFileUploadSpoudes} className="btn btn-primary">
+                        Upload
+                    </button>
+                        {/* Pedia ta opoia aforoun tin diathesimotita kai to plaisio paroxis ypiresiwn */}
+                        <Typography variant="h6">Διαθεσιμότητα και Πλαίσιο παροχής υπηρεσίας</Typography>
+                        &nbsp;
+                        <div className="d-flex align-items-center" style={{ gap: "16px", marginBottom: "16px" }}>
+                        {/* Combobox dynatotita filoksenias */}
+                        <FormControl style={{ flexGrow: 2, minWidth: "320px" }} fullWidth variant="outlined">
+                            {/* Label for the combobox */}
+                            <label htmlFor="host" className="form-label" style={{ fontSize: "16px", marginBottom: "8px", display: "block" }}>
+                            Δυνατότητα Φιλοξενίας στην οικία μου
+                            </label>
+                            {/* Combobox */}
+                            <Select
+                            id="host"
+                            value={host} // Bind the current state to the Select value
+                            onChange={handleHostChange} // Handle selection change
+                            displayEmpty
+                            >
+                            {/* Dropdown options */}
+                            <MenuItem value="">
+                            </MenuItem>
+                            <MenuItem value="yes">ΝΑΙ</MenuItem>
+                            <MenuItem value="no">ΟΧΙ</MenuItem>
                             </Select>
                         </FormControl>
                         </div>
