@@ -4,7 +4,14 @@ import "./index.css";
 import { useEffect, useState } from "react";
 import { FIREBASE_AUTH, FIREBASE_DB } from "../../firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { collection,  query, where, getDocs, setDoc,doc } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  setDoc,
+  doc,
+} from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 
 export default function ParentProfile() {
@@ -86,21 +93,20 @@ export default function ParentProfile() {
         type,
         phone,
         userId,
-        role : false,
+        role: false,
         bio,
         region,
         expertise,
-        appointments : [],
+        appointments: [],
         createdAt: new Date(),
       };
 
       if (userData.length > 0) {
         const existingDocId = userData[0].id; // Assuming only one document per user
-        await setDoc(doc(FIREBASE_DB, "user", existingDocId), payload, { merge: true });
+        await setDoc(doc(FIREBASE_DB, "user", existingDocId), payload, {
+          merge: true,
+        });
       }
-  
-
-      
 
       // Reset form fields
       setFullName("");
@@ -123,7 +129,10 @@ export default function ParentProfile() {
   // Fetch user data
   const fetchUserData = async () => {
     try {
-      const q = query(collection(FIREBASE_DB, "user"), where("userId", "==", userId));
+      const q = query(
+        collection(FIREBASE_DB, "user"),
+        where("userId", "==", userId)
+      );
       const querySnapshot = await getDocs(q);
       const users = querySnapshot.docs.map((doc) => ({
         id: doc.id,
@@ -140,11 +149,8 @@ export default function ParentProfile() {
         setBio(user.bio || "");
         setRegion(user.region || "");
         setExpertise(user.expertise || "");
-        
-      
-       }
-    } 
-    catch (error) {
+      }
+    } catch (error) {
       console.error("Error fetching user data:", error);
     }
   };
@@ -158,7 +164,7 @@ export default function ParentProfile() {
 
       {/* Breadcrumb */}
       <div className="breadcrumb">
-        <a href="/">Αρχική</a> &gt; <span>Προφίλ -  Νταντάς</span>
+        <a href="/">Αρχική</a> &gt; <span>Προφίλ - Νταντάς</span>
       </div>
 
       {/* Error message */}
@@ -194,20 +200,20 @@ export default function ParentProfile() {
             />
 
             <label>Περιοχή</label>
-              <select
-                value={region}
-                onChange={(e) => setRegion(e.target.value)}
-                required
-              >
-                <option value="" disabled>
-                  Επιλέξτε την πόλη σας
+            <select
+              value={region}
+              onChange={(e) => setRegion(e.target.value)}
+              required
+            >
+              <option value="" disabled>
+                Επιλέξτε την πόλη σας
+              </option>
+              {citiesInGreece.map((city) => (
+                <option key={city} value={city}>
+                  {city}
                 </option>
-                {citiesInGreece.map((city) => (
-                  <option key={city} value={city}>
-                    {city}
-                  </option>
-                ))}
-              </select>
+              ))}
+            </select>
 
             <label>Επιθυμητή Τοποθεσία Φύλαξης</label>
             <select>
@@ -224,8 +230,8 @@ export default function ParentProfile() {
               <option value="" disabled>
                 Επιλέξτε είδος απασχόλησης
               </option>
-              <option >Πλήρης</option>
-              <option >Μερική</option>
+              <option>Πλήρης</option>
+              <option>Μερική</option>
             </select>
           </div>
 
@@ -242,22 +248,22 @@ export default function ParentProfile() {
             />
 
             <label>Επιλέξτε ιδιότητα:</label>
-              <div>
-                <button
-                  type="button"
-                  className={`role-button ${!expertise ? "selected" : ""}`}
-                  onClick={() => setExpertise(false)}
-                >
-                  Φοιτήτρια
-                </button>
-                <button
-                  type="button"
-                  className={`role-button ${expertise? "selected" : ""}`}
-                  onClick={() => setExpertise(true)}
-                >
-                  Επαγγελματίας
-                </button>
-              </div>
+            <div>
+              <button
+                type="button"
+                className={`role-button ${!expertise ? "selected" : ""}`}
+                onClick={() => setExpertise(false)}
+              >
+                Φοιτήτρια
+              </button>
+              <button
+                type="button"
+                className={`role-button ${expertise ? "selected" : ""}`}
+                onClick={() => setExpertise(true)}
+              >
+                Επαγγελματίας
+              </button>
+            </div>
 
             <label>Διεύθυνση Ηλεκτρονικού Ταχυδρομείου -email</label>
             <input type="email" value={email} />
@@ -272,7 +278,6 @@ export default function ParentProfile() {
             ></textarea>
           </div>
 
-
           {/* Buttons */}
           <div className="buttons">
             <button
@@ -282,18 +287,14 @@ export default function ParentProfile() {
             >
               Έξοδος
             </button>
-            <button
-              type="submit"
-              className="save-button"
-              disabled={loading}
-            >
+            <button type="submit" className="save-button" disabled={loading}>
               {loading ? "Επεξεργασία.." : "Αποθήκευση"}
             </button>
           </div>
         </form>
       </div>
 
-      <Footer/>
+      <Footer />
     </div>
   );
 }

@@ -1,6 +1,17 @@
 // Create Nanny Registration Form
 import Header from "../Header";
 import Footer from "../Footer";
+import { useEffect } from "react";
+import { FIREBASE_AUTH, FIREBASE_DB } from "../../firebase";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  setDoc,
+  doc,
+} from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import {
   Stepper,
@@ -33,7 +44,70 @@ import ConfirmationModals from "./ConfirmationModals";
 
 export default function RegFormNanny() {
   const navigate = useNavigate();
+  const [userData, setUserData] = useState([]); // For fetched data
+  const [userId, setUserId] = useState(null);
+  // Track authentication
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
+      if (user) {
+        setMail(user.email);
+        setUserId(user.uid);
+      } else {
+        //navigate("/loginNanny");
+      }
+    });
+    return () => unsubscribe();
+  }, [navigate]);
 
+  // Fetch user data after userId is set
+  useEffect(() => {
+    if (userId) fetchUserData();
+  }, [userId]);
+
+  // Logout handler
+  const handleLogout = async () => {
+    try {
+      await signOut(FIREBASE_AUTH);
+      // navigate("/");
+    } catch (error) {
+      console.error("Error logging out:", error);
+      // setError("Αποτυχία αποσύνδεσης. Παρακαλώ προσπαθήστε ξανά.");
+    }
+  };
+
+  // Fetch user data
+  const fetchUserData = async () => {
+    try {
+      const q = query(
+        collection(FIREBASE_DB, "user"),
+        where("userId", "==", userId)
+      );
+      const querySnapshot = await getDocs(q);
+      const users = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setUserData(users);
+      //If user data exists, populate the form fields
+      if (users.length > 0) {
+        console.error("test");
+        const user = users[0]; // Assuming there's only one document per user
+        setOnoma(user.onoma || "");
+        setEponymo(user.surName || "");
+        setOnomaPatera(user.fatherName || "");
+        setTilefwno(user.phone || "");
+        setKinito(user.cellPhone || "");
+        setGenisi(user.dateBirth || "");
+        setAddress(user.address || "");
+        setMail(user.email || "");
+        //setBio(user.bio || "");
+        //setRegion(user.region || "");
+        //setExpertise(user.expertise || "");
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
   const steps = [
     "Βασικά στοιχεία",
     "Στοιχεία επικοινωνίας, Διαθεσιμότητα",
@@ -67,11 +141,33 @@ export default function RegFormNanny() {
     // Perform cancel action, e.g., navigate or reset form
     //navigate("/home");
   };
-  const handleConfirmSave = () => {
-    console.log("User confirmed cancellation.");
+  const handleConfirmSave = async (e) => {
     setSaveModalOpen(false); // Close the modal
-    // Perform cancel action, e.g., navigate or reset form
-    //navigate("/home");
+    try {
+      const payload = {
+        onoma,
+        eponymo,
+        onomaPatera,
+        onomaMiteras,
+        userId,
+        role: false,
+        genisi,
+        tilefwno,
+        kinito,
+        address,
+        perioxi,
+        appointments: [],
+        createdAt: new Date(),
+      };
+
+      if (userData.length > 0) {
+        const existingDocId = userData[0].id; // Assuming only one document per user
+        await setDoc(doc(FIREBASE_DB, "user", existingDocId), payload, {
+          merge: true,
+        });
+      }
+      //navigate("/home");
+    } catch {}
   };
   const handleConfirmSubmit = () => {
     console.log("User confirmed cancellation.");
@@ -313,7 +409,7 @@ export default function RegFormNanny() {
     setSubmitModalOpen(true); // Show the modal
   };
 
-  // Allow users to directly select a step
+  //Allow users to directly select a step
   const handleStepClick = (index) => {
     if (index != activeStep) {
       if (index == 0) setActiveStep(index);
@@ -336,6 +432,10 @@ export default function RegFormNanny() {
       }
     }
   };
+
+  // const handleStepClick = (index) => {
+  //   setActiveStep(index);
+  // };
 
   //-------------------------------------------------------------------------------------------------------------------------------
   //Validate functions for next button
@@ -573,8 +673,7 @@ export default function RegFormNanny() {
                     onChange={(date) => setGenisi(date)}
                     dateFormat="dd/MM/yyyy"
                     placeholderText="Επιλέξτε ημερομηνία"
-                    maxDate={new Date()} // Prevent future dates
-                    minDate={eighteenYearsAgo}
+                    maxDate={eighteenYearsAgo} // Prevent future dates
                     showYearDropdown // Enables year dropdown
                     scrollableYearDropdown // Allows scrolling through the years
                     yearDropdownItemNumber={100} // Number of years to show in the dropdown
