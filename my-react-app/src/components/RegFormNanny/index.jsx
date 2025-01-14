@@ -29,14 +29,15 @@ import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./index.css";
+import ConfirmationModals from "./ConfirmationModals";
 
 export default function RegFormNanny() {
   const navigate = useNavigate();
 
   const steps = [
-    "Έλεγχος Στοιχείων TaxisNet",
-    "Συμπλήρωση στοιχείων Νταντάς",
-    "Επισύναψη Δικαιολογητικών",
+    "Βασικά στοιχεία",
+    "Στοιχεία επικοινωνίας, Διαθεσιμότητα",
+    "Εκπαίδευση και Δικαιολογητικά",
     "Έλεγχος και Υποβολή",
   ]; // Define stages
   const [activeStep, setActiveStep] = useState(0);
@@ -60,6 +61,7 @@ export default function RegFormNanny() {
   const eighteenYearsAgo = new Date();
   eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18); // Calculate the minimum date (18 years ago)
 
+  //Modal handlers
   const handleConfirmCancel = () => {
     setCancelModalOpen(false); // Close the modal
     // Perform cancel action, e.g., navigate or reset form
@@ -87,6 +89,7 @@ export default function RegFormNanny() {
   const handleCloseSubmit = () => {
     setSubmitModalOpen(false); // Close the modal without canceling
   };
+  //---------------------------------------------------------------------------------------
   //metablites forms
   //vars of step 0
   const [onoma, setOnoma] = useState("");
@@ -313,7 +316,24 @@ export default function RegFormNanny() {
   // Allow users to directly select a step
   const handleStepClick = (index) => {
     if (index != activeStep) {
-      setActiveStep(index); // Allow only going back to previous steps
+      if (index == 0) setActiveStep(index);
+      else if (index == 1) {
+        if (validateStep0() == true) {
+          setActiveStep(index);
+        }
+      } else if (index == 2) {
+        if (validateStep0() == true && validateStep1OnlyFilled() == true) {
+          setActiveStep(index);
+        }
+      } else if (index == 3) {
+        if (
+          validateStep0() == true &&
+          validateStep1OnlyFilled() == true &&
+          validateStep2() == true
+        ) {
+          setActiveStep(index);
+        }
+      }
     }
   };
 
@@ -1218,7 +1238,6 @@ export default function RegFormNanny() {
             >
               ΑΚΥΡΩΣΗ ΑΙΤΗΣΗΣ
             </Button>
-
             {activeStep > 0 && (
               <Button
                 variant="contained"
@@ -1233,7 +1252,6 @@ export default function RegFormNanny() {
                 ΠΡΟΗΓΟΥΜΕΝΟ
               </Button>
             )}
-
             <Button
               variant="contained"
               onClick={handleSave}
@@ -1246,7 +1264,6 @@ export default function RegFormNanny() {
             >
               ΑΠΟΘΗΚΕΥΣΗ
             </Button>
-
             {activeStep < steps.length - 1 && (
               <Button
                 variant="contained"
@@ -1280,99 +1297,19 @@ export default function RegFormNanny() {
                 ΚΑΤΑΘΕΣΗ
               </Button>
             )}
-            {/* Modal Dialog cancel button */}
-            <Dialog
-              open={cancelModalOpen}
-              onClose={handleCloseCancel} // Allow closing by clicking outside
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-            >
-              <DialogTitle id="alert-dialog-title">
-                Επιβεβαίωση Ακύρωσης
-              </DialogTitle>
-              <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                  Είστε σίγουροι ότι θέλετε να ακυρώσετε; Όλες οι αλλαγές σας θα
-                  χαθούν.
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button
-                  onClick={handleCloseCancel}
-                  style={{ color: "#007BFF" }}
-                >
-                  Όχι
-                </Button>
-                <Button
-                  onClick={handleConfirmCancel}
-                  style={{ color: "#E53935" }}
-                  autoFocus
-                >
-                  Ναι, Ακύρωση
-                </Button>
-              </DialogActions>
-            </Dialog>
-            {/* Modal Dialog save button */}
-            <Dialog
-              open={saveModalOpen}
-              onClose={handleCloseSave} // Allow closing by clicking outside
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-            >
-              <DialogTitle id="alert-dialog-title">
-                Επιβεβαίωση Ακύρωσης
-              </DialogTitle>
-              <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                  Είστε σίγουροι ότι θέλετε να ακυρώσετε; Όλες οι αλλαγές σας θα
-                  χαθούν.
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleCloseSave} style={{ color: "#007BFF" }}>
-                  Όχι
-                </Button>
-                <Button
-                  onClick={handleConfirmSave}
-                  style={{ color: "#E53935" }}
-                  autoFocus
-                >
-                  Ναι, Ακύρωση
-                </Button>
-              </DialogActions>
-            </Dialog>
-            {/* Modal Dialog submit button */}
-            <Dialog
-              open={submitModalOpen}
-              onClose={handleCloseSubmit} // Allow closing by clicking outside
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-            >
-              <DialogTitle id="alert-dialog-title">
-                Επιβεβαίωση Ακύρωσης
-              </DialogTitle>
-              <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                  Είστε σίγουροι ότι θέλετε να ακυρώσετε; Όλες οι αλλαγές σας θα
-                  χαθούν.
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button
-                  onClick={handleCloseSubmit}
-                  style={{ color: "#007BFF" }}
-                >
-                  Όχι
-                </Button>
-                <Button
-                  onClick={handleConfirmSubmit}
-                  style={{ color: "#E53935" }}
-                  autoFocus
-                >
-                  Ναι, Ακύρωση
-                </Button>
-              </DialogActions>
-            </Dialog>
+            {/* Modal Dialog for confirm*/}
+            <ConfirmationModals
+              cancelModalOpen={cancelModalOpen}
+              handleCloseCancel={handleCloseCancel}
+              handleConfirmCancel={handleConfirmCancel}
+              saveModalOpen={saveModalOpen}
+              handleCloseSave={handleCloseSave}
+              handleConfirmSave={handleConfirmSave}
+              submitModalOpen={submitModalOpen}
+              handleCloseSubmit={handleCloseSubmit}
+              handleConfirmSubmit={handleConfirmSubmit}
+            />
+            ;
           </Box>
         </Box>
       </div>
