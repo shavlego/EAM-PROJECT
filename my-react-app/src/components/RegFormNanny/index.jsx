@@ -245,7 +245,7 @@ export default function RegFormNanny() {
         fileUploadAlo: fileUploadAlo, //pistopoihtiko glwssomatheias gia alodapous string
         //-----------------------------------------------------------------------------------
         fullName: onoma + " " + eponymo,
-        regSubmited: true,
+        regSubmitted: true,
         appointments: [],
         createdAt: new Date(),
         role: false,
