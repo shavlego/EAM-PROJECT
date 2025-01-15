@@ -92,16 +92,36 @@ export default function RegFormNanny() {
       if (users.length > 0) {
         console.error("test");
         const user = users[0]; // Assuming there's only one document per user
-        setOnoma(user.onoma || "");
+        //step 0 vars
+        setOnoma(user.name || "");
         setEponymo(user.surName || "");
         setOnomaPatera(user.fatherName || "");
+        setOnomaMiteras(user.motherName || "");
+        setGenisi(user.dateOfBirth.toDate());
+        //step 1 vars
         setTilefwno(user.phone || "");
         setKinito(user.cellPhone || "");
-        setGenisi(user.dateBirth || "");
         setAddress(user.address || "");
+        setPerioxi(user.perioxi || "");
+        setTk(user.tk || "");
+        setCity(user.region || "");
         setMail(user.email || "");
+        setHost(user.host || "");
+        setCoHost(user.coHost || "");
+        setTypeOfWork(user.type || "");
+        setChildAges(user.childAges || "");
+        //step 2 vasrs
+        setEkpaideusi(user.ekpaideusi || "");
+        setFileUploadSpoudes(user.fileUploadSpoudes || "");
+        setFirstAid(user.firstAid || "");
+        setFileUploadFirstAid(user.fileUploadFirstAid || "");
+        setFileUploadPathol(user.fileUploadPathol || "");
+        setFileUploadDerm(user.setFileUploadDerm || "");
+        setFileUploadPsi(user.fileUploadPsi || "");
+        setFileUploadYd(user.fileUploadPsi || "");
+        setFileUploadAlo(user.fileUploadAlo || "");
+        //-------------------------------------------------------
         //setBio(user.bio || "");
-        //setRegion(user.region || "");
         //setExpertise(user.expertise || "");
       }
     } catch (error) {
@@ -145,19 +165,40 @@ export default function RegFormNanny() {
     setSaveModalOpen(false); // Close the modal
     try {
       const payload = {
-        onoma,
-        eponymo,
-        onomaPatera,
-        onomaMiteras,
-        userId,
-        role: false,
-        genisi,
-        tilefwno,
-        kinito,
-        address,
-        perioxi,
+        //from step 0
+        name: onoma,
+        surName: eponymo,
+        fatherName: onomaPatera,
+        motherName: onomaMiteras,
+        dateOfBirth: genisi,
+        //from step 1
+        email: mail,
+        phone: tilefwno,
+        cellPhone: kinito,
+        address: address,
+        perioxi: perioxi,
+        tk: tk,
+        region: city,
+        host: host, //Dynatotita filoksenias stin oikia
+        coHost: coHost, //synikountes
+        type: typeOfWork, //pliris/meriki
+        childAges: childAges, //0-6 Μηνών/6-12 Μηνών/1-2.5 Έτη/0-2.5 Έτη
+        //from step 2
+        ekpaideusi: ekpaideusi, //Λύκειο/ΙΕΚ/ΤΕΙ/ΑΕΙ
+        fileUploadSpoudes: fileUploadSpoudes, //Pistopoihtiko ekpaideusis string
+        firstAid: firstAid, //Gnwsi prwtwn bohtheiwn NAI/OXI
+        fileUploadFirstAid: fileUploadFirstAid, //Pistopoihtiko prwtwn vohtheiwn string
+        fileUploadPathol: fileUploadPathol, //Pistopoihtiko ygeias apo pathologo string
+        fileUploadDerm: fileUploadDerm, //pistopoihtiko ygeias apo dermatologo string
+        fileUploadPsi: fileUploadPsi, //pistopoihtiko ygeias apo psichiatro string
+        fileUploadYd: fileUploadYd, //Ypeythini dhlwsh aitisis string
+        fileUploadAlo: fileUploadAlo, //pistopoihtiko glwssomatheias gia alodapous string
+        //-----------------------------------------------------------------------------------
+        fullname: onoma + " " + eponymo,
         appointments: [],
         createdAt: new Date(),
+        role: false,
+        userId,
       };
 
       if (userData.length > 0) {
@@ -169,11 +210,56 @@ export default function RegFormNanny() {
       //navigate("/home");
     } catch {}
   };
-  const handleConfirmSubmit = () => {
+  const handleConfirmSubmit = async (e) => {
     console.log("User confirmed cancellation.");
     setSubmitModalOpen(false); //close the modal
-    // Perform cancel action, e.g., navigate or reset form
-    //navigate("/home");
+    try {
+      const payload = {
+        //from step 0
+        name: onoma,
+        surName: eponymo,
+        fatherName: onomaPatera,
+        motherName: onomaMiteras,
+        dateOfBirth: genisi,
+        //from step 1
+        email: mail,
+        phone: tilefwno,
+        cellPhone: kinito,
+        address: address,
+        perioxi: perioxi,
+        tk: tk,
+        region: city,
+        host: host, //Dynatotita filoksenias stin oikia
+        coHost: coHost, //synikountes
+        type: typeOfWork, //pliris/meriki
+        childAges: childAges, //0-6 Μηνών/6-12 Μηνών/1-2.5 Έτη/0-2.5 Έτη
+        //from step 2
+        ekpaideusi: ekpaideusi, //Λύκειο/ΙΕΚ/ΤΕΙ/ΑΕΙ
+        fileUploadSpoudes: fileUploadSpoudes, //Pistopoihtiko ekpaideusis string
+        firstAid: firstAid, //Gnwsi prwtwn bohtheiwn NAI/OXI
+        fileUploadFirstAid: fileUploadFirstAid, //Pistopoihtiko prwtwn vohtheiwn string
+        fileUploadPathol: fileUploadPathol, //Pistopoihtiko ygeias apo pathologo string
+        fileUploadDerm: fileUploadDerm, //pistopoihtiko ygeias apo dermatologo string
+        fileUploadPsi: fileUploadPsi, //pistopoihtiko ygeias apo psichiatro string
+        fileUploadYd: fileUploadYd, //Ypeythini dhlwsh aitisis string
+        fileUploadAlo: fileUploadAlo, //pistopoihtiko glwssomatheias gia alodapous string
+        //-----------------------------------------------------------------------------------
+        fullName: onoma + " " + eponymo,
+        regSubmited: true,
+        appointments: [],
+        createdAt: new Date(),
+        role: false,
+        userId,
+      };
+
+      if (userData.length > 0) {
+        const existingDocId = userData[0].id; // Assuming only one document per user
+        await setDoc(doc(FIREBASE_DB, "user", existingDocId), payload, {
+          merge: true,
+        });
+      }
+      //navigate("/home");
+    } catch {}
   };
 
   const handleCloseCancel = () => {
@@ -201,9 +287,11 @@ export default function RegFormNanny() {
   const [address, setAddress] = useState("");
   const [tk, setTk] = useState("");
   const [perioxi, setPerioxi] = useState("");
+  const [typeOfWork, setTypeOfWork] = useState("");
   const [host, setHost] = useState("");
   const [coHost, setCoHost] = useState("");
   const [childAges, setChildAges] = useState("");
+  const [city, setCity] = useState("");
   //vars of step 2
   const [ekpaideusi, setEkpaideusi] = useState("");
   const [fileUploadSpoudes, setFileUploadSpoudes] = useState("");
@@ -227,6 +315,7 @@ export default function RegFormNanny() {
   const [addressError, setAddressError] = useState("");
   const [perioxiError, setPerioxiError] = useState("");
   const [tkError, setTkError] = useState("");
+  const [cityError, setCityError] = useState("");
 
   //step 2 error messages
   //Maybe add errors for
@@ -327,6 +416,17 @@ export default function RegFormNanny() {
       );
     }
   };
+  const handleCityChange = (e) => {
+    const value = e.target.value;
+    if (isValidName(value)) {
+      setCity(value); // Update state if valid
+      setCityError(""); // Clear error message
+    } else {
+      setCityError(
+        'Στο πεδίο " Πόλη κατοικίας " επιτρέπονται μόνο ελληνικοί,λατινικοί χαρακτήρες και κενά'
+      );
+    }
+  };
   const handleTκChange = (e) => {
     const value = e.target.value;
     if (isValidNumber(value, 0, 8)) {
@@ -347,6 +447,9 @@ export default function RegFormNanny() {
         'Στο πεδίο " Διεύθυνση " επιτρέπονται μόνο ελληνικοί,λατινικοί χαρακτήρες και κενά'
       );
     }
+  };
+  const handletypeOfWorkChange = (event) => {
+    setTypeOfWork(event.target.value); // Update state when the user selects an option
   };
   const handleHostChange = (event) => {
     setHost(event.target.value); // Update state when the user selects an option
@@ -514,7 +617,27 @@ export default function RegFormNanny() {
     if (!mail.trim()) {
       isValid = false;
     }
-
+    if (!address.trim()) {
+      isValid = false;
+    }
+    if (!perioxi.trim()) {
+      isValid = false;
+    }
+    if (!tk.trim()) {
+      isValid = false;
+    }
+    if (!city.trim()) {
+      isValid = false;
+    }
+    if (!typeOfWork.trim()) {
+      isValid = false;
+    }
+    //if the user selects his address then he must check the cohost field
+    if (host == "NAI") {
+      if (coHost == "") {
+        isValid = false;
+      }
+    }
     return isValid;
   };
   // Validation function for Step 2
@@ -523,6 +646,11 @@ export default function RegFormNanny() {
 
     if (!ekpaideusi.trim()) {
       isValid = false;
+    }
+    if (firstAid == "ΝΑΙ") {
+      if (fileUploadFirstAid == "") {
+        isValid = false;
+      }
     }
 
     if (!fileUploadSpoudes.trim()) {
@@ -828,6 +956,28 @@ export default function RegFormNanny() {
                         helperText={tkError} // Display error message below the input
                       />
                     </FormControl>
+                    <FormControl
+                      style={{ flexGrow: 2, minWidth: "280px" }}
+                      fullWidth
+                      variant="outlined"
+                    >
+                      <label
+                        htmlFor="textBox"
+                        className="form-label"
+                        style={{ fontSize: "16px" }}
+                      >
+                        Πόλη Κατοικίας <span style={{ color: "red" }}>* </span>
+                      </label>
+                      <TextField
+                        id="city"
+                        variant="outlined"
+                        value={city}
+                        onChange={handleCityChange}
+                        fullWidth
+                        error={Boolean(tkError)} // Highlight input if there's an error
+                        helperText={tkError} // Display error message below the input
+                      />
+                    </FormControl>
                   </div>
                   {/* Pedia ta opoia aforoun tin diathesimotita kai to plaisio paroxis ypiresiwn */}
                   <Typography variant="h6">
@@ -838,6 +988,35 @@ export default function RegFormNanny() {
                     className="d-flex align-items-center"
                     style={{ gap: "16px", marginBottom: "16px" }}
                   >
+                    <FormControl
+                      style={{ flexGrow: 2, minWidth: "320px" }}
+                      fullWidth
+                      variant="outlined"
+                    >
+                      {/* Label for the combobox */}
+                      <label
+                        htmlFor="typeOfWork"
+                        className="form-label"
+                        style={{
+                          fontSize: "16px",
+                          marginBottom: "8px",
+                          display: "block",
+                        }}
+                      >
+                        Τύπος Απασχόλησης Πλήρης/Μερική
+                      </label>
+                      {/* Combobox */}
+                      <Select
+                        id="typeOfWork"
+                        value={typeOfWork} // Bind the current state to the Select value
+                        onChange={handletypeOfWorkChange} // Handle selection change
+                        displayEmpty
+                      >
+                        {/* Dropdown options */}
+                        <MenuItem value="Πλήρης">Πλήρης</MenuItem>
+                        <MenuItem value="Μερική">Μερική</MenuItem>
+                      </Select>
+                    </FormControl>
                     {/* Combobox dynatotita filoksenias */}
                     <FormControl
                       style={{ flexGrow: 2, minWidth: "320px" }}
@@ -865,8 +1044,8 @@ export default function RegFormNanny() {
                       >
                         {/* Dropdown options */}
                         <MenuItem value=""></MenuItem>
-                        <MenuItem value="yes">ΝΑΙ</MenuItem>
-                        <MenuItem value="no">ΟΧΙ</MenuItem>
+                        <MenuItem value="ΝΑΙ">ΝΑΙ</MenuItem>
+                        <MenuItem value="ΟΧΙ">ΟΧΙ</MenuItem>
                       </Select>
                     </FormControl>
 
@@ -894,12 +1073,12 @@ export default function RegFormNanny() {
                         value={coHost}
                         onChange={handleCoHostChange}
                         displayEmpty
-                        disabled={host != "yes"}
+                        disabled={host != "ΝΑΙ"}
                       >
                         {/* Dropdown options */}
                         <MenuItem value=""></MenuItem>
-                        <MenuItem value="yes">ΝΑΙ</MenuItem>
-                        <MenuItem value="no">ΟΧΙ</MenuItem>
+                        <MenuItem value="ΝΑΙ">ΝΑΙ</MenuItem>
+                        <MenuItem value="ΟΧΙ">ΟΧΙ</MenuItem>
                       </Select>
                     </FormControl>
 
@@ -930,10 +1109,10 @@ export default function RegFormNanny() {
                       >
                         {/* Dropdown options */}
                         <MenuItem value=""></MenuItem>
-                        <MenuItem value="0-6">0-6 Μηνών</MenuItem>
-                        <MenuItem value="6-12">6-12 Μηνών</MenuItem>
-                        <MenuItem value="1-2.5">1-2,5 Έτη</MenuItem>
-                        <MenuItem value="0-2.5">0-2,5 Έτη</MenuItem>
+                        <MenuItem value="0-6 Μηνών">0-6 Μηνών</MenuItem>
+                        <MenuItem value="6-12 Μηνών">6-12 Μηνών</MenuItem>
+                        <MenuItem value="1-2,5 Έτη">1-2,5 Έτη</MenuItem>
+                        <MenuItem value="0-2,5 Έτη">0-2,5 Έτη</MenuItem>
                       </Select>
                     </FormControl>
                   </div>
@@ -978,12 +1157,12 @@ export default function RegFormNanny() {
                   >
                     {/* Dropdown options */}
                     <MenuItem value=""></MenuItem>
-                    <MenuItem value="likio">
+                    <MenuItem value="Λύκειο">
                       Απόφοιτος/Απόφοιτη Λυκείου
                     </MenuItem>
-                    <MenuItem value="iek">Απόφοιτος/Απόφοιτη ΙΕΚ</MenuItem>
-                    <MenuItem value="tei">Απόφοιτος/Απόφοιτη ΤΕΙ</MenuItem>
-                    <MenuItem value="aei">Απόφοιτος/Απόφοιτη ΑΕΙ</MenuItem>
+                    <MenuItem value="IEK">Απόφοιτος/Απόφοιτη ΙΕΚ</MenuItem>
+                    <MenuItem value="TEI">Απόφοιτος/Απόφοιτη ΤΕΙ</MenuItem>
+                    <MenuItem value="AEI">Απόφοιτος/Απόφοιτη ΑΕΙ</MenuItem>
                   </Select>
                   <label
                     htmlFor="textBox"
@@ -1032,8 +1211,8 @@ export default function RegFormNanny() {
                       >
                         {/* Dropdown options */}
                         <MenuItem value=""></MenuItem>
-                        <MenuItem value="yes">ΝΑΙ</MenuItem>
-                        <MenuItem value="no">ΟΧΙ</MenuItem>
+                        <MenuItem value="ΝΑΙ">ΝΑΙ</MenuItem>
+                        <MenuItem value="ΟΧΙ">ΟΧΙ</MenuItem>
                       </Select>
                     </FormControl>
                   </div>
@@ -1050,7 +1229,7 @@ export default function RegFormNanny() {
                     className="form-control"
                     onChange={handleFileUploadFirstAid}
                     style={{ marginBottom: "8px" }}
-                    disabled={firstAid != "yes"}
+                    disabled={firstAid != "ΝΑΙ"}
                   />
                   &nbsp;
                   <Typography variant="h4">Πιστοποιητικά Υγείας</Typography>
