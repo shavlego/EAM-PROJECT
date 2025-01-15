@@ -1066,6 +1066,9 @@ export default function RegFormNanny() {
                         }}
                       >
                         Υπάρχουν Συνοικούντες;
+                        {host === "ΝΑΙ" && (
+                          <span style={{ color: "red" }}>*</span>
+                        )}
                       </label>
                       {/* Combobox */}
                       <Select
@@ -1222,6 +1225,9 @@ export default function RegFormNanny() {
                     style={{ fontSize: "16px" }}
                   >
                     Πιστοποιητικό Πρώτων Βοηθειών
+                    {firstAid === "ΝΑΙ" && (
+                      <span style={{ color: "red" }}>*</span>
+                    )}
                   </label>
                   <input
                     id="fileUploadFirstAid"

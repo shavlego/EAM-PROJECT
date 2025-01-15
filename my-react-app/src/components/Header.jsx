@@ -1,104 +1,100 @@
-import './Header.css';
-import 'bootstrap/dist/css/bootstrap.min.css';        /*For dropdown menu*/
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';   /*For dropdown menu*/
+import "./Header.css";
+import "bootstrap/dist/css/bootstrap.min.css"; /*For dropdown menu*/
+import "bootstrap/dist/js/bootstrap.bundle.min.js"; /*For dropdown menu*/
 import { useNavigate, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FIREBASE_AUTH, FIREBASE_DB } from "../firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { collection, query, where, getDocs } from "firebase/firestore";
 
-
-
 function Header() {
   const navigate = useNavigate();
-  const [userName,setUserName] = useState(null);
-  const [email,setEmail] = useState(null);
-  const [userId,setUserId] = useState(null);
-  const [userRole,setUserRole] = useState(null);
+  const [userName, setUserName] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [userId, setUserId] = useState(null);
+  const [userRole, setUserRole] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login state locally
-  const [userMail,setUserMail] = useState(false);
+  const [userMail, setUserMail] = useState(false);
 
- // Listen to auth state changes
+  // Listen to auth state changes
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, async (user) => {
       if (user) {
         setUserId(user.uid); // Store user ID
-        setUserMail(user.email)
-        setUserRole(user.role)
+        setUserMail(user.email);
         await fetchUsername(user.uid); // Fetch and set the username
         setIsLoggedIn(true); // Mark as logged in
       } else {
         setUserId(null);
         setUserName(null);
         setUserRole(null);
-        setIsLoggedIn(false); 
+        setIsLoggedIn(false);
       }
     });
     return () => unsubscribe();
   }, []);
-  
 
-// Fetch username from Firestore using query logic
-const fetchUsername = async (userId) => {
-  try {
-    console.log("Fetching username for UID:", userId);
+  // Fetch username from Firestore using query logic
+  const fetchUsername = async (userId) => {
+    try {
+      console.log("Fetching username for UID:", userId);
 
-    // Query the "user" collection for documents where "userId" matches
-    const q = query(collection(FIREBASE_DB, "user"), where("userId", "==", userId));
-    const querySnapshot = await getDocs(q);
+      // Query the "user" collection for documents where "userId" matches
+      const q = query(
+        collection(FIREBASE_DB, "user"),
+        where("userId", "==", userId)
+      );
+      const querySnapshot = await getDocs(q);
 
-    if (!querySnapshot.empty) {
-      // Assuming only one document matches
-      const userDoc = querySnapshot.docs[0];
-      const userData = userDoc.data();
-
-      console.log("User data fetched from Firestore:", userData);
-      setUserName(userData.fullName); // Assuming the username is stored as "fullName"
-      setEmail(userData.email);
-    } else {
-      console.log("No user document found for the provided userId.");
+      if (!querySnapshot.empty) {
+        // Assuming only one document matches
+        const userDoc = querySnapshot.docs[0];
+        const userData = userDoc.data();
+        console.log("User data fetched from Firestore:", userData);
+        setUserName(userData.fullName); // Assuming the username is stored as "fullName"
+        setEmail(userData.email);
+        setUserRole(userData.role);
+      } else {
+        console.log("No user document found for the provided userId.");
+      }
+    } catch (error) {
+      console.error("Error fetching username:", error);
     }
-  } catch (error) {
-    console.error("Error fetching username:", error);
-  }
-};
-
-
+  };
 
   const handleLogout = async () => {
-      try {
-        await signOut(FIREBASE_AUTH);
-        navigate("/");
-      } catch (error) {
-        console.error("Error logging out:", error);
-      
-      }
-    };
+    try {
+      await signOut(FIREBASE_AUTH);
+      navigate("/");
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
+  };
 
- 
   return (
     <header className="bg-light py-3 border-bottom">
       <div className="container d-flex align-items-center">
         {/* Logo on the Left */}
-        <div className="logo d-flex align-items-center" onClick={() => navigate("/")}>
-          <img
-            src="/Images/logo.png"
-            alt="Logo"
-            className="img-fluid"
-          />
+        <div
+          className="logo d-flex align-items-center"
+          onClick={() => navigate("/")}
+        >
+          <img src="/Images/logo.png" alt="Logo" className="img-fluid" />
         </div>
 
         {/* Menu Next to the Logo */}
-        <nav className="ms-3"> {/* Added margin-start (Bootstrap utility) */}
+        <nav className="ms-3">
+          {" "}
+          {/* Added margin-start (Bootstrap utility) */}
           <ul className="nav fw-bold">
             <li className="nav-item dropdown">
               <a
-              href="#"
-              className="nav-link dropdown-toggle"
-              id="nanniesDropdown"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
+                href="#"
+                className="nav-link dropdown-toggle"
+                id="nanniesDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
               >
                 Νταντάδες
               </a>
@@ -116,13 +112,13 @@ const fetchUsername = async (userId) => {
               </ul>
             </li>
             <li className="nav-item dropdown">
-            <a
-              href="#"
-              className="nav-link dropdown-toggle"
-              id="parrentsDropdown"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
+              <a
+                href="#"
+                className="nav-link dropdown-toggle"
+                id="parrentsDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
               >
                 Γονείς
               </a>
@@ -140,13 +136,13 @@ const fetchUsername = async (userId) => {
               </ul>
             </li>
             <li className="nav-item dropdown">
-            <a
-              href="#"
-              className="nav-link dropdown-toggle"
-              id="infoDropdown"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
+              <a
+                href="#"
+                className="nav-link dropdown-toggle"
+                id="infoDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
               >
                 Πληροφορίες
               </a>
@@ -169,13 +165,13 @@ const fetchUsername = async (userId) => {
               </ul>
             </li>
             <li className="nav-item dropdown">
-            <a
-              href="#"
-              className="nav-link dropdown-toggle"
-              id="helpDropdown"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
+              <a
+                href="#"
+                className="nav-link dropdown-toggle"
+                id="helpDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
               >
                 Βοήθεια
               </a>
@@ -187,7 +183,7 @@ const fetchUsername = async (userId) => {
                 </li>
                 <li>
                   <a className="dropdown-item" href="./SiteMap">
-                    Χάρτης Ιστοχώρου 
+                    Χάρτης Ιστοχώρου
                   </a>
                 </li>
               </ul>
@@ -201,7 +197,9 @@ const fetchUsername = async (userId) => {
         </nav>
 
         {/* Dynamic Login/Username Section */}
-        <div className="ms-auto"> {/* Push the button/username to the far right */}
+        <div className="ms-auto">
+          {" "}
+          {/* Push the button/username to the far right */}
           {isLoggedIn ? (
             <div className="dropdown">
               <button
@@ -215,23 +213,27 @@ const fetchUsername = async (userId) => {
               </button>
               <ul className="dropdown-menu" aria-labelledby="userDropdown">
                 <li>
-                <a 
-                  className="dropdown-item" 
-                  href="#" 
-                  onClick={() => {
-                    // Navigate based on user role
-                    if (userRole === false) {
-                      navigate("/profileNanny");
-                    } else {
-                      navigate("/profileParent");
-                    }
-                  }}
-                >
-                  Προφίλ
-                </a>
+                  <a
+                    className="dropdown-item"
+                    href="#"
+                    onClick={() => {
+                      // Navigate based on user role
+                      if (userRole == false) {
+                        navigate("/profileNanny");
+                      } else {
+                        navigate("/profileParent");
+                      }
+                    }}
+                  >
+                    Προφίλ
+                  </a>
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#" onClick={() => navigate("/settings")}>
+                  <a
+                    className="dropdown-item"
+                    href="#"
+                    onClick={() => navigate("/settings")}
+                  >
                     Ρυθμίσεις
                   </a>
                 </li>

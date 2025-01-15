@@ -29,6 +29,7 @@ export default function ParentProfile() {
   const [bio, setBio] = useState(""); // State for additional text
   const [region, setRegion] = useState("");
   const [expertise, setExpertise] = useState("");
+  const [nannyFormSubmitted, setNannyFormSubmitter] = useState(false);
 
   const citiesInGreece = [
     "Αθήνα",
@@ -149,6 +150,7 @@ export default function ParentProfile() {
         setBio(user.bio || "");
         setRegion(user.region || "");
         setExpertise(user.expertise || "");
+        setNannyFormSubmitter(user.regSubmited || false);
       }
     } catch (error) {
       console.error("Error fetching user data:", error);
@@ -160,8 +162,8 @@ export default function ParentProfile() {
   return (
     <div className="profile-page">
       <Header />
-      <h1>Δημιουργία Επεξεργασία Προφίλ - Νταντάς</h1>
-
+      <h1>Δημιουργία / Επεξεργασία Προφίλ - Νταντάς</h1>
+      {nannyFormSubmitted == false && navigate("/reg")}
       {/* Breadcrumb */}
       <div className="breadcrumb">
         <a href="/">Αρχική</a> &gt; <span>Προφίλ - Νταντάς</span>
