@@ -178,20 +178,20 @@ export default function NannyProfile() {
       <h1>Δημιουργία / Επεξεργασία Προφίλ - Νταντάς</h1>
       <Breadcrumb />
       <div className="container py-4">
-        <h5 className="mb-4 text-center ">
-          Επεξεργασία Προφίλ - Βιογραφικού Νταντάς
-        </h5>
-        <div className="row mb-4">
+        <div className="row mb-3">
           {/* Profile Picture Section */}
           <div className="col-12 col-sm-4 d-flex flex-column align-items-left">
             <div
-              className="border border-secondary rounded p-3 text-center custom-bg"
-              style={{ height: "100%" }}
+              className="border border-secondary rounded text-center custom-bg"
+              style={{
+                padding: "10px", // Reduced padding
+                height: "100%",
+              }}
             >
               <div
                 style={{
-                  width: "150px",
-                  height: "150px",
+                  width: "120px", // Reduced image size
+                  height: "120px",
                   overflow: "hidden",
                   borderRadius: "50%",
                   margin: "0 auto",
@@ -207,7 +207,7 @@ export default function NannyProfile() {
                   }}
                 />
               </div>
-              <button className="btn btn-primary mt-3">
+              <button className="btn btn-primary mt-2">
                 Αλλαγή Εικόνας Προφίλ
               </button>
             </div>
@@ -216,16 +216,18 @@ export default function NannyProfile() {
           {/* Personal Info Section */}
           <div className="col-12 col-sm-6">
             <div
-              className="custom-bg text-dark p-4 rounded"
-              style={{ height: "100%" }}
+              className="custom-bg text-dark rounded"
+              style={{
+                padding: "15px", // Reduced padding
+              }}
             >
               <h6 className="text-center">Προσωπικές Πληροφορίες</h6>
               <p className="small text-muted">
-                Οι προσωπικές πληροφορίες μπορούν να αλλάξουν μόνο με κατάθεση
-                νέας αίτησης εγγραφής Νταντάς. Μπορείτε να χρησιμοποιήσετε το
-                πλήκτρο στα δεξιά για να αλλάξετε αυτές τις πληροφορίες.
+                Οι προσωπικές πληροφορίες μπορούν να αλλάξουν μόνο με νέα
+                αίτησης εγγραφής. Για νέα αίτηση χρησιμοποιήστε το πλήκτρο
+                "Φόρμα Επανεγγραφής".
               </p>
-              <div className="mb-3">
+              <div className="mb-2">
                 <label className="form-label">Ονοματεπώνυμο</label>
                 <input
                   type="text"
@@ -235,7 +237,7 @@ export default function NannyProfile() {
                 />
               </div>
               <div className="row">
-                <div className="col-6 mb-3">
+                <div className="col-6 mb-2">
                   <label className="form-label">Ηλικία</label>
                   <input
                     type="text"
@@ -244,7 +246,7 @@ export default function NannyProfile() {
                     readOnly
                   />
                 </div>
-                <div className="col-6 mb-3">
+                <div className="col-6 mb-2">
                   <label className="form-label">Επίπεδο Σπουδών</label>
                   <input
                     type="text"
@@ -261,27 +263,24 @@ export default function NannyProfile() {
           <div className="col-12 col-sm-2 d-flex align-items-center justify-content-center">
             <button
               onClick={handleRegButtonClick}
-              className="btn btn-success rounded-pill px-4"
+              className="btn btn-success rounded-pill px-3 py-2"
             >
-              Φόρμα Εγγραφής
+              Φόρμα Eπανεγγραφής
             </button>
-            {/* modals */}
-            <ConfirmationModals
-              regModalOpen={regModalOpen}
-              handleCloseReg={handleCloseReg}
-              handleConfirmReg={handleConfirmReg}
-            />
-            ;
           </div>
         </div>
 
         {/* Address Section */}
-        <div className="row mb-4">
-          {/* Address Section */}
+        <div className="row mb-3">
           <div className="col-12 col-md-6">
-            <div className="custom-bg text-dark p-4 rounded">
+            <div
+              className="custom-bgy text-dark rounded"
+              style={{
+                padding: "15px", // Reduced padding
+              }}
+            >
               <h6>Διεύθυνση Νταντάς</h6>
-              <div className="mb-3">
+              <div className="mb-2">
                 <label className="form-label">Διεύθυνση</label>
                 <input
                   type="text"
@@ -291,7 +290,7 @@ export default function NannyProfile() {
                 />
               </div>
               <div className="row">
-                <div className="col-6 mb-3">
+                <div className="col-6 mb-2">
                   <label className="form-label">Περιοχή</label>
                   <input
                     type="text"
@@ -300,7 +299,7 @@ export default function NannyProfile() {
                     readOnly
                   />
                 </div>
-                <div className="col-6 mb-3">
+                <div className="col-6 mb-2">
                   <label className="form-label">Πόλη</label>
                   <input
                     type="text"
@@ -315,9 +314,14 @@ export default function NannyProfile() {
 
           {/* Contact Info Section */}
           <div className="col-12 col-md-6">
-            <div className="custom-bgy text-dark p-4 rounded">
+            <div
+              className="custom-bgy text-dark rounded"
+              style={{
+                padding: "15px", // Reduced padding
+              }}
+            >
               <h6>Στοιχεία Επικοινωνίας</h6>
-              <div className="mb-3">
+              <div className="mb-2">
                 <label className="form-label">Σταθερό Τηλέφωνο</label>
                 <input
                   type="text"
@@ -327,7 +331,7 @@ export default function NannyProfile() {
                 />
               </div>
               <div className="row">
-                <div className="col-6 mb-3">
+                <div className="col-6 mb-2">
                   <label className="form-label">Κινητό Τηλέφωνο</label>
                   <input
                     type="text"
@@ -336,7 +340,7 @@ export default function NannyProfile() {
                     readOnly
                   />
                 </div>
-                <div className="col-6 mb-3">
+                <div className="col-6 mb-2">
                   <label className="form-label">Email</label>
                   <input
                     type="text"
@@ -349,7 +353,100 @@ export default function NannyProfile() {
             </div>
           </div>
         </div>
+
+        {/* Custom Text Section */}
+        <div className="row mb-3">
+          <div className="col-12">
+            <div
+              className="p-3 rounded custom-bg"
+              style={{
+                borderRadius: "10px",
+              }}
+            >
+              <label className="form-label" style={{ color: "black" }}>
+                Λίγα Λόγια για Εσάς
+              </label>
+              <textarea
+                className="form-control"
+                rows="3"
+                placeholder="Γράψτε κάτι για εσάς..."
+                style={{
+                  border: "2px solid black",
+                  borderRadius: "8px",
+                }}
+              ></textarea>
+            </div>
+          </div>
+        </div>
+        {/* Custom Text Section */}
+        <div className="row mb-3">
+          <div className="col-12">
+            <div
+              className="p-3 rounded custom-bgy"
+              style={{
+                borderRadius: "10px",
+              }}
+            >
+              <label className="form-label" style={{ color: "black" }}>
+                Σύντομο Βιογραφικό
+              </label>
+              <textarea
+                className="form-control"
+                rows="3"
+                placeholder="Γράψτε κάτι για εσάς..."
+                style={{
+                  border: "2px solid black",
+                  borderRadius: "8px",
+                }}
+              ></textarea>
+              <div className="row">
+                <div>
+                  <label
+                    htmlFor="textBox"
+                    className="form-label"
+                    style={{ fontSize: "16px" }}
+                  >
+                    Επισύναψη Βιογραφικού
+                  </label>
+                  <input
+                    id="biografiko"
+                    type="file"
+                    className="form-control"
+                    //onChange={handleFileUploadFirstAid}
+                    style={{ marginBottom: "8px" }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="container d-flex justify-content-center mt-4">
+          <Button
+            variant="contained"
+            style={{
+              backgroundColor: "#FF0000",
+              color: "white",
+              borderRadius: "20px", // Rounded corners
+              minWidth: "180px",
+              marginRight: "10px", // Gap between buttons
+            }}
+          >
+            ΑΚΥΡΩΣΗ
+          </Button>
+          <Button
+            variant="contained"
+            style={{
+              backgroundColor: "#008000",
+              color: "white",
+              borderRadius: "20px", // Rounded corners
+              minWidth: "180px",
+            }}
+          >
+            ΑΠΟΘΗΚΕΥΣΗ
+          </Button>
+        </div>
       </div>
+
       {/* Error message */}
       {error && <div className="error-message">{error}</div>}
 
