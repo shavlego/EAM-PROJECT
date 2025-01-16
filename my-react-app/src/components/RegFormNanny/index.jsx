@@ -90,7 +90,6 @@ export default function RegFormNanny() {
       setUserData(users);
       //If user data exists, populate the form fields
       if (users.length > 0) {
-        console.error("test");
         const user = users[0]; // Assuming there's only one document per user
         //step 0 vars
         setOnoma(user.name || "");

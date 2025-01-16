@@ -31,6 +31,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function NannyProfile() {
   const [email, setEmail] = useState(null);
+  const [emailError, setEmailError] = useState("");
   const [userId, setUserId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -42,12 +43,17 @@ export default function NannyProfile() {
   const [surName, setSurName] = useState("");
   const [ilikia, setIlikia] = useState("");
   const [address, setAddress] = useState("");
+  const [addressError, setAddressError] = useState("");
   const [typeOfWork, setTypeOfWork] = useState("");
   const [phone, setPhone] = useState("");
+  const [phoneError, setPhoneError] = useState("");
   const [cellPhone, setCellPhone] = useState("");
+  const [cellPhoneError, setCellPhoneError] = useState("");
   const [perioxi, setPerioxi] = useState("");
+  const [perioxiError, setPerioxiError] = useState("");
   const [tk, setTk] = useState("");
   const [city, setCity] = useState("");
+  const [cityError, setCityError] = useState("");
   const [host, setHost] = useState("");
   const [childAges, setChildAges] = useState("");
   const [ekpaideusi, setEkpaideusi] = useState();
@@ -56,6 +62,7 @@ export default function NannyProfile() {
 
   //Modals for new registration
   const [regModalOpen, setRegModalOpen] = useState(false);
+  const [cancelModalOpen, setCancelModalOpen] = useState(false);
 
   const handleRegButtonClick = () => {
     setRegModalOpen(true);
@@ -63,6 +70,14 @@ export default function NannyProfile() {
   const handleCloseReg = () => {
     setRegModalOpen(false);
   };
+  const handleCloseCancel = () => {
+    setCancelModalOpen(false);
+  };
+  const handleConfirmCancel = async (e) => {
+    setCancelModalOpen(false);
+    navigate("/");
+  };
+
   //here we need to open set the submit var and navigate to registration
   const handleConfirmReg = async (e) => {
     setRegModalOpen(false);
@@ -91,8 +106,143 @@ export default function NannyProfile() {
       navigate("/registerFormNanny");
     } catch {}
   };
-  //----------------------------------------------------------------------------------------
 
+  //button handlers
+  const handleSaveClick = async (e) => {
+    //need to send info to firebase
+    try {
+      const payload = {
+        phone: phone,
+        cellPhone: cellPhone,
+        address: address,
+        perioxi: perioxi,
+        region: city,
+        userId,
+        bio: bio, //bio of nanny
+      };
+
+      if (userData.length > 0) {
+        const existingDocId = userData[0].id; // Assuming only one document per user
+        await setDoc(doc(FIREBASE_DB, "user", existingDocId), payload, {
+          merge: true,
+        });
+      }
+    } catch {}
+  };
+  const handleCancelClick = () => {
+    //need to call modal if sure
+    console.log("aaa");
+    setCancelModalOpen(true);
+  };
+  //----------------------------------------------------------------------------------------
+  //value change handlers
+  //check the validity of the data
+  const isValidName = (value) => /^[A-Za-zΑ-Ωα-ωΆ-Ώά-ώ\s]*$/.test(value); //i will use the same for eponymo,onoma patros,mitros
+  const isValidEmail = (value) =>
+    /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(value);
+  const isValidNumber = (value, minLength = 1, maxLength = Infinity) => {
+    // Check if the value contains only digits
+    const isNumber = /^[0-9]*$/.test(value);
+    // Check if the length is within the specified range
+    const isCorrectLength =
+      value.length >= minLength && value.length <= maxLength;
+    return isNumber && isCorrectLength;
+  };
+  const isValidAddress = (value) => {
+    // Regular expression to allow letters, numbers, and spaces
+    const regex = /^[A-Za-zΑ-Ωα-ωΆ-Ώά-ώ0-9\s]*$/;
+    return regex.test(value);
+  };
+
+  const handlePerioxiChange = (e) => {
+    const value = e.target.value;
+    if (isValidName(value)) {
+      setPerioxi(value); // Update state if valid
+      setPerioxiError(""); // Clear error message
+    } else {
+      setPerioxiError(
+        'Στο πεδίο " Περιοχή " επιτρέπονται μόνο ελληνικοί,λατινικοί χαρακτήρες και κενά'
+      );
+    }
+  };
+  const handlePerioxiBlur = () => {
+    if (isValidName(perioxi)) setPerioxiError(""); // Update error state
+  };
+
+  const handlePhoneChange = (e) => {
+    const value = e.target.value;
+    if (isValidNumber(value, 0, 10)) {
+      //only numbers and 10 digits
+      setPhone(value); //set the val
+      setPhoneError(""); //reset error
+    } else {
+      setPhoneError("Ο αριθμός τηλεφώνου πρέπει να περιέχει 10 ψηφία.");
+    }
+  };
+  const handlePhoneBlur = () => {
+    if (isValidNumber(phone)) setTilefwnoError(""); // Update error state
+  };
+
+  const handleCellPhoneChange = (e) => {
+    const value = e.target.value;
+    if (isValidNumber(value, 0, 10)) {
+      //only numbers and 10 digits
+      setCellPhone(value); //set the val
+      setCellPhoneError(""); //reset error
+    } else {
+      setCellPhoneError(
+        "Ο αριθμός κινητού τηλεφώνου πρέπει να περιέχει 10 ψηφία."
+      );
+    }
+  };
+  const handleCellPhoneBlur = () => {
+    if (isValidNumber(cellPhone)) setKinitoError(""); // Update error state
+  };
+
+  const handleEmailChange = (e) => {
+    const value = e.target.value;
+    setEmail(value);
+    if (isValidEmail(value)) setEmailError(""); // Update error state
+  };
+  const handleEmailBlur = () => {
+    if (isValidEmail(email))
+      setEmailError(""); // Update error state
+    else
+      setEmailError(
+        "Η διεύθυνση Email πρέπει να είναι της μορφής xxxxx@xxxx.xxx"
+      );
+  };
+
+  const handleAddressChange = (e) => {
+    const value = e.target.value;
+    if (isValidAddress(value)) {
+      setAddress(value); // Update state if valid
+      setAddressError(""); // Clear error message
+    } else {
+      setAddressError(
+        'Στο πεδίο " Διεύθυνση " επιτρέπονται μόνο ελληνικοί,λατινικοί χαρακτήρες και κενά'
+      );
+    }
+  };
+  const handleAddressBlur = () => {
+    if (isValidAddress(address)) setAddressError(""); // Update error state
+  };
+
+  const handleCityChange = (e) => {
+    const value = e.target.value;
+    if (isValidName(value)) {
+      setCity(value); // Update state if valid
+      setCityError(""); // Clear error message
+    } else {
+      setCityError(
+        'Στο πεδίο " Πόλη κατοικίας " επιτρέπονται μόνο ελληνικοί,λατινικοί χαρακτήρες και κενά'
+      );
+    }
+  };
+  const handleCityBlur = () => {
+    if (isValidName(city)) setCityError(""); // Update error state
+  };
+  //----------------------------------------------------------------------------------------
   // Track authentication
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
@@ -263,7 +413,7 @@ export default function NannyProfile() {
           <div className="col-12 col-sm-2 d-flex align-items-center justify-content-center">
             <button
               onClick={handleRegButtonClick}
-              className="btn btn-success rounded-pill px-3 py-2"
+              className="btn btn-primary rounded-pill px-3 py-2"
             >
               Φόρμα Eπανεγγραφής
             </button>
@@ -284,29 +434,41 @@ export default function NannyProfile() {
                 <label className="form-label">Διεύθυνση</label>
                 <input
                   type="text"
-                  className="form-control"
+                  className={`form-control ${addressError ? "is-invalid" : ""}`}
                   value={address}
-                  readOnly
+                  onChange={handleAddressChange}
+                  onBlur={handleAddressBlur}
                 />
+                {addressError && (
+                  <div className="invalid-feedback">{addressError}</div>
+                )}
               </div>
               <div className="row">
                 <div className="col-6 mb-2">
                   <label className="form-label">Περιοχή</label>
                   <input
                     type="text"
-                    className="form-control"
+                    className={`form-control ${perioxiError ? "is-invalid" : ""}`}
                     value={perioxi}
-                    readOnly
+                    onChange={handlePerioxiChange}
+                    onBlur={handlePerioxiBlur}
                   />
+                  {perioxiError && (
+                    <div className="invalid-feedback">{perioxiError}</div>
+                  )}
                 </div>
                 <div className="col-6 mb-2">
                   <label className="form-label">Πόλη</label>
                   <input
                     type="text"
-                    className="form-control"
+                    className={`form-control ${cityError ? "is-invalid" : ""}`}
                     value={city}
-                    readOnly
+                    onChange={handleCityChange}
+                    onBlur={handleCityBlur}
                   />
+                  {cityError && (
+                    <div className="invalid-feedback">{cityError}</div>
+                  )}
                 </div>
               </div>
             </div>
@@ -325,29 +487,41 @@ export default function NannyProfile() {
                 <label className="form-label">Σταθερό Τηλέφωνο</label>
                 <input
                   type="text"
-                  className="form-control"
+                  className={`form-control ${phoneError ? "is-invalid" : ""}`}
                   value={phone}
-                  readOnly
+                  onChange={handlePhoneChange}
+                  onBlur={handlePhoneBlur}
                 />
+                {phoneError && (
+                  <div className="invalid-feedback">{phoneError}</div>
+                )}
               </div>
               <div className="row">
                 <div className="col-6 mb-2">
                   <label className="form-label">Κινητό Τηλέφωνο</label>
                   <input
                     type="text"
-                    className="form-control"
+                    className={`form-control ${cellPhoneError ? "is-invalid" : ""}`}
                     value={cellPhone}
-                    readOnly
+                    onChange={handleCellPhoneChange}
+                    onBlur={handleCellPhoneBlur}
                   />
+                  {cellPhoneError && (
+                    <div className="invalid-feedback">{cellPhoneError}</div>
+                  )}
                 </div>
                 <div className="col-6 mb-2">
                   <label className="form-label">Email</label>
                   <input
                     type="text"
-                    className="form-control"
+                    className={`form-control ${emailError ? "is-invalid" : ""}`}
                     value={email}
-                    readOnly
+                    onChange={handleEmailChange}
+                    onBlur={handleEmailBlur}
                   />
+                  {emailError && (
+                    <div className="invalid-feedback">{emailError}</div>
+                  )}
                 </div>
               </div>
             </div>
@@ -423,6 +597,7 @@ export default function NannyProfile() {
         <div className="container d-flex justify-content-center mt-4">
           <Button
             variant="contained"
+            onClick={handleCancelClick}
             style={{
               backgroundColor: "#FF0000",
               color: "white",
@@ -435,6 +610,7 @@ export default function NannyProfile() {
           </Button>
           <Button
             variant="contained"
+            onClick={handleSaveClick}
             style={{
               backgroundColor: "#008000",
               color: "white",
@@ -451,6 +627,15 @@ export default function NannyProfile() {
       {error && <div className="error-message">{error}</div>}
 
       <Footer />
+      {/* Modal Dialog */}
+      <ConfirmationModals
+        cancelModalOpen={cancelModalOpen}
+        handleCloseCancel={handleCloseCancel}
+        handleConfirmCancel={handleConfirmCancel}
+        regModalOpen={regModalOpen}
+        handleCloseReg={handleCloseReg}
+        handleConfirmReg={handleConfirmReg}
+      />
     </div>
   );
 }
