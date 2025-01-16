@@ -26,13 +26,14 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
-  Grid,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
   Checkbox,
+  Alert,
+  Snackbar,
 } from "@mui/material";
 import Breadcrumb from "./Breadcrumb";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap styles
@@ -46,6 +47,10 @@ export default function RegFormNanny() {
   const navigate = useNavigate();
   const [userData, setUserData] = useState([]); // For fetched data
   const [userId, setUserId] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(false); // State for success message
+  const handleCloseSuccessMessage = () => {
+    setSuccessMessage(false); // Close success message
+  };
   // Track authentication
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
@@ -205,6 +210,7 @@ export default function RegFormNanny() {
         await setDoc(doc(FIREBASE_DB, "user", existingDocId), payload, {
           merge: true,
         });
+        setSuccessMessage(true); // Show success messag
       }
       //navigate("/home");
     } catch {}
@@ -255,8 +261,13 @@ export default function RegFormNanny() {
         await setDoc(doc(FIREBASE_DB, "user", existingDocId), payload, {
           merge: true,
         });
+        setSuccessMessage(true); // Show success message
+        // Delay navigation to let the message show
+        setTimeout(() => {
+          navigate("/profileNanny"); // Replace with your desired route
+        }, 1500); // 3-second delay
       }
-      navigate("/profileNanny");
+      //navigate("/profileNanny");
     } catch {}
   };
 
@@ -402,6 +413,15 @@ export default function RegFormNanny() {
   const handleMailChange = (e) => {
     const value = e.target.value;
     setMail(value);
+    if (isValidEmail(value)) setMailError(""); // Update error state
+  };
+  const handleEmailBlur = (e) => {
+    if (isValidEmail(mail))
+      setMailError(""); // Update error state
+    else
+      setMailError(
+        "Η διεύθυνση Email πρέπει να είναι της μορφής xxxxx@xxxx.xxx"
+      );
   };
   const handleAddressChange = (e) => {
     const value = e.target.value;
@@ -882,6 +902,7 @@ export default function RegFormNanny() {
                       variant="outlined"
                       value={mail}
                       onChange={handleMailChange}
+                      onBlur={handleEmailBlur}
                       fullWidth
                       error={Boolean(mailError)} // Highlight input if there's an error
                       helperText={mailError} // Display error message below the input
@@ -1591,6 +1612,21 @@ export default function RegFormNanny() {
               handleCloseSubmit={handleCloseSubmit}
               handleConfirmSubmit={handleConfirmSubmit}
             />
+            {/* Success Snackbar */}
+            <Snackbar
+              open={successMessage}
+              autoHideDuration={4000} // Auto-hide after 4 seconds
+              onClose={handleCloseSuccessMessage}
+              anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            >
+              <Alert
+                onClose={handleCloseSuccessMessage}
+                severity="success"
+                sx={{ width: "100%" }}
+              >
+                Data saved successfully!
+              </Alert>
+            </Snackbar>
             ;
           </Box>
         </Box>

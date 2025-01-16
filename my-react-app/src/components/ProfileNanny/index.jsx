@@ -25,7 +25,11 @@ import {
   InputLabel,
   Grid2,
   Checkbox,
+  Alert,
+  Snackbar,
 } from "@mui/material";
+//import Snackbar from "@mui/material/Snackbar";
+//import Alert from "@mui/material/Alert";
 import Breadcrumb from "./Breadcrumb";
 import { useNavigate } from "react-router-dom";
 
@@ -37,6 +41,7 @@ export default function NannyProfile() {
   const [error, setError] = useState("");
   const [regSubmitted, setRegSubmitted] = useState(null);
   const navigate = useNavigate();
+  const [successMessage, setSuccessMessage] = useState(false); // State for success message
 
   // Form fields
   const [name, setName] = useState("");
@@ -58,6 +63,7 @@ export default function NannyProfile() {
   const [childAges, setChildAges] = useState("");
   const [ekpaideusi, setEkpaideusi] = useState();
   const [bio, setBio] = useState(""); // State for additional text
+  const [ligaLogia, setLigaLogia] = useState("");
   const [userData, setUserData] = useState([]); // For fetched data
 
   //Modals for new registration
@@ -78,6 +84,9 @@ export default function NannyProfile() {
     navigate("/");
   };
 
+  const handleCloseSuccessMessage = () => {
+    setSuccessMessage(false); // Close success message
+  };
   //here we need to open set the submit var and navigate to registration
   const handleConfirmReg = async (e) => {
     setRegModalOpen(false);
@@ -95,6 +104,7 @@ export default function NannyProfile() {
         regSubmitted: false,
         userId,
         bio: bio, //bio of nanny
+        ligaLogia: ligaLogia,
       };
 
       if (userData.length > 0) {
@@ -109,6 +119,10 @@ export default function NannyProfile() {
 
   //button handlers
   const handleSaveClick = async (e) => {
+    if (!phone || !cellPhone || !address || !perioxi || !city || !email) {
+      alert("Please fill in all fields before proceeding.");
+      return;
+    }
     //need to send info to firebase
     try {
       const payload = {
@@ -119,6 +133,7 @@ export default function NannyProfile() {
         region: city,
         userId,
         bio: bio, //bio of nanny
+        ligaLogia: ligaLogia,
       };
 
       if (userData.length > 0) {
@@ -126,12 +141,12 @@ export default function NannyProfile() {
         await setDoc(doc(FIREBASE_DB, "user", existingDocId), payload, {
           merge: true,
         });
+        setSuccessMessage(true); // Show success messag
       }
     } catch {}
   };
   const handleCancelClick = () => {
     //need to call modal if sure
-    console.log("aaa");
     setCancelModalOpen(true);
   };
   //----------------------------------------------------------------------------------------
@@ -242,6 +257,14 @@ export default function NannyProfile() {
   const handleCityBlur = () => {
     if (isValidName(city)) setCityError(""); // Update error state
   };
+  const handleLigaLogiaChange = (e) => {
+    const value = e.target.value;
+    setLigaLogia(value);
+  };
+  const handleBioChange = (e) => {
+    const value = e.target.value;
+    setBio(value);
+  };
   //----------------------------------------------------------------------------------------
   // Track authentication
   useEffect(() => {
@@ -295,6 +318,7 @@ export default function NannyProfile() {
         setEkpaideusi(user.ekpaideusi || "");
         setTypeOfWork(user.type);
         setBio(user.bio || "");
+        setLigaLogia(user.ligaLogia || "");
         setRegSubmitted(user.regSubmitted);
         //-------------------------------------------------------
 
@@ -542,6 +566,8 @@ export default function NannyProfile() {
               </label>
               <textarea
                 className="form-control"
+                value={ligaLogia}
+                onChange={handleLigaLogiaChange}
                 rows="3"
                 placeholder="Γράψτε κάτι για εσάς..."
                 style={{
@@ -566,6 +592,8 @@ export default function NannyProfile() {
               </label>
               <textarea
                 className="form-control"
+                value={bio}
+                onChange={handleBioChange}
                 rows="3"
                 placeholder="Γράψτε κάτι για εσάς..."
                 style={{
@@ -636,6 +664,21 @@ export default function NannyProfile() {
         handleCloseReg={handleCloseReg}
         handleConfirmReg={handleConfirmReg}
       />
+      {/* Success Snackbar */}
+      <Snackbar
+        open={successMessage}
+        autoHideDuration={4000} // Auto-hide after 4 seconds
+        onClose={handleCloseSuccessMessage}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseSuccessMessage}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          Data saved successfully!
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
