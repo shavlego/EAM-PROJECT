@@ -4,6 +4,7 @@ import "./index.css";
 import { useEffect, useState } from "react";
 import { FIREBASE_AUTH, FIREBASE_DB } from "../../firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
+import ConfirmationModals from "./ConfirmationModals";
 import {
   collection,
   query,
@@ -52,6 +53,45 @@ export default function NannyProfile() {
   const [ekpaideusi, setEkpaideusi] = useState();
   const [bio, setBio] = useState(""); // State for additional text
   const [userData, setUserData] = useState([]); // For fetched data
+
+  //Modals for new registration
+  const [regModalOpen, setRegModalOpen] = useState(false);
+
+  const handleRegButtonClick = () => {
+    setRegModalOpen(true);
+  };
+  const handleCloseReg = () => {
+    setRegModalOpen(false);
+  };
+  //here we need to open set the submit var and navigate to registration
+  const handleConfirmReg = async (e) => {
+    setRegModalOpen(false);
+    try {
+      const payload = {
+        phone: phone,
+        cellPhone: cellPhone,
+        address: address,
+        perioxi: perioxi,
+        tk: tk,
+        region: city,
+        host: host, //Dynatotita filoksenias stin oikia
+        type: typeOfWork, //pliris/meriki
+        childAges: childAges, //0-6 Μηνών/6-12 Μηνών/1-2.5 Έτη/0-2.5 Έτη
+        regSubmitted: false,
+        userId,
+        bio: bio, //bio of nanny
+      };
+
+      if (userData.length > 0) {
+        const existingDocId = userData[0].id; // Assuming only one document per user
+        await setDoc(doc(FIREBASE_DB, "user", existingDocId), payload, {
+          merge: true,
+        });
+      }
+      navigate("/registerFormNanny");
+    } catch {}
+  };
+  //----------------------------------------------------------------------------------------
 
   // Track authentication
   useEffect(() => {
@@ -137,172 +177,179 @@ export default function NannyProfile() {
       <Header />
       <h1>Δημιουργία / Επεξεργασία Προφίλ - Νταντάς</h1>
       <Breadcrumb />
-      <Box sx={{ padding: "20px" }}>
-        <Typography variant="h5">
+      <div className="container py-4">
+        <h5 className="mb-4 text-center ">
           Επεξεργασία Προφίλ - Βιογραφικού Νταντάς
-        </Typography>
-
-        <Grid2 container spacing={2} sx={{ marginTop: "20px" }}>
+        </h5>
+        <div className="row mb-4">
           {/* Profile Picture Section */}
-          <Grid2 xs={12} sm={4}>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column", // Ensure button goes below the image
-                alignItems: "center", // Center align items
-                padding: "10px",
-                borderRadius: "8px",
-                border: "2px solid #c1c1c1",
-              }}
+          <div className="col-12 col-sm-4 d-flex flex-column align-items-left">
+            <div
+              className="border border-secondary rounded p-3 text-center custom-bg"
+              style={{ height: "100%" }}
             >
-              <img
-                src="/Images/logo.png"
-                alt="Profile"
+              <div
                 style={{
-                  borderRadius: "50%",
                   width: "150px",
                   height: "150px",
-                  objectFit: "cover", // Ensures the image maintains its aspect ratio
-                }}
-              />
-              <Button
-                variant="contained"
-                component="label"
-                sx={{
-                  marginTop: "10px",
-                  backgroundColor: "#2e86de",
-                  color: "white",
+                  overflow: "hidden",
+                  borderRadius: "50%",
+                  margin: "0 auto",
                 }}
               >
-                Αλλαγή Εικόνας Προφίλ
-                <input
-                  type="file"
-                  hidden
-                  //onChange={handleProfilePictureChange}
+                <img
+                  src="/Images/logo.png"
+                  alt="Profile"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
                 />
-              </Button>
-            </Box>
-          </Grid2>
+              </div>
+              <button className="btn btn-primary mt-3">
+                Αλλαγή Εικόνας Προφίλ
+              </button>
+            </div>
+          </div>
+
           {/* Personal Info Section */}
-          <Grid2 xs={12}>
-            <Box
-              sx={{
-                backgroundColor: "#d4e157",
-                padding: "20px",
-                borderRadius: "8px",
-              }}
+          <div className="col-12 col-sm-6">
+            <div
+              className="custom-bg text-dark p-4 rounded"
+              style={{ height: "100%" }}
             >
-              <Typography variant="h6">Προσωπικές Πληροφορίες</Typography>
-              <TextField
-                label="Ονοματεπώνυμο"
-                fullWidth
-                sx={{ marginBottom: "10px", marginTop: "15px" }}
-                value={name + " " + surName}
-              />
-              <Grid2 container spacing={2}>
-                <Grid2 xs={6}>
-                  <TextField
-                    label="Ηλικία"
+              <h6 className="text-center">Προσωπικές Πληροφορίες</h6>
+              <p className="small text-muted">
+                Οι προσωπικές πληροφορίες μπορούν να αλλάξουν μόνο με κατάθεση
+                νέας αίτησης εγγραφής Νταντάς. Μπορείτε να χρησιμοποιήσετε το
+                πλήκτρο στα δεξιά για να αλλάξετε αυτές τις πληροφορίες.
+              </p>
+              <div className="mb-3">
+                <label className="form-label">Ονοματεπώνυμο</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={`${name} ${surName}`}
+                  readOnly
+                />
+              </div>
+              <div className="row">
+                <div className="col-6 mb-3">
+                  <label className="form-label">Ηλικία</label>
+                  <input
+                    type="text"
+                    className="form-control"
                     value={ilikia}
-                    fullWidth
-                    //onChange={(e) => setAge(e.target.value)}
+                    readOnly
                   />
-                </Grid2>
-              </Grid2>
-              <Grid2 container spacing={2}>
-                <Grid2 xs={6}>
-                  <TextField
-                    label="Επίπεδο Σπουδών"
-                    fullWidth
-                    sx={{ marginTop: "10px" }}
+                </div>
+                <div className="col-6 mb-3">
+                  <label className="form-label">Επίπεδο Σπουδών</label>
+                  <input
+                    type="text"
+                    className="form-control"
                     value={ekpaideusi}
-                    //onChange={(e) => setEducationLevel(e.target.value)}
+                    readOnly
                   />
-                </Grid2>
-              </Grid2>
-            </Box>
-          </Grid2>
-        </Grid2>
-        <Grid2 container spacing={2} sx={{ marginTop: "20px" }}>
-          <Grid2 xs={12} sm={8}>
-            <Box
-              sx={{
-                backgroundColor: "#d4e157",
-                padding: "20px",
-                borderRadius: "8px",
-              }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Additional Button Section */}
+          <div className="col-12 col-sm-2 d-flex align-items-center justify-content-center">
+            <button
+              onClick={handleRegButtonClick}
+              className="btn btn-success rounded-pill px-4"
             >
-              <Typography variant="h6">Διεύθυνση Νταντάς</Typography>
-              <TextField
-                label="Διεύθυνση"
-                fullWidth
-                sx={{ marginBottom: "10px", marginTop: "15px" }}
-                value={address}
-              />
-              <Grid2 container spacing={2}>
-                <Grid2 xs={6}>
-                  <TextField
-                    label="Περιοχή"
+              Φόρμα Εγγραφής
+            </button>
+            {/* modals */}
+            <ConfirmationModals
+              regModalOpen={regModalOpen}
+              handleCloseReg={handleCloseReg}
+              handleConfirmReg={handleConfirmReg}
+            />
+            ;
+          </div>
+        </div>
+
+        {/* Address Section */}
+        <div className="row mb-4">
+          {/* Address Section */}
+          <div className="col-12 col-md-6">
+            <div className="custom-bg text-dark p-4 rounded">
+              <h6>Διεύθυνση Νταντάς</h6>
+              <div className="mb-3">
+                <label className="form-label">Διεύθυνση</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={address}
+                  readOnly
+                />
+              </div>
+              <div className="row">
+                <div className="col-6 mb-3">
+                  <label className="form-label">Περιοχή</label>
+                  <input
+                    type="text"
+                    className="form-control"
                     value={perioxi}
-                    fullWidth
-                    //onChange={(e) => setAge(e.target.value)}
+                    readOnly
                   />
-                </Grid2>
-              </Grid2>
-              <Grid2 container spacing={2}>
-                <Grid2 xs={6}>
-                  <TextField
-                    label="Πόλη"
-                    fullWidth
-                    sx={{ marginTop: "10px" }}
+                </div>
+                <div className="col-6 mb-3">
+                  <label className="form-label">Πόλη</label>
+                  <input
+                    type="text"
+                    className="form-control"
                     value={city}
-                    //onChange={(e) => setEducationLevel(e.target.value)}
+                    readOnly
                   />
-                </Grid2>
-              </Grid2>
-            </Box>
-          </Grid2>
-          <Grid2 xs={12} sm={8}>
-            <Box
-              sx={{
-                backgroundColor: "#d4e157",
-                padding: "20px",
-                borderRadius: "8px",
-              }}
-            >
-              <Typography variant="h6">Στοιχεία Επικοινωνίας</Typography>
-              <TextField
-                label="Σταθερό Τηλέφωνο"
-                fullWidth
-                sx={{ marginBottom: "10px", marginTop: "15px" }}
-                value={phone}
-              />
-              <Grid2 container spacing={2}>
-                <Grid2 xs={6}>
-                  <TextField
-                    label="Κινητό Τηλέφωνο"
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Contact Info Section */}
+          <div className="col-12 col-md-6">
+            <div className="custom-bgy text-dark p-4 rounded">
+              <h6>Στοιχεία Επικοινωνίας</h6>
+              <div className="mb-3">
+                <label className="form-label">Σταθερό Τηλέφωνο</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={phone}
+                  readOnly
+                />
+              </div>
+              <div className="row">
+                <div className="col-6 mb-3">
+                  <label className="form-label">Κινητό Τηλέφωνο</label>
+                  <input
+                    type="text"
+                    className="form-control"
                     value={cellPhone}
-                    fullWidth
-                    //onChange={(e) => setAge(e.target.value)}
+                    readOnly
                   />
-                </Grid2>
-              </Grid2>
-              <Grid2 container spacing={2}>
-                <Grid2 xs={6}>
-                  <TextField
-                    label="Email"
-                    fullWidth
-                    sx={{ marginTop: "10px" }}
+                </div>
+                <div className="col-6 mb-3">
+                  <label className="form-label">Email</label>
+                  <input
+                    type="text"
+                    className="form-control"
                     value={email}
-                    disabled
-                    //onChange={(e) => setEducationLevel(e.target.value)}
+                    readOnly
                   />
-                </Grid2>
-              </Grid2>
-            </Box>
-          </Grid2>
-        </Grid2>
-      </Box>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       {/* Error message */}
       {error && <div className="error-message">{error}</div>}
 

@@ -211,7 +211,6 @@ export default function RegFormNanny() {
     } catch {}
   };
   const handleConfirmSubmit = async (e) => {
-    console.log("User confirmed cancellation.");
     setSubmitModalOpen(false); //close the modal
     try {
       const payload = {
@@ -258,7 +257,7 @@ export default function RegFormNanny() {
           merge: true,
         });
       }
-      //navigate("/home");
+      navigate("/profileNanny");
     } catch {}
   };
 
