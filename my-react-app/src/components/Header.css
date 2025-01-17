@@ -1,37 +1,37 @@
 header {
-    background-color: #f8f9fa; /* Light background */
-    border-bottom: 1px solid #ddd; /* Optional border for styling */
-    padding: 10px 0;
-  }
-  
-  header .logo img {
-    max-width: 10rem;           /* specify maximum logo size */
-    cursor: pointer;        /* Pointer cursor for clickable logo */
-  }
-  
-  header .nav {
-    font-weight: bold;
-  }
-  
-  header .nav-link {
-    font-size: 16px;
-    padding: 0 15px; /* Spacing between menu items */
-    color: #333; /* Default text color */
-    text-decoration: none;
-  }
-  
-  header .nav-link:hover {
-    text-decoration: underline;
-  }
-  
-  header button {
-    font-size: 16px;
-    padding: 5px 15px;
-  }
+  background-color: hsla(254, 85%, 36%, 0.4); /* Light background */
+  border-bottom: 1px solid #ddd; /* Optional border for styling */
+  padding: 10px 0;
+}
 
-  /* Open the dropdown on hover */
+header .logo img {
+  max-width: 10rem; /* specify maximum logo size */
+  cursor: pointer; /* Pointer cursor for clickable logo */
+}
+
+header .nav {
+  font-weight: bold;
+}
+
+header .nav-link {
+  font-size: 16px;
+  padding: 0 15px; /* Spacing between menu items */
+  color: #333; /* Default text color */
+  text-decoration: none;
+}
+
+header .nav-link:hover {
+  text-decoration: underline;
+}
+
+header button {
+  font-size: 16px;
+  padding: 5px 15px;
+}
+
+/* Open the dropdown on hover */
 .nav-item.dropdown:hover .dropdown-menu {
   display: block;
-  background-color: #f8f9fa;        /* Same background as the menu */
-  margin-top: 0;                      /* Optional: Remove any gap between the dropdown toggle and menu */
+  background-color: #f8f9fa; /* Same background as the menu */
+  margin-top: 0; /* Optional: Remove any gap between the dropdown toggle and menu */
 }

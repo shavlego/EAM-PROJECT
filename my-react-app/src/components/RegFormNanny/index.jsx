@@ -102,6 +102,7 @@ export default function RegFormNanny() {
         setOnomaPatera(user.fatherName || "");
         setOnomaMiteras(user.motherName || "");
         setGenisi(user.dateOfBirth.toDate());
+        setSex(user.sex || "");
         //step 1 vars
         setTilefwno(user.phone || "");
         setKinito(user.cellPhone || "");
@@ -175,6 +176,7 @@ export default function RegFormNanny() {
         fatherName: onomaPatera,
         motherName: onomaMiteras,
         dateOfBirth: genisi,
+        sex: sex,
         //from step 1
         email: mail,
         phone: tilefwno,
@@ -225,6 +227,7 @@ export default function RegFormNanny() {
         fatherName: onomaPatera,
         motherName: onomaMiteras,
         dateOfBirth: genisi,
+        sex: sex,
         //from step 1
         email: mail,
         phone: tilefwno,
@@ -289,6 +292,7 @@ export default function RegFormNanny() {
   const [onomaMiteras, setOnomaMiteras] = useState("");
   const [genisi, setGenisi] = useState("");
   const [formData, setFormData] = useState(""); // Input data for validation
+  const [sex, setSex] = useState("");
   //vars of step 1
   const [tilefwno, setTilefwno] = useState("");
   const [kinito, setKinito] = useState("");
@@ -374,6 +378,10 @@ export default function RegFormNanny() {
         'Στο πεδίο " Όνομα Μητέρας " επιτρέπονται μόνο ελληνικοί,λατινικοί χαρακτήρες και κενά'
       );
     }
+  };
+
+  const handleSexChange = (event) => {
+    setSex(event.target.value); // Update state when the user selects an option
   };
 
   //----------------------------------------------------------------------------------------------------------------------------
@@ -803,31 +811,63 @@ export default function RegFormNanny() {
                     />
                   </div>
                   &nbsp;
-                  {/* Date Picker Field */}
-                  {/*	&nbsp; Date of Birth */}
-                  <label
-                    htmlFor="textBox"
-                    className="form-label"
-                    style={{ fontSize: "16px" }}
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "16px", // Space between DatePicker and Select
+                      alignItems: "center", // Vertical alignment
+                    }}
                   >
-                    Ημερομηνία Γέννησης <span style={{ color: "red" }}>*</span>
-                  </label>
-                  <DatePicker
-                    id="genisi"
-                    className="form-control"
-                    selected={genisi}
-                    onChange={(date) => setGenisi(date)}
-                    dateFormat="dd/MM/yyyy"
-                    placeholderText="Επιλέξτε ημερομηνία"
-                    maxDate={eighteenYearsAgo} // Prevent future dates
-                    showYearDropdown // Enables year dropdown
-                    scrollableYearDropdown // Allows scrolling through the years
-                    yearDropdownItemNumber={100} // Number of years to show in the dropdown
-                    showMonthDropdown // Enables month dropdown
-                    required
-                  />
-                </div>
+                    {/* Date Picker */}
+                    <div style={{ flex: 1 }}>
+                      <label
+                        htmlFor="genisi"
+                        className="form-label"
+                        style={{ fontSize: "16px" }}
+                      >
+                        Ημερομηνία Γέννησης{" "}
+                        <span style={{ color: "red" }}>*</span>
+                      </label>
+                      <DatePicker
+                        id="genisi"
+                        className="form-control"
+                        selected={genisi}
+                        onChange={(date) => setGenisi(date)}
+                        dateFormat="dd/MM/yyyy"
+                        placeholderText="Επιλέξτε ημερομηνία"
+                        maxDate={eighteenYearsAgo}
+                        showYearDropdown
+                        scrollableYearDropdown
+                        yearDropdownItemNumber={100}
+                        showMonthDropdown
+                        required
+                        style={{ width: "100%", height: "40px" }} // Consistent height
+                      />
+                    </div>
 
+                    {/* Select Box */}
+                    <div style={{ flex: 1 }}>
+                      <label
+                        htmlFor="sex"
+                        className="form-label"
+                        style={{ fontSize: "16px", marginBottom: "8px" }}
+                      >
+                        Φύλο
+                      </label>
+                      <Select
+                        id="sex"
+                        value={sex}
+                        onChange={handleSexChange}
+                        displayEmpty
+                        fullWidth
+                        style={{ width: "100%", height: "40px" }} // Consistent height
+                      >
+                        <MenuItem value="Άνδρας">Άνδρας</MenuItem>
+                        <MenuItem value="Γυναίκα">Γυναίκα</MenuItem>
+                      </Select>
+                    </div>
+                  </div>
+                </div>
                 {formData.trim() === "" && (
                   <Typography
                     variant="body2"
@@ -1199,7 +1239,7 @@ export default function RegFormNanny() {
                     type="file"
                     className="form-control"
                     onChange={handleFileUploadSpoudes}
-                    style={{ marginBottom: "8px" }}
+                    style={{ marginBottom: "8px", border: "1px solid black" }}
                   />
                   &nbsp;
                   <div
@@ -1253,7 +1293,7 @@ export default function RegFormNanny() {
                     type="file"
                     className="form-control"
                     onChange={handleFileUploadFirstAid}
-                    style={{ marginBottom: "8px" }}
+                    style={{ marginBottom: "8px", border: "1px solid black" }}
                     disabled={firstAid != "ΝΑΙ"}
                   />
                   &nbsp;
@@ -1271,7 +1311,7 @@ export default function RegFormNanny() {
                     type="file"
                     className="form-control"
                     onChange={handleFileUploadPathol}
-                    style={{ marginBottom: "8px" }}
+                    style={{ marginBottom: "8px", border: "1px solid black" }}
                   />
                   <label
                     htmlFor="textBox"
@@ -1286,7 +1326,7 @@ export default function RegFormNanny() {
                     type="file"
                     className="form-control"
                     onChange={handleFileUploadDerm}
-                    style={{ marginBottom: "8px" }}
+                    style={{ marginBottom: "8px", border: "1px solid black" }}
                   />
                   <label
                     htmlFor="textBox"
@@ -1301,7 +1341,7 @@ export default function RegFormNanny() {
                     type="file"
                     className="form-control"
                     onChange={handleFileUploadPsi}
-                    style={{ marginBottom: "8px" }}
+                    style={{ marginBottom: "8px", border: "1px solid black" }}
                   />
                   &nbsp;
                   <Typography variant="h6">Υπεύθυνη Δήλωση</Typography>
@@ -1318,7 +1358,7 @@ export default function RegFormNanny() {
                     type="file"
                     className="form-control"
                     onChange={handleFileUploadYd}
-                    style={{ marginBottom: "8px" }}
+                    style={{ marginBottom: "8px", border: "1px solid black" }}
                   />
                   &nbsp;
                   <Typography variant="h6">
@@ -1337,7 +1377,7 @@ export default function RegFormNanny() {
                     type="file"
                     className="form-control"
                     onChange={handleFileUploadAlo}
-                    style={{ marginBottom: "8px" }}
+                    style={{ marginBottom: "8px", border: "1px solid black" }}
                   />
                   &nbsp;
                 </div>
@@ -1503,16 +1543,7 @@ export default function RegFormNanny() {
                     </div>
                   </div>
                 </div>
-
-                {formData.trim() === "" && (
-                  <Typography
-                    variant="body2"
-                    color="error"
-                    sx={{ marginTop: "10px" }}
-                  >
-                    Please fill out the field to proceed.
-                  </Typography>
-                )}
+                &nbsp;
               </div>
             )}
           </Box>

@@ -73,7 +73,7 @@ function Header() {
 
   return (
     <header className="bg-light py-3 border-bottom">
-      <div className="container d-flex align-items-center">
+      <div className="container  d-flex align-items-center">
         {/* Logo on the Left */}
         <div
           className="logo d-flex align-items-center"
@@ -87,7 +87,7 @@ function Header() {
           {" "}
           {/* Added margin-start (Bootstrap utility) */}
           <ul className="nav fw-bold">
-            <li className="nav-item dropdown">
+            <li className="nav-item dropdown ">
               <a
                 href="#"
                 className="nav-link dropdown-toggle"
@@ -228,6 +228,28 @@ function Header() {
                     Προφίλ
                   </a>
                 </li>
+                {userRole == false && (
+                  <li>
+                    <a
+                      className="dropdown-item"
+                      href="#"
+                      onClick={() => navigate("/nannyMenu")}
+                    >
+                      Μενού Νταντάς
+                    </a>
+                  </li>
+                )}
+                {userRole == true && (
+                  <li>
+                    <a
+                      className="dropdown-item"
+                      href="#"
+                      onClick={() => navigate("/")}
+                    >
+                      Μενού Γονέα
+                    </a>
+                  </li>
+                )}
                 <li>
                   <a
                     className="dropdown-item"
@@ -235,6 +257,15 @@ function Header() {
                     onClick={() => navigate("/settings")}
                   >
                     Ρυθμίσεις
+                  </a>
+                </li>
+                <li>
+                  <a
+                    className="dropdown-item"
+                    href="#"
+                    onClick={() => navigate("/")}
+                  >
+                    Αλλαγή Κωδικού
                   </a>
                 </li>
                 <li>
