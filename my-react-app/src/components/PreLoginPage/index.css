@@ -1,72 +1,68 @@
-
-
 h1 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-    text-align: center;
+  font-size: 2rem;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 p {
-    margin-bottom: 20px;
-    font-size: 1rem;
-    text-align: center;
+  margin-bottom: 20px;
+  font-size: 1rem;
+  text-align: center;
 }
 
-
-
 .login-options {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
 }
 
 .login-option {
-    width: 350px;
-    height: 200px;
-    border-radius: 15px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 10px;
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    margin-top: 20px;
-    margin-bottom: 200px;
+  width: 350px;
+  height: 200px;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  margin-top: 20px;
+  margin-bottom: 200px;
 }
 
-
-
 .login-option.parent {
-    background-color: #b6d97b;
+  background-color: #b6d97b;
 }
 
 .login-option.nanny {
-    background-color: #d1b5e5;
+  background-color: #d1b5e5;
 }
 
 .login-icon {
-    width: 50px;
-    height: 50px;
-    margin-bottom: 10px;
+  width: "90px";
+  height: "90px";
+  margin: "0 auto";
 }
 
 .login-button {
-    border: none;
-    padding: 10px;
-    font-size: 14px;
-    font-weight: bold;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: rgb(50, 50, 50);
-    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
-    transition: background-color 0.2s ease;
+  border: none;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: rgb(50, 50, 50);
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  transition: background-color 0.2s ease;
 }
 
 .login-button:hover {
-    transform: scale(1.05);
-    background-color: rgb(30, 30, 30);
+  transform: scale(1.05);
+  background-color: rgb(30, 30, 30);
 }

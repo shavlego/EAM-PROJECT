@@ -39,7 +39,7 @@ export default function NannyProfile() {
   const [userId, setUserId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [regSubmitted, setRegSubmitted] = useState(null);
+  const [regSubmitted, setRegSubmitted] = useState("");
   const navigate = useNavigate();
   const [successMessage, setSuccessMessage] = useState(false); // State for success message
 
@@ -319,7 +319,8 @@ export default function NannyProfile() {
         setTypeOfWork(user.type);
         setBio(user.bio || "");
         setLigaLogia(user.ligaLogia || "");
-        setRegSubmitted(user.regSubmitted);
+        setRegSubmitted(user.regSubmitted || false);
+        console.log(user.regSubmitted);
         //-------------------------------------------------------
 
         //setExpertise(user.expertise || "");
@@ -347,7 +348,7 @@ export default function NannyProfile() {
   return (
     <div className="profile-page container">
       {console.log(regSubmitted)}
-      {regSubmitted == false && navigate("/registerFormNanny")}
+      {regSubmitted === false && navigate("/registerFormNanny")}
       <Header />
       <h1>Δημιουργία / Επεξεργασία Προφίλ - Νταντάς</h1>
       <Breadcrumb />

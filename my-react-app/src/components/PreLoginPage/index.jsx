@@ -1,52 +1,65 @@
-import Header from '../Header';
-import './index.css';
-import Footer from '../Footer';
+import Header from "../Header";
+import "./index.css";
+import Footer from "../Footer";
 import { useNavigate } from "react-router-dom";
 
-
 function PreLoginPage() {
-    const nav = useNavigate();
-    const handleNannyClick = function(){
-      nav('/LoginNanny')
-    }
-  
-    const handleParentClick = function(){
-      nav('/LoginParent')
-    }
+  const nav = useNavigate();
+  const handleNannyClick = function () {
+    nav("/LoginNanny");
+  };
 
-    return (
-        <div>
-          <Header />
+  const handleParentClick = function () {
+    nav("/LoginParent");
+  };
 
-          <h1>Σελίδα Σύνδεσης</h1>
-            <p>
-                Δεν έχετε φτιάξει ακόμα προφίλ. Θα πρέπει να συνδεθείτε είτε ως
-                “Νταντά” είτε ως Γονέας/Κηδεμόνας.
-            </p>
-            
-            <div className="login-options">
-                
-                <div className="login-option parent">
-                    <img
-                        src="parent-icon.png" // Replace with the actual path to your image
-                        alt="Parent Icon"
-                        className="login-icon"
-                    />
-                    <button className="login-button" onClick={handleParentClick}>Σύνδεση Γονέας</button>
-                </div>
-                <div className="login-option nanny">
-                    <img
-                        src="nanny-icon.png" // Replace with the actual path to your image
-                        alt="Nanny Icon"
-                        className="login-icon"
-                    />
-                    <button className="login-button" onClick={handleNannyClick}>Σύνδεση Νταντά</button>
-                </div>
-            </div>
-          
-          <Footer />
+  return (
+    <div>
+      <Header />
+
+      <h1>Σελίδα Σύνδεσης</h1>
+      <p>
+        Μπορείτε να συνδεθείτε είτε ως “Νταντά” είτε ως Γονέας/Κηδεμόνας. Αν δεν
+        έχετε φτιάξει προφίλ επιλέγοντας μια απο τις επιλογές γονέας/νταντά, στο
+        επόμενο βήμα μπορείτε να κάνετε εγγραφή.
+      </p>
+
+      <div className="login-options">
+        <div className="login-option parent">
+          <img
+            src="\public\Images\parent_logo.png"
+            alt="Parent Icon"
+            className="img-fluid rounded-circle mb-3"
+            style={{
+              width: "100px",
+              height: "100px",
+              objectFit: "cover",
+            }}
+          />
+          <button className="login-button" onClick={handleParentClick}>
+            Σύνδεση/Εγγραγή Γονέα
+          </button>
         </div>
-      );
-  }
-  
-  export default PreLoginPage;
+        <div className="login-option nanny">
+          <img
+            src="\public\Images\nanny_logo.png"
+            alt="Nanny Icon"
+            className="img-fluid rounded-circle mb-3"
+            style={{
+              width: "100px",
+              height: "100px",
+              objectFit: "cover",
+            }}
+          />
+          <button className="login-button" onClick={handleNannyClick}>
+            Σύνδεση/Εγγραφή "Νταντάς"
+          </button>
+        </div>
+      </div>
+
+      <Footer />
+    </div>
+  );
+}
+
+export default PreLoginPage;

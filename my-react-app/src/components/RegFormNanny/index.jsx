@@ -149,6 +149,11 @@ export default function RegFormNanny() {
   const isValidName = (value) => /^[A-Za-zΑ-Ωα-ωΆ-Ώά-ώ\s]*$/.test(value); //i will use the same for eponymo,onoma patros,mitros
   const isValidEmail = (value) =>
     /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(value);
+  const isValidAddress = (value) => {
+    // Regular expression to allow letters, numbers, and spaces
+    const regex = /^[A-Za-zΑ-Ωα-ωΆ-Ώά-ώ0-9\s]*$/;
+    return regex.test(value);
+  };
   const isValidNumber = (value, minLength = 1, maxLength = Infinity) => {
     // Check if the value contains only digits
     const isNumber = /^[0-9]*$/.test(value);
@@ -435,7 +440,7 @@ export default function RegFormNanny() {
   };
   const handleAddressChange = (e) => {
     const value = e.target.value;
-    if (isValidName(value)) {
+    if (isValidAddress(value)) {
       setAddress(value); // Update state if valid
       setAddressError(""); // Clear error message
     } else {
@@ -443,6 +448,9 @@ export default function RegFormNanny() {
         'Στο πεδίο " Διεύθυνση " επιτρέπονται μόνο ελληνικοί,λατινικοί χαρακτήρες και κενά'
       );
     }
+  };
+  const handleAddressBlur = (e) => {
+    if (isValidAddress(address)) setAddressError(""); // Update error state
   };
   const handleCityChange = (e) => {
     const value = e.target.value;
@@ -963,6 +971,7 @@ export default function RegFormNanny() {
                       variant="outlined"
                       value={address}
                       onChange={handleAddressChange}
+                      onBlur={handleAddressBlur}
                       fullWidth
                       error={Boolean(addressError)} // Highlight input if there's an error
                       helperText={addressError} // Display error message below the input
