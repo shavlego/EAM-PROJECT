@@ -30,7 +30,9 @@ const ConfirmationModals = ({
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Είστε σίγουροι ότι θέλετε να καταθέσετε εκ νέου φόρμα εγγραφής;
+            Είστε σίγουροι ότι θέλετε να καταθέσετε εκ νέου φόρμα εγγραφής; Άν
+            έχετε δημοσιευμένη αγγαλία θα απενεργοποιηθεί και θα πρέπει να
+            επαναδημοσιεύσετε μετά την ολοκλήρωση της διαδικασίας εγγραφής.
           </DialogContentText>
         </DialogContent>
         <DialogActions>

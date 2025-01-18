@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { FIREBASE_AUTH, FIREBASE_DB } from "../../firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import "./index.css";
+import ConfirmationModals from "./ConfirmationModals";
 import {
   collection,
   query,
@@ -34,6 +35,8 @@ import { Container, Row, Col, Card, Form } from "react-bootstrap";
 import { use } from "react";
 export default function CreateAggelia() {
   const navigate = useNavigate();
+  const [userData, setUserData] = useState([]); // For fetched data
+  const [userId, setUserId] = useState(null);
   //variables for form and tect controls
   const [phone, setPhone] = useState("");
   const [phoneError, setPhoneError] = useState("");
@@ -56,7 +59,67 @@ export default function CreateAggelia() {
   const [addressIsChecked, setAddressIsChecked] = useState(false);
   const [emailIsChecked, setEmailIsChecked] = useState(false);
   const [phoneIsChecked, setPhoneIsChecked] = useState(false);
+  //firebase functions
+  // Track authentication
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
+      if (user) {
+        setEmail(user.email);
+        setUserId(user.uid);
+      } else {
+        navigate("/loginNanny");
+      }
+    });
+    return () => unsubscribe();
+  }, [navigate]);
+  // Fetch user data after userId is set
+  useEffect(() => {
+    if (userId) fetchUserData();
+  }, [userId]);
 
+  // Fetch user data
+  const fetchUserData = async () => {
+    try {
+      const q = query(
+        collection(FIREBASE_DB, "user"),
+        where("userId", "==", userId)
+      );
+      const querySnapshot = await getDocs(q);
+      const users = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setUserData(users);
+      //If user data exists, populate the form fields
+      if (users.length > 0) {
+        const user = users[0]; // Assuming there's only one document per user
+
+        setPhone(user.phone || "");
+        setCellPhone(user.cellPhone || "");
+        setAddress(user.address || "");
+        setPerioxi(user.perioxi || "");
+        setCity(user.region || "");
+        setHost(user.host || "");
+        setCoHost(user.coHost || "");
+        setTypeOfWork(user.type || "");
+        setChildAges(user.childAges || "");
+        setBio(user.bio || "");
+        setLigaLogia(user.ligaLogia || "");
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+  const handleLogout = async () => {
+    try {
+      await signOut(FIREBASE_AUTH);
+      navigate("/");
+    } catch (error) {
+      console.error("Error logging out:", error);
+      setError("Αποτυχία αποσύνδεσης. Παρακαλώ προσπαθήστε ξανά.");
+    }
+  };
+  //-----------------------------------------------------------------------------
   //handlers for data change
   const handlePhoneChange = (e) => {
     const value = e.target.value;
@@ -174,9 +237,173 @@ export default function CreateAggelia() {
   const handlePhoneCheckBoxClick = () => {
     setPhoneIsChecked((prevState) => !prevState);
   };
+  //------------------------------------------------------------------------------------------------------------------------------
+  //handlers for modals
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [cancelModalOpen, setCancelModalOpen] = useState(false);
+  const [submitModalOpen, setSubmitModalOpen] = useState(false);
+  //close
+  const handleCloseDelete = () => {
+    setDeleteModalOpen(false);
+  };
+  const handleCloseCancel = () => {
+    setCancelModalOpen(false);
+  };
+  const handleCloseSubmit = () => {
+    setSubmitModalOpen(false);
+  };
+  //confirm
+  const handleConfirmCancel = async (e) => {
+    setCancelModalOpen(false);
+    navigate("/NannyMenu");
+  };
+  const handleConfirmDelete = async (e) => {
+    setDeleteModalOpen(false);
+    // set the variable that controls the show of aggeliews activeAggelia = false
+    try {
+      const payload = {
+        userId,
+        aggeliaActive: false,
+      };
 
+      if (userData.length > 0) {
+        const existingDocId = userData[0].id; // Assuming only one document per user
+        await setDoc(doc(FIREBASE_DB, "user", existingDocId), payload, {
+          merge: true,
+        });
+      }
+    } catch {}
+    navigate("/NannyMenu");
+    navigate("/NannyMenu");
+  };
+  const handleConfirmSubmit = async (e) => {
+    setSubmitModalOpen(false);
+    //sign data and send firebase
+    try {
+      const payload = {
+        phone: phone,
+        cellPhone: cellPhone,
+        address: address,
+        perioxi: perioxi,
+        region: city,
+        host: host, //Dynatotita filoksenias stin oikia
+        coHost: coHost,
+        type: typeOfWork, //pliris/meriki
+        childAges: childAges, //0-6 Μηνών/6-12 Μηνών/1-2.5 Έτη/0-2.5 Έτη
+        userId,
+        bio: bio, //bio of nanny
+        ligaLogia: ligaLogia,
+        aggeliaActive: true,
+      };
+
+      if (userData.length > 0) {
+        const existingDocId = userData[0].id; // Assuming only one document per user
+        await setDoc(doc(FIREBASE_DB, "user", existingDocId), payload, {
+          merge: true,
+        });
+      }
+    } catch {}
+    navigate("/NannyMenu");
+  };
   //------------------------------------------------------------------------------------------------------------------------------
   //handlers for button clicks
+  const handleDeleteBtnClick = () => {
+    setDeleteModalOpen(true);
+  };
+  const handleCancelBtnClick = () => {
+    setCancelModalOpen(true);
+  };
+  const handleSaveBtnClick = async (e) => {
+    //check if data are filled
+    if (
+      !phone ||
+      !cellPhone ||
+      !address ||
+      !perioxi ||
+      !city ||
+      !email ||
+      !typeOfWork ||
+      !host ||
+      !childAges
+    ) {
+      alert(
+        "Συμπληρώστε όλα τα πεδία με αστερίσκο για να αποθηκεύσετε ή να δημοσιεύσετε αγγελία."
+      );
+      return;
+    }
+    //check if host is filled and coHost not
+    if (host) {
+      if (!coHost) {
+        alert(
+          "Εφόσον έχετε συμπληρώσει οτι μπορείτε να φιλοξενήσετε στο σπίτι σας πρέπει να συμπληρώσετε αν υπάρχει συνοικούντας ή οχι."
+        );
+        return;
+      }
+    }
+    if (!isValidEmail(email)) {
+      alert("Λάθος μορφή διεύθυνσης ηλεκτρονικού ταχυδρομείου.");
+      return;
+    }
+    //send info to firebase
+    try {
+      const payload = {
+        phone: phone,
+        cellPhone: cellPhone,
+        address: address,
+        perioxi: perioxi,
+        region: city,
+        host: host, //Dynatotita filoksenias stin oikia
+        coHost: coHost,
+        type: typeOfWork, //pliris/meriki
+        childAges: childAges, //0-6 Μηνών/6-12 Μηνών/1-2.5 Έτη/0-2.5 Έτη
+        userId,
+        bio: bio, //bio of nanny
+        ligaLogia: ligaLogia,
+      };
+
+      if (userData.length > 0) {
+        const existingDocId = userData[0].id; // Assuming only one document per user
+        await setDoc(doc(FIREBASE_DB, "user", existingDocId), payload, {
+          merge: true,
+        });
+      }
+    } catch {}
+  };
+
+  const handleSubmitBtnClick = () => {
+    if (
+      !phone ||
+      !cellPhone ||
+      !address ||
+      !perioxi ||
+      !city ||
+      !email ||
+      !typeOfWork ||
+      !host ||
+      !childAges
+    ) {
+      alert(
+        "Συμπληρώστε όλα τα πεδία με αστερίσκο για να αποθηκεύσετε ή να δημοσιεύσετε αγγελία."
+      );
+      return;
+    }
+    //check if host is filled and coHost not
+    if (host) {
+      if (!coHost) {
+        alert(
+          "Εφόσον έχετε συμπληρώσει οτι μπορείτε να φιλοξενήσετε στο σπίτι σας πρέπει να συμπληρώσετε αν υπάρχει συνοικούντας ή οχι."
+        );
+        return;
+      }
+    }
+    if (!isValidEmail(email)) {
+      alert("Λάθος μορφή διεύθυνσης ηλεκτρονικού ταχυδρομείου.");
+      return;
+    }
+    setSubmitModalOpen(true);
+  };
+
+  //------------------------------------------------------------------------------------------------------------------------------
   //data validation
   const isValidName = (value) => /^[A-Za-zΑ-Ωα-ωΆ-Ώά-ώ\s]*$/.test(value); //i will use the same for eponymo,onoma patros,mitros
   const isValidEmail = (value) =>
@@ -211,8 +438,11 @@ export default function CreateAggelia() {
               }}
             >
               <h6>Διεύθυνση Νταντάς</h6>
+
               <div className="mb-2 ">
-                <label className="form-label">Διεύθυνση</label>
+                <label className="form-label">
+                  Διεύθυνση <span style={{ color: "red" }}>*</span>
+                </label>
                 <input
                   type="text"
                   className={`form-control ${addressError ? "is-invalid" : ""}`}
@@ -234,7 +464,10 @@ export default function CreateAggelia() {
               </div>
               <div className="row">
                 <div className="col-6 mb-2">
-                  <label className="form-label">Περιοχή</label>
+                  <label className="form-label">
+                    Περιοχή <span style={{ color: "red" }}>*</span>
+                  </label>
+
                   <input
                     type="text"
                     className={`form-control ${perioxiError ? "is-invalid" : ""}`}
@@ -247,7 +480,10 @@ export default function CreateAggelia() {
                   )}
                 </div>
                 <div className="col-6 mb-2">
-                  <label className="form-label">Πόλη</label>
+                  <label className="form-label">
+                    Πόλη <span style={{ color: "red" }}>*</span>
+                  </label>
+
                   <input
                     type="text"
                     className={`form-control ${cityError ? "is-invalid" : ""}`}
@@ -272,7 +508,10 @@ export default function CreateAggelia() {
             >
               <h6>Στοιχεία Επικοινωνίας</h6>
               <div className="col-12 mb-2">
-                <label className="form-label">Email</label>
+                <label className="form-label">
+                  Email <span style={{ color: "red" }}>*</span>
+                </label>
+
                 <input
                   type="text"
                   className={`form-control ${emailError ? "is-invalid" : ""}`}
@@ -294,7 +533,10 @@ export default function CreateAggelia() {
               </Form.Group>
               <div className="row">
                 <div className=" col-md-6 mb-2">
-                  <label className="form-label">Σταθερό Τηλέφωνο</label>
+                  <label className="form-label">
+                    Σταθερό Τηλέφωνο <span style={{ color: "red" }}>*</span>
+                  </label>
+
                   <input
                     type="text"
                     className={`form-control ${phoneError ? "is-invalid" : ""}`}
@@ -307,7 +549,10 @@ export default function CreateAggelia() {
                   )}
                 </div>
                 <div className="col-md-6 mb-2">
-                  <label className="form-label">Κινητό Τηλέφωνο</label>
+                  <label className="form-label">
+                    Κινητό Τηλέφωνο<span style={{ color: "red" }}>*</span>
+                  </label>
+
                   <input
                     type="text"
                     className={`form-control ${cellPhoneError ? "is-invalid" : ""}`}
@@ -331,6 +576,7 @@ export default function CreateAggelia() {
             </div>
           </div>
           <div>
+            &nbsp;
             {/* plaisio paroxis ktlp */}
             <div className="row">
               <div className="col-12 col-md-12">
@@ -361,6 +607,7 @@ export default function CreateAggelia() {
                         }}
                       >
                         Τύπος Απασχόλησης Πλήρης/Μερική
+                        <span style={{ color: "red" }}>*</span>
                       </label>
                       {/* Combobox */}
                       <Select
@@ -391,6 +638,7 @@ export default function CreateAggelia() {
                         }}
                       >
                         Δυνατότητα Φιλοξενίας στην οικία μου
+                        <span style={{ color: "red" }}>*</span>
                       </label>
                       {/* Combobox */}
                       <Select
@@ -459,6 +707,7 @@ export default function CreateAggelia() {
                         }}
                       >
                         Ηλικίες παιδιών που δύναται να φροντίσει:
+                        <span style={{ color: "red" }}>*</span>
                       </label>
                       {/* Combobox */}
                       <Select
@@ -553,11 +802,26 @@ export default function CreateAggelia() {
         </div>
 
         <div className="d-flex justify-content-center mt-4">
+          {addressIsChecked && (
+            <Button
+              variant="contained"
+              onClick={handleDeleteBtnClick}
+              style={{
+                backgroundColor: "#FF0000",
+                color: "white",
+                borderRadius: "20px", // Rounded corners
+                minWidth: "180px",
+                marginRight: "10px", // Gap between button
+              }}
+            >
+              ΔΙΑΓΡΑΦΗ ΔΗΜΟΣΙΕΥΜΕΝΗΣ ΑΓΓΕΛΙΑΣ
+            </Button>
+          )}
           <Button
             variant="contained"
-            // onClick={handleCancelClick}
+            onClick={handleCancelBtnClick}
             style={{
-              backgroundColor: "#FF0000",
+              backgroundColor: "#d96f6f",
               color: "white",
               borderRadius: "20px", // Rounded corners
               minWidth: "180px",
@@ -568,7 +832,7 @@ export default function CreateAggelia() {
           </Button>
           <Button
             variant="contained"
-            // onClick={handleSaveClick}
+            onClick={handleSaveBtnClick}
             style={{
               backgroundColor: "#0864a6",
               color: "white",
@@ -581,7 +845,7 @@ export default function CreateAggelia() {
           </Button>
           <Button
             variant="contained"
-            // onClick={handleSaveClick}
+            onClick={handleSubmitBtnClick}
             style={{
               backgroundColor: "#008000",
               color: "white",
@@ -594,6 +858,18 @@ export default function CreateAggelia() {
         </div>
       </div>
       <Footer />
+      {/* Modal Dialog */}
+      <ConfirmationModals
+        cancelModalOpen={cancelModalOpen}
+        handleCloseCancel={handleCloseCancel}
+        handleConfirmCancel={handleConfirmCancel}
+        deleteModalOpen={deleteModalOpen}
+        handleCloseDelete={handleCloseDelete}
+        handleConfirmDelete={handleConfirmDelete}
+        submitModalOpen={submitModalOpen}
+        handleCloseSubmit={handleCloseSubmit}
+        handleConfirmSubmit={handleConfirmSubmit}
+      />
     </div>
   );
 }

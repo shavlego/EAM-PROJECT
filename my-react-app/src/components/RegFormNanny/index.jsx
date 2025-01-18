@@ -205,6 +205,7 @@ export default function RegFormNanny() {
         createdAt: new Date(),
         role: false,
         userId,
+        aggeliaActive: false,
       };
 
       if (userData.length > 0) {
@@ -257,6 +258,7 @@ export default function RegFormNanny() {
         createdAt: new Date(),
         role: false,
         userId,
+        aggeliaActive: false,
       };
 
       if (userData.length > 0) {
