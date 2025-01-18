@@ -6,20 +6,17 @@ import Breadcrumb from "./Breadcrumb";
 import Eligibility from "./Eligibility";
 import HowitWorks from "./HowItWorks";
 
-export default function ParentInfo  ()  {
+export default function ParentInfo() {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
-  
-    return (
-        <div>
-            <Header />
-            <h1>Οδηγίες για Γονείς</h1>
-            <Breadcrumb/>
-            <p>Σε αυτή την σελίδα  θα βρείτε τις πληροφορίες που χρειάζεστε για να επωφεληθείτε απο το πρόγραμμα ως γονέας.</p>
-            <Eligibility/>
-            <HowitWorks/>
-            <Footer />     
-        </div>
-    );
-  };
-  
+  return (
+    <div>
+      <Header />
+      <h1>Οδηγίες για Γονείς</h1>
+      <Breadcrumb />
+      <Eligibility />
+      <HowitWorks />
+      <Footer />
+    </div>
+  );
+}

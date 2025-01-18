@@ -132,7 +132,7 @@ export default function CreateAggelia() {
     }
   };
   const handlePhoneBlur = () => {
-    if (isValidNumber(phone)) setTilefwnoError(""); // Update error state
+    if (isValidNumber(phone)) setPhoneError(""); // Update error state
   };
 
   const handleCellPhoneChange = (e) => {
@@ -148,7 +148,7 @@ export default function CreateAggelia() {
     }
   };
   const handleCellPhoneBlur = () => {
-    if (isValidNumber(cellPhone)) setKinitoError(""); // Update error state
+    if (isValidNumber(cellPhone)) setCellPhoneError(""); // Update error state
   };
 
   const handlePerioxiChange = (e) => {

@@ -15,8 +15,7 @@ function Hero() {
       <div className="hero text-center mb-4 p-4 bg-light rounded">
         <h1 className="display-4">Δράση “Νταντάδες της Γειτονιάς”</h1>
         <p className="lead">
-          Υπηρεσία κατ’ οίκον φροντίδας βρεφών και νηπίων από 2.5 μηνών έως 2
-          ετών
+          Υπηρεσία κατ’ οίκον φροντίδας βρεφών και νηπίων έως δυόμιση έτη
         </p>
       </div>
       <div className="row">
@@ -29,9 +28,9 @@ function Hero() {
         </div>
         <div className="col-md-6 ">
           <p className="fs-5">
-            Πρόσβαση έχουν οι γονείς και τα φυσικά πρόσωπα που έχουν την
-            επιμέλεια βρεφών και νηπίων, καθώς και τα φυσικά πρόσωπα που
-            επιθυμούν να εγγραφούν στο μητρώο σαν επαγγελματίες.
+            Πρόκειται για κρατικό πρόγραμμα το οποίο επιδοτεί 100% γονείς που
+            επιθυμούν να μισθώσουν Νταντά για το παιδί τους. Επίσης προσφέρει
+            ευκαιρίες εργασίας σε όσους θέλουν να απασχοληθούν ως "Νταντά"
           </p>
           <div className="buttons d-flex  justify-content-center gap-2">
             {/* px-lg for larger screens px-md for medium screens and px-sm for small screens */}
