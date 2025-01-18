@@ -372,7 +372,7 @@ export default function NannyProfile() {
                 }}
               >
                 <img
-                  src="/Images/logo.png"
+                  src="/Images/nanny1.png"
                   alt="Profile"
                   style={{
                     width: "100%",
