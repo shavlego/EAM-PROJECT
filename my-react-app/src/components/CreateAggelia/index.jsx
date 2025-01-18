@@ -4,6 +4,8 @@ import Footer from "../Footer";
 import { useNavigate } from "react-router-dom";
 import Breadcrumb from "./Breadcrumb";
 import { useEffect, useState } from "react";
+import { FIREBASE_AUTH, FIREBASE_DB } from "../../firebase";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import "./index.css";
 import {
   collection,
@@ -29,8 +31,169 @@ import {
   Snackbar,
 } from "@mui/material";
 import { Container, Row, Col, Card, Form } from "react-bootstrap";
+import { use } from "react";
 export default function CreateAggelia() {
   const navigate = useNavigate();
+  //variables for form and tect controls
+  const [phone, setPhone] = useState("");
+  const [phoneError, setPhoneError] = useState("");
+  const [cellPhone, setCellPhone] = useState("");
+  const [cellPhoneError, setCellPhoneError] = useState("");
+  const [perioxi, setPerioxi] = useState("");
+  const [perioxiError, setPerioxiError] = useState("");
+  const [address, setAddress] = useState("");
+  const [addressError, setAddressError] = useState("");
+  const [city, setCity] = useState("");
+  const [cityError, setCityError] = useState("");
+  const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [ligaLogia, setLigaLogia] = useState("");
+  const [bio, setBio] = useState("");
+  const [host, setHost] = useState("");
+  const [coHost, setCoHost] = useState("");
+  const [typeOfWork, setTypeOfWork] = useState("");
+  const [childAges, setChildAges] = useState("");
+  const [addressIsChecked, setAddressIsChecked] = useState(false);
+  const [emailIsChecked, setEmailIsChecked] = useState(false);
+  const [phoneIsChecked, setPhoneIsChecked] = useState(false);
+
+  //handlers for data change
+  const handlePhoneChange = (e) => {
+    const value = e.target.value;
+    if (isValidNumber(value, 0, 10)) {
+      //only numbers and 10 digits
+      setPhone(value); //set the val
+      setPhoneError(""); //reset error
+    } else {
+      setPhoneError("Ο αριθμός τηλεφώνου πρέπει να περιέχει 10 ψηφία.");
+    }
+  };
+  const handlePhoneBlur = () => {
+    if (isValidNumber(phone)) setTilefwnoError(""); // Update error state
+  };
+
+  const handleCellPhoneChange = (e) => {
+    const value = e.target.value;
+    if (isValidNumber(value, 0, 10)) {
+      //only numbers and 10 digits
+      setCellPhone(value); //set the val
+      setCellPhoneError(""); //reset error
+    } else {
+      setCellPhoneError(
+        "Ο αριθμός κινητού τηλεφώνου πρέπει να περιέχει 10 ψηφία."
+      );
+    }
+  };
+  const handleCellPhoneBlur = () => {
+    if (isValidNumber(cellPhone)) setKinitoError(""); // Update error state
+  };
+
+  const handlePerioxiChange = (e) => {
+    const value = e.target.value;
+    if (isValidName(value)) {
+      setPerioxi(value); // Update state if valid
+      setPerioxiError(""); // Clear error message
+    } else {
+      setPerioxiError(
+        'Στο πεδίο " Περιοχή " επιτρέπονται μόνο ελληνικοί,λατινικοί χαρακτήρες και κενά'
+      );
+    }
+  };
+  const handlePerioxiBlur = () => {
+    if (isValidName(perioxi)) setPerioxiError(""); // Update error state
+  };
+  const handleAddressChange = (e) => {
+    const value = e.target.value;
+    if (isValidAddress(value)) {
+      setAddress(value); // Update state if valid
+      setAddressError(""); // Clear error message
+    } else {
+      setAddressError(
+        'Στο πεδίο " Διεύθυνση " επιτρέπονται μόνο ελληνικοί,λατινικοί χαρακτήρες και κενά'
+      );
+    }
+  };
+  const handleAddressBlur = () => {
+    if (isValidAddress(address)) setAddressError(""); // Update error state
+  };
+
+  const handleCityChange = (e) => {
+    const value = e.target.value;
+    if (isValidName(value)) {
+      setCity(value); // Update state if valid
+      setCityError(""); // Clear error message
+    } else {
+      setCityError(
+        'Στο πεδίο " Πόλη κατοικίας " επιτρέπονται μόνο ελληνικοί,λατινικοί χαρακτήρες και κενά'
+      );
+    }
+  };
+  const handleCityBlur = () => {
+    if (isValidName(city)) setCityError(""); // Update error state
+  };
+
+  const handleEmailChange = (e) => {
+    const value = e.target.value;
+    setEmail(value);
+    if (isValidEmail(value)) setEmailError(""); // Update error state
+  };
+  const handleEmailBlur = () => {
+    if (isValidEmail(email))
+      setEmailError(""); // Update error state
+    else
+      setEmailError(
+        "Η διεύθυνση Email πρέπει να είναι της μορφής xxxxx@xxxx.xxx"
+      );
+  };
+  const handleLigaLogiaChange = (e) => {
+    const value = e.target.value;
+    setLigaLogia(value);
+  };
+  const handleBioChange = (e) => {
+    const value = e.target.value;
+    setBio(value);
+  };
+  const handletypeOfWorkChange = (event) => {
+    setTypeOfWork(event.target.value); // Update state when the user selects an option
+  };
+  const handleHostChange = (event) => {
+    setHost(event.target.value); // Update state when the user selects an option
+  };
+  const handleCoHostChange = (event) => {
+    setCoHost(event.target.value); // Update state when the user selects an option
+  };
+  const handleChildAgesChange = (event) => {
+    setChildAges(event.target.value); // Update state when the user selects an option
+  };
+  const handleAddressCheckBoxClick = () => {
+    setAddressIsChecked((prevState) => !prevState);
+  };
+  const handleEmailCheckBoxClick = () => {
+    setEmailIsChecked((prevState) => !prevState);
+  };
+  const handlePhoneCheckBoxClick = () => {
+    setPhoneIsChecked((prevState) => !prevState);
+  };
+
+  //------------------------------------------------------------------------------------------------------------------------------
+  //handlers for button clicks
+  //data validation
+  const isValidName = (value) => /^[A-Za-zΑ-Ωα-ωΆ-Ώά-ώ\s]*$/.test(value); //i will use the same for eponymo,onoma patros,mitros
+  const isValidEmail = (value) =>
+    /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(value);
+  const isValidNumber = (value, minLength = 1, maxLength = Infinity) => {
+    // Check if the value contains only digits
+    const isNumber = /^[0-9]*$/.test(value);
+    // Check if the length is within the specified range
+    const isCorrectLength =
+      value.length >= minLength && value.length <= maxLength;
+    return isNumber && isCorrectLength;
+  };
+  const isValidAddress = (value) => {
+    // Regular expression to allow letters, numbers, and spaces
+    const regex = /^[A-Za-zΑ-Ωα-ωΆ-Ώά-ώ0-9\s]*$/;
+    return regex.test(value);
+  };
 
   return (
     <div>
@@ -52,17 +215,19 @@ export default function CreateAggelia() {
                 <label className="form-label">Διεύθυνση</label>
                 <input
                   type="text"
-                  //className={`form-control ${addressError ? "is-invalid" : ""}`}
-                  //value={address}
-                  //onChange={handleAddressChange}
-                  // onBlur={handleAddressBlur}
+                  className={`form-control ${addressError ? "is-invalid" : ""}`}
+                  value={address}
+                  onChange={handleAddressChange}
+                  onBlur={handleAddressBlur}
                 />
-                {/* {addressError && (
-                <div className="invalid-feedback">{addressError}</div>
-              )} */}
+                {addressError && (
+                  <div className="invalid-feedback">{addressError}</div>
+                )}
                 <Form.Group controlId="addressCheckbox" className="mt-1">
                   <Form.Check
                     type="checkbox"
+                    checked={addressIsChecked}
+                    onChange={handleAddressCheckBoxClick}
                     label="Επιθυμώ την εμφάνιση της Διεύθυνσης μου στην Αγγελία"
                   />
                 </Form.Group>
@@ -72,27 +237,27 @@ export default function CreateAggelia() {
                   <label className="form-label">Περιοχή</label>
                   <input
                     type="text"
-                    //className={`form-control ${perioxiError ? "is-invalid" : ""}`}
-                    //value={perioxi}
-                    //onChange={handlePerioxiChange}
-                    //onBlur={handlePerioxiBlur}
+                    className={`form-control ${perioxiError ? "is-invalid" : ""}`}
+                    value={perioxi}
+                    onChange={handlePerioxiChange}
+                    onBlur={handlePerioxiBlur}
                   />
-                  {/* perioxiError && (
-                 <div className="invalid-feedback">{perioxiError}</div>
-                )} */}
+                  {perioxiError && (
+                    <div className="invalid-feedback">{perioxiError}</div>
+                  )}
                 </div>
                 <div className="col-6 mb-2">
                   <label className="form-label">Πόλη</label>
                   <input
                     type="text"
-                    // className={`form-control ${cityError ? "is-invalid" : ""}`}
-                    //value={city}
-                    //onChange={handleCityChange}
-                    // onBlur={handleCityBlur}
+                    className={`form-control ${cityError ? "is-invalid" : ""}`}
+                    value={city}
+                    onChange={handleCityChange}
+                    onBlur={handleCityBlur}
                   />
-                  {/* {cityError && (
-                  <div className="invalid-feedback">{cityError}</div>
-                )} */}
+                  {cityError && (
+                    <div className="invalid-feedback">{cityError}</div>
+                  )}
                 </div>
               </div>
             </div>
@@ -110,19 +275,21 @@ export default function CreateAggelia() {
                 <label className="form-label">Email</label>
                 <input
                   type="text"
-                  //className={`form-control ${emailError ? "is-invalid" : ""}`}
-                  // value={email}
-                  // onChange={handleEmailChange}
-                  //onBlur={handleEmailBlur}
+                  className={`form-control ${emailError ? "is-invalid" : ""}`}
+                  value={email}
+                  onChange={handleEmailChange}
+                  onBlur={handleEmailBlur}
                 />
-                {/* {emailError && (
+                {emailError && (
                   <div className="invalid-feedback">{emailError}</div>
-                )} */}
+                )}
               </div>
               <Form.Group controlId="addressCheckbox" className="mt-1">
                 <Form.Check
                   type="checkbox"
-                  label="Επιθυμώ την εμφάνιση του Email μου"
+                  checked={emailIsChecked}
+                  onChange={handleEmailCheckBoxClick}
+                  label="Επιθυμώ την εμφάνιση του Email μου στην αγγελία"
                 />
               </Form.Group>
               <div className="row">
@@ -130,32 +297,34 @@ export default function CreateAggelia() {
                   <label className="form-label">Σταθερό Τηλέφωνο</label>
                   <input
                     type="text"
-                    //className={`form-control ${phoneError ? "is-invalid" : ""}`}
-                    //  value={phone}
-                    // onChange={handlePhoneChange}
-                    // onBlur={handlePhoneBlur}
+                    className={`form-control ${phoneError ? "is-invalid" : ""}`}
+                    value={phone}
+                    onChange={handlePhoneChange}
+                    onBlur={handlePhoneBlur}
                   />
-                  {/* {phoneError && (
-                <div className="invalid-feedback">{phoneError}</div>
-              )} */}
+                  {phoneError && (
+                    <div className="invalid-feedback">{phoneError}</div>
+                  )}
                 </div>
                 <div className="col-md-6 mb-2">
                   <label className="form-label">Κινητό Τηλέφωνο</label>
                   <input
                     type="text"
-                    // className={`form-control ${cellPhoneError ? "is-invalid" : ""}`}
-                    // value={cellPhone}
-                    // onChange={handleCellPhoneChange}
-                    // onBlur={handleCellPhoneBlur}
+                    className={`form-control ${cellPhoneError ? "is-invalid" : ""}`}
+                    value={cellPhone}
+                    onChange={handleCellPhoneChange}
+                    onBlur={handleCellPhoneBlur}
                   />
-                  {/* {cellPhoneError && (
-                  <div className="invalid-feedback">{cellPhoneError}</div>
-                )} */}
+                  {cellPhoneError && (
+                    <div className="invalid-feedback">{cellPhoneError}</div>
+                  )}
                 </div>
                 <Form.Group controlId="addressCheckbox" className="mt-1">
                   <Form.Check
                     type="checkbox"
-                    label="Επιθυμώ την εμφάνιση των αριθμών τηλεφώνου μου"
+                    checked={phoneIsChecked}
+                    onChange={handlePhoneCheckBoxClick}
+                    label="Επιθυμώ την εμφάνιση των αριθμών τηλεφώνου μου στην αγγελία"
                   />
                 </Form.Group>
               </div>
@@ -196,8 +365,8 @@ export default function CreateAggelia() {
                       {/* Combobox */}
                       <Select
                         id="typeOfWork"
-                        // value={typeOfWork} // Bind the current state to the Select value
-                        //  onChange={handletypeOfWorkChange} // Handle selection change
+                        value={typeOfWork} // Bind the current state to the Select value
+                        onChange={handletypeOfWorkChange} // Handle selection change
                         displayEmpty
                       >
                         {/* Dropdown options */}
@@ -226,8 +395,8 @@ export default function CreateAggelia() {
                       {/* Combobox */}
                       <Select
                         id="host"
-                        //value={host} // Bind the current state to the Select value
-                        //   onChange={handleHostChange} // Handle selection change
+                        value={host} // Bind the current state to the Select value
+                        onChange={handleHostChange} // Handle selection change
                         displayEmpty
                       >
                         {/* Dropdown options */}
@@ -254,17 +423,17 @@ export default function CreateAggelia() {
                         }}
                       >
                         Υπάρχουν Συνοικούντες;
-                        {/* {host === "ΝΑΙ" && (
+                        {host === "ΝΑΙ" && (
                           <span style={{ color: "red" }}>*</span>
-                        )} */}
+                        )}
                       </label>
                       {/* Combobox */}
                       <Select
                         id="cohabitants"
-                        //  value={coHost}
-                        // onChange={handleCoHostChange}
+                        value={coHost}
+                        onChange={handleCoHostChange}
                         displayEmpty
-                        //  disabled={host != "ΝΑΙ"}
+                        disabled={host != "ΝΑΙ"}
                       >
                         {/* Dropdown options */}
                         <MenuItem value=""></MenuItem>
@@ -294,8 +463,8 @@ export default function CreateAggelia() {
                       {/* Combobox */}
                       <Select
                         id="childAges"
-                        //value={childAges}
-                        // onChange={handleChildAgesChange}
+                        value={childAges}
+                        onChange={handleChildAgesChange}
                         displayEmpty
                       >
                         {/* Dropdown options */}
@@ -315,7 +484,7 @@ export default function CreateAggelia() {
             <div className="row mb-3">
               <div className="col-12">
                 <div
-                  className="p-3 rounded custom-bg"
+                  className="p-3 rounded custom-bgy"
                   style={{
                     borderRadius: "10px",
                   }}
@@ -325,8 +494,8 @@ export default function CreateAggelia() {
                   </label>
                   <textarea
                     className="form-control"
-                    //value={ligaLogia}
-                    //onChange={handleLigaLogiaChange}
+                    value={ligaLogia}
+                    onChange={handleLigaLogiaChange}
                     rows="3"
                     placeholder="Γράψτε κάτι για εσάς..."
                     style={{
@@ -341,7 +510,7 @@ export default function CreateAggelia() {
             <div className="row mb-3">
               <div className="col-12">
                 <div
-                  className="p-3 rounded custom-bgy"
+                  className="p-3 rounded custom-bg"
                   style={{
                     borderRadius: "10px",
                   }}
@@ -351,8 +520,8 @@ export default function CreateAggelia() {
                   </label>
                   <textarea
                     className="form-control"
-                    //value={bio}
-                    //onChange={handleBioChange}
+                    value={bio}
+                    onChange={handleBioChange}
                     rows="3"
                     placeholder="Γράψτε κάτι για εσάς..."
                     style={{
@@ -373,7 +542,6 @@ export default function CreateAggelia() {
                         id="biografiko"
                         type="file"
                         className="form-control"
-                        //onChange={handleFileUploadFirstAid}
                         style={{ marginBottom: "8px" }}
                       />
                     </div>
@@ -382,6 +550,47 @@ export default function CreateAggelia() {
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="d-flex justify-content-center mt-4">
+          <Button
+            variant="contained"
+            // onClick={handleCancelClick}
+            style={{
+              backgroundColor: "#FF0000",
+              color: "white",
+              borderRadius: "20px", // Rounded corners
+              minWidth: "180px",
+              marginRight: "10px", // Gap between buttons
+            }}
+          >
+            ΑΚΥΡΩΣΗ
+          </Button>
+          <Button
+            variant="contained"
+            // onClick={handleSaveClick}
+            style={{
+              backgroundColor: "#0864a6",
+              color: "white",
+              borderRadius: "20px", // Rounded corners
+              minWidth: "180px",
+              marginRight: "10px",
+            }}
+          >
+            ΑΠΟΘΗΚΕΥΣΗ
+          </Button>
+          <Button
+            variant="contained"
+            // onClick={handleSaveClick}
+            style={{
+              backgroundColor: "#008000",
+              color: "white",
+              borderRadius: "20px", // Rounded corners
+              minWidth: "180px",
+            }}
+          >
+            ΔΗΜΟΣΙΕΥΣΗ
+          </Button>
         </div>
       </div>
       <Footer />
