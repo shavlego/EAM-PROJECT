@@ -21,6 +21,7 @@ import ScheduleAppointment from "./components/ScheduleAppointment";
 import NannyMenu from "./components/NannyMenu";
 import ApplyForNanny from "./components/ApplyForNanny";
 import CreateAggelia from "./components/CreateAggelia";
+import NannyNotifications from "./components/nannyNotifications";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -53,6 +54,7 @@ function App() {
         <Route path="/NannyMenu" element={<NannyMenu />} />
         <Route path="/CreateAggelia" element={<CreateAggelia />} />
         <Route path="/AitisiSinergasias" element={<AitisiSinergasias />} />
+        <Route path="/NannyNotificaions" element={<NannyNotifications />} />
         <Route
           path="/scheduleAppointment/:nannyId"
           element={<ScheduleAppointment />}

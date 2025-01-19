@@ -31,6 +31,9 @@ export default function NannyMenu() {
   const handleAggeliaClick = () => {
     navigate("/CreateAggelia");
   };
+  const handleNotificationsClick = () => {
+    navigate("/NannyNotifications");
+  };
 
   //----------------------------------------------------------------------------------------
   // Track authentication
@@ -311,7 +314,7 @@ export default function NannyMenu() {
           {/* Card N6 */}
           <Col md={4} sm={6} xs={12} className="mb-4">
             <Card
-              onClick={handleProfileClick}
+              onClick={handleNotificationsClick}
               className="shadow-lg text-center h-100"
               style={{
                 backgroundColor: "#FFF7E6",
