@@ -235,6 +235,129 @@ export default function AitisiSinergasias() {
             </div>
           </div>
         </div>
+        <div className="container">
+          <h3 style={{ textAlign: "center" }}>Επιλογές Συνεργασίας</h3>
+          <div
+            className="d-flex align-items-center "
+            style={{ gap: "16px", marginBottom: "16px" }}
+          >
+            <FormControl
+              style={{ flexGrow: 2, minWidth: "320px" }}
+              fullWidth
+              variant="outlined"
+            >
+              {/* Label for the combobox */}
+              <label
+                htmlFor="typeOfWork"
+                className="form-label"
+                style={{
+                  fontSize: "16px",
+                  marginBottom: "8px",
+                  display: "block",
+                }}
+              >
+                Τύπος Απασχόλησης
+              </label>
+              {/* Combobox */}
+              <Select
+                id="typeOfWork"
+                //  value={typeOfWork} // Bind the current state to the Select value
+                // onChange={handletypeOfWorkChange} // Handle selection change
+                displayEmpty
+              >
+                {/* Dropdown options */}
+                <MenuItem value="Πλήρης">Πλήρης</MenuItem>
+                <MenuItem value="Μερική">Μερική</MenuItem>
+              </Select>
+            </FormControl>
+            {/* Combobox dynatotita filoksenias */}
+            <FormControl
+              style={{ flexGrow: 2, minWidth: "320px" }}
+              fullWidth
+              variant="outlined"
+            >
+              {/* Label for the combobox */}
+              <label
+                htmlFor="host"
+                className="form-label"
+                style={{
+                  fontSize: "16px",
+                  marginBottom: "8px",
+                  display: "block",
+                }}
+              >
+                Χώρος φύλαξης
+              </label>
+              {/* Combobox */}
+              <Select
+                id="host"
+                //value={host} // Bind the current state to the Select value
+                // onChange={handleHostChange} // Handle selection change
+                displayEmpty
+              >
+                {/* Dropdown options */}
+                <MenuItem value=""></MenuItem>
+                <MenuItem value="Οικεία Γονέα">Οικεία Γονέα</MenuItem>
+                <MenuItem value="Οικεία Νταντάς">Οικεία Νταντάς</MenuItem>
+              </Select>
+            </FormControl>
+
+            {/* Combobox 2 */}
+            <FormControl
+              style={{ flexGrow: 4, minWidth: "250px" }}
+              fullWidth
+              variant="outlined"
+            >
+              {/* Label for the combobox */}
+              <label
+                htmlFor="cohabitants"
+                className="form-label"
+                style={{
+                  fontSize: "16px",
+                  marginBottom: "8px",
+                  display: "block",
+                }}
+              >
+                Διάρκεια Συνεργασίας
+              </label>
+              {/* Combobox */}
+              <Select
+                id="cohabitants"
+                //value={coHost}
+                // onChange={handleCoHostChange}
+                displayEmpty
+                //  disabled={host != "ΝΑΙ"}
+              >
+                {/* Dropdown options */}
+                <MenuItem value="1 Μήνας">1 Μήνας</MenuItem>
+                <MenuItem value="3 Μήνες">3 Μήνες</MenuItem>
+                <MenuItem value="6 Μήνες">6 Μήνες</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+          <FormControl
+            style={{ flexGrow: 4, minWidth: "120px" }}
+            fullWidth
+            variant="outlined"
+          >
+            <label
+              htmlFor="textBox"
+              className="form-label"
+              style={{ fontSize: "16px" }}
+            >
+              Πόλη Κατοικίας <span style={{ color: "red" }}>* </span>
+            </label>
+            <TextField
+              id="city"
+              variant="outlined"
+              //value={city}
+              // onChange={handleCityChange}
+              fullWidth
+              //  error={Boolean(tkError)} // Highlight input if there's an error
+              //   helperText={tkError} // Display error message below the input
+            />
+          </FormControl>
+        </div>
       </div>
       <Footer />
     </div>
