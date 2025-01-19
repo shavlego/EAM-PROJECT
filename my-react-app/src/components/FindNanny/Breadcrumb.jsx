@@ -9,7 +9,7 @@ function Breadcrumb() {
             <a href="/">Αρχική</a>
           </li>
           <li className="breadcrumb-item active" aria-current="page">
-            Οδηγίες για Νταντάδες
+            Αναζήτηση "Νταντάς"
           </li>
         </ol>
       </nav>

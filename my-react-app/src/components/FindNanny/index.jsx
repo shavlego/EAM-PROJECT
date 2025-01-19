@@ -12,10 +12,9 @@ import {
   Button,
   Form,
   Table,
-  Breadcrumb,
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import "./Breadcrumb";
+import Breadcrumb from "./Breadcrumb";
 
 function FindNanny() {
   const navigate = useNavigate();
@@ -131,7 +130,16 @@ function FindNanny() {
                 >
                   Προγραμματισμός Ραντεβού
                 </Button>
-                <Button variant="success">Αίτηση Συνεργασίας</Button>
+                <Button
+                  variant="success"
+                  onClick={() =>
+                    navigate("../AitisiSinergasias", {
+                      state: { nannyId: nanny.id },
+                    })
+                  }
+                >
+                  Αίτηση Συνεργασίας
+                </Button>
               </Col>
             </Row>
           </Card.Body>
