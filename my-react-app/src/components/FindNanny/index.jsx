@@ -125,20 +125,16 @@ function FindNanny() {
                   <strong>Τύπος Απασχόλησης:</strong> {nanny.type || "N/A"}
                 </p>
                 <Button
-                  variant="primary"
-                  onClick={() => navigate(`../scheduleAppointment/${nanny.id}`)}
-                >
-                  Προγραμματισμός Ραντεβού
+                variant="primary"
+                onClick={() => navigate(`../scheduleAppointment/${nanny.id}`)}
+                  >
+                    Προγραμματισμός Ραντεβού
                 </Button>
                 <Button
-                  variant="success"
-                  onClick={() =>
-                    navigate("../AitisiSinergasias", {
-                      state: { nannyId: nanny.id },
-                    })
-                  }
-                >
-                  Αίτηση Συνεργασίας
+                variant="success "
+                onClick={() => navigate(`../applyForNanny/${nanny.id}`)}
+                  >
+                    Αίτηση συνεργασίας
                 </Button>
               </Col>
             </Row>
@@ -169,7 +165,7 @@ function FindNanny() {
       <Header />
       <Breadcrumb />
       <Container>
-        <h1 className="text-center my-4">Αναζήτηση "Νταντάδων"</h1>
+        <h1 className="text-center my-4">Αναζήτηση Νταντάδων</h1>
         <p className="text-center">
           Βρες την ιδανική νταντά για εσένα και το παιδί σου. Χρησιμοποίησε τα
           φίλτρα, εντόπισε τον κατάλληλο επαγγελματία και ολοκλήρωσε την αίτηση

@@ -18,9 +18,7 @@ import SandBox from "./components/SandBox";
 import ProfileNanny from "./components/ProfileNanny";
 import RegFormNanny from "./components/RegFormNanny";
 import ScheduleAppointment from "./components/ScheduleAppointment";
-import NannyMenu from "./components/NannyMenu";
-import CreateAggelia from "./components/CreateAggelia";
-import AitisiSinergasias from "./components/AitisiSinergasias";
+import ApplyForNanny from "./components/ApplyForNanny";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -54,7 +52,6 @@ function App() {
           path="/scheduleAppointment/:nannyId"
           element={<ScheduleAppointment />}
         />
-        <Route path="/AitisiSinergasias" element={<AitisiSinergasias />} />
         <Route path="/registerFormNanny" element={<RegFormNanny />} />
       </Routes>
     </Router>
