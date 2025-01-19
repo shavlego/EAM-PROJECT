@@ -1,6 +1,7 @@
 // Aitisi sinergasias me ntanta
 import Header from "../Header";
 import Footer from "../Footer";
+import Breadcrumb from "./Breadcrumb";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
@@ -12,6 +13,8 @@ import {
   where,
   getDocs,
   setDoc,
+  updateDoc,
+  arrayUnion,
   doc,
 } from "firebase/firestore";
 import {
@@ -31,6 +34,7 @@ import {
 } from "@mui/material";
 export default function AitisiSinergasias() {
   const navigate = useNavigate();
+  const [success, setSuccess] = useState("");
   //vars
   const [userData, setUserData] = useState([]); // For fetched data
   const [nannyData, setNannyData] = useState([]); //for fetched data
@@ -39,11 +43,12 @@ export default function AitisiSinergasias() {
   const [role, setRole] = useState("");
   const [loadingAuth, setLoadingAuth] = useState(true); // Track auth state loading
   const [loadingUserData, setLoadingUserData] = useState(true); // Track user data loading
+  const [formData, setFormData] = useState([]);
   //vars of application choices
   const [typeOfWork, setTypeOfWork] = useState("");
   const [startDate, setStartDate] = useState("");
   const [duration, setDuration] = useState("");
-  const [childGenre, setChildGenre] = useState("");
+  const [childGender, setChildGender] = useState("");
   const [childAge, setChildAge] = useState("");
   const [host, setHost] = useState("");
 
@@ -78,8 +83,8 @@ export default function AitisiSinergasias() {
   const handleChildAgeChange = (e) => {
     setChildAge(e.target.value);
   };
-  const handleChildGenreChange = (e) => {
-    setChildGenre(e.target.value);
+  const handleChildGenderChange = (e) => {
+    setChildGender(e.target.value);
   };
   //----------------------------------------------------------------------------------------
   useEffect(() => {
@@ -154,6 +159,7 @@ export default function AitisiSinergasias() {
       fetchNannyData();
     }
   }, [nannyId]);
+
   //fetch nanny Data
   const fetchNannyData = async () => {
     try {
@@ -191,17 +197,30 @@ export default function AitisiSinergasias() {
       console.error("Error fetching user data:", error);
     }
   };
+  const isFormComplete = () => {
+    return (
+      typeOfWork !== "" &&
+      host !== "" &&
+      duration !== "" &&
+      startDate !== "" &&
+      childAge !== "" &&
+      childGender !== ""
+    );
+  };
 
   const handleSaveOrSubmit = async (isSubmit) => {
-    const { childAge, typeOfWork, childGender, startDate, duration } = formData;
     //Validate required fields
-    if (!childAge || !childGender || !startDate || !duration || typeOfWork) {
+    if (!childAge || !childGender || !startDate || !duration || !typeOfWork) {
       setError("Παρακαλώ συμπληρώστε όλα τα πεδία.");
       return;
     }
     try {
       const application = {
-        ...formData,
+        startDate: startDate,
+        duration: duration,
+        type: typeOfWork,
+        childAge: childAge,
+        childGender: childGender,
         parentId: userId,
         nannyId, // Include the nanny's ID
         isSubmitted: isSubmit, // Set whether the application is submitted or just stored
@@ -236,6 +255,9 @@ export default function AitisiSinergasias() {
   return (
     <div>
       <Header />
+      <Breadcrumb />
+      {error && <p className="text-danger text-center">{error}</p>}
+      {success && <p className="text-success text-center">{success}</p>}
       <h1>Αίτηση Συνεργασίας με Νταντά</h1>
       <div className="container">
         <div
@@ -318,7 +340,7 @@ export default function AitisiSinergasias() {
                     marginBottom: "8px",
                   }}
                 >
-                  Τύπος Απασχόλησης
+                  Τύπος Απασχόλησης <span style={{ color: "red" }}>* </span>
                 </label>
                 <Select
                   id="typeOfWork"
@@ -343,7 +365,7 @@ export default function AitisiSinergasias() {
                     marginBottom: "8px",
                   }}
                 >
-                  Χώρος φύλαξης
+                  Χώρος φύλαξης <span style={{ color: "red" }}>* </span>
                 </label>
                 <Select
                   id="host"
@@ -368,7 +390,7 @@ export default function AitisiSinergasias() {
                     marginBottom: "8px",
                   }}
                 >
-                  Διάρκεια Συνεργασίας
+                  Διάρκεια Συνεργασίας <span style={{ color: "red" }}>* </span>
                 </label>
                 <Select
                   id="cohabitants"
@@ -396,7 +418,7 @@ export default function AitisiSinergasias() {
                     fontSize: "16px",
                   }}
                 >
-                  Ημερομηνία Έναρξης
+                  Ημερομηνία Έναρξης<span style={{ color: "red" }}>* </span>
                 </label>
                 <input
                   type="date"
@@ -419,7 +441,7 @@ export default function AitisiSinergasias() {
                     marginBottom: "8px",
                   }}
                 >
-                  Ηλικία παιδιού
+                  Ηλικία παιδιού <span style={{ color: "red" }}>* </span>
                 </label>
                 <Select
                   id="childAge"
@@ -446,12 +468,12 @@ export default function AitisiSinergasias() {
                     marginBottom: "8px",
                   }}
                 >
-                  Φύλο Παιδιού
+                  Φύλο Παιδιού <span style={{ color: "red" }}>* </span>
                 </label>
                 <Select
                   id="childGenre"
-                  value={childGenre}
-                  onChange={handleChildGenreChange}
+                  value={childGender}
+                  onChange={handleChildGenderChange}
                   displayEmpty
                 >
                   <MenuItem value="Αγόρι">Αγόρι</MenuItem>
@@ -462,6 +484,10 @@ export default function AitisiSinergasias() {
           </div>
         </div>
         <div className="text-center my-4">
+          <p style={{ color: "red" }}>
+            {" "}
+            Συμπληρώστε όλα τα πεδία με * για να υποβάλετε την αίτηση
+          </p>
           <button
             className="btn btn-danger mx-2"
             onClick={() => navigate("/profileParent")}
@@ -477,6 +503,7 @@ export default function AitisiSinergasias() {
           <button
             className="btn btn-success mx-2"
             onClick={() => handleSaveOrSubmit(true)}
+            disabled={!isFormComplete()} // Disable button if form is incomplete
           >
             Υποβολή
           </button>
