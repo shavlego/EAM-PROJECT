@@ -113,8 +113,13 @@ function FindNanny() {
                 onClick={() => navigate(`../scheduleAppointment/${nanny.id}`)}
                   >
                     Προγραμματισμός Ραντεβού
-              </Button>
-                <Button variant="success">Αίτηση Συνεργασίας</Button>
+                </Button>
+                <Button
+                variant="success "
+                onClick={() => navigate(`../applyForNanny/${nanny.id}`)}
+                  >
+                    Αίτηση συνεργασίας
+                </Button>
               </Col>
             </Row>
           </Card.Body>
@@ -144,7 +149,7 @@ function FindNanny() {
     <div>
       <Header />
       <Container>
-        <h1 className="text-center my-4">Αναζήτηση "Νταντάδων"</h1>
+        <h1 className="text-center my-4">Αναζήτηση Νταντάδων</h1>
         <p className="text-center">
           Βρες την ιδανική νταντά για εσένα και το παιδί σου. Χρησιμοποίησε τα φίλτρα,
           εντόπισε τον κατάλληλο επαγγελματία και ολοκλήρωσε την αίτηση συνεργασίας.
