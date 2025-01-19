@@ -1,57 +1,51 @@
 /* Custom styling for the hero section */
 .hero {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    padding: 20px;
-    border-radius: 10px;
-  }
-  
-  .nav .nav-link{
-    color: #000; /* Default color */
-    transition: color 0.3s ease; /* Smooth transition */
-  
-  
-  }
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 10px;
+}
 
-  .nav .nav-link:hover {
-    color: #007bff; /* Hover color */
-    text-decoration: underline;
-  }
-  
-  .nav .btn{
-    color: black;
-    background-color: hsla(255, 82%, 84%, 0.4);
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 5px;
-  
-  }
+.nav .nav-link {
+  color: #000; /* Default color */
+  transition: color 0.3s ease; /* Smooth transition */
+}
 
-  .nav .btn:hover {
-    background-color: hsla(255, 82%, 84%, 1);
-  }
-  
-  
-  
-  /* Adjust button styles if needed */
-  
-  .buttons .btn-custom1{
-    background-color: hsla(255, 82%, 84%, 0.4);
-    cursor: pointer;
-  
-  }
-  
-  .buttons .btn-custom2{
-    border-color: hsla(255, 82%, 84%, 0.4) ;
-    cursor: pointer;
-  
-  }
-  .buttons button:hover {
-    background-color: hsla(255, 82%, 84%, 1);
-  }
-  
- .custom-footer {
+.nav .nav-link:hover {
+  color: #007bff; /* Hover color */
+  text-decoration: underline;
+}
+
+.nav .btn {
+  color: black;
+  background-color: hsla(255, 82%, 84%, 0.4);
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.nav .btn:hover {
+  background-color: hsla(255, 82%, 84%, 1);
+}
+
+/* Adjust button styles if needed */
+
+.buttons .btn-custom1 {
+  background-color: hsla(255, 82%, 84%, 0.4);
+  color: #000;
+  cursor: pointer;
+}
+
+.buttons .btn-custom2 {
+  border-color: hsla(255, 82%, 84%, 0.4);
+  cursor: pointer;
+}
+.buttons button:hover {
+  background-color: hsla(255, 82%, 84%, 1);
+}
+
+.custom-footer {
   padding: 0;
   border-radius: 1px;
 }
@@ -59,19 +53,17 @@
 .custom-footer .container {
   background-color: hsla(255, 82%, 84%, 0.4);
   padding: 15px;
-  text-align: center; 
+  text-align: center;
 }
 
 .custom-footer .mid {
   background-color: #f8f9fa; /* Light background */
   margin-bottom: 1px;
-  padding: 15px; 
+  padding: 15px;
 }
 
 .custom-footer .bot {
   background-color: hsla(255, 82%, 84%, 0.4);
-  padding: 1px; 
-  text-align: center; 
+  padding: 1px;
+  text-align: center;
 }
-  
-  

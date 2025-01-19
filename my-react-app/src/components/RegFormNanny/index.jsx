@@ -26,13 +26,14 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
-  Grid,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
   Checkbox,
+  Alert,
+  Snackbar,
 } from "@mui/material";
 import Breadcrumb from "./Breadcrumb";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap styles
@@ -46,6 +47,10 @@ export default function RegFormNanny() {
   const navigate = useNavigate();
   const [userData, setUserData] = useState([]); // For fetched data
   const [userId, setUserId] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(false); // State for success message
+  const handleCloseSuccessMessage = () => {
+    setSuccessMessage(false); // Close success message
+  };
   // Track authentication
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
@@ -90,7 +95,6 @@ export default function RegFormNanny() {
       setUserData(users);
       //If user data exists, populate the form fields
       if (users.length > 0) {
-        console.error("test");
         const user = users[0]; // Assuming there's only one document per user
         //step 0 vars
         setOnoma(user.name || "");
@@ -98,6 +102,7 @@ export default function RegFormNanny() {
         setOnomaPatera(user.fatherName || "");
         setOnomaMiteras(user.motherName || "");
         setGenisi(user.dateOfBirth.toDate());
+        setSex(user.sex || "");
         //step 1 vars
         setTilefwno(user.phone || "");
         setKinito(user.cellPhone || "");
@@ -144,6 +149,11 @@ export default function RegFormNanny() {
   const isValidName = (value) => /^[A-Za-zΑ-Ωα-ωΆ-Ώά-ώ\s]*$/.test(value); //i will use the same for eponymo,onoma patros,mitros
   const isValidEmail = (value) =>
     /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(value);
+  const isValidAddress = (value) => {
+    // Regular expression to allow letters, numbers, and spaces
+    const regex = /^[A-Za-zΑ-Ωα-ωΆ-Ώά-ώ0-9\s]*$/;
+    return regex.test(value);
+  };
   const isValidNumber = (value, minLength = 1, maxLength = Infinity) => {
     // Check if the value contains only digits
     const isNumber = /^[0-9]*$/.test(value);
@@ -171,6 +181,7 @@ export default function RegFormNanny() {
         fatherName: onomaPatera,
         motherName: onomaMiteras,
         dateOfBirth: genisi,
+        sex: sex,
         //from step 1
         email: mail,
         phone: tilefwno,
@@ -199,6 +210,7 @@ export default function RegFormNanny() {
         createdAt: new Date(),
         role: false,
         userId,
+        aggeliaActive: false,
       };
 
       if (userData.length > 0) {
@@ -206,12 +218,12 @@ export default function RegFormNanny() {
         await setDoc(doc(FIREBASE_DB, "user", existingDocId), payload, {
           merge: true,
         });
+        setSuccessMessage(true); // Show success messag
       }
       //navigate("/home");
     } catch {}
   };
   const handleConfirmSubmit = async (e) => {
-    console.log("User confirmed cancellation.");
     setSubmitModalOpen(false); //close the modal
     try {
       const payload = {
@@ -221,6 +233,7 @@ export default function RegFormNanny() {
         fatherName: onomaPatera,
         motherName: onomaMiteras,
         dateOfBirth: genisi,
+        sex: sex,
         //from step 1
         email: mail,
         phone: tilefwno,
@@ -250,6 +263,7 @@ export default function RegFormNanny() {
         createdAt: new Date(),
         role: false,
         userId,
+        aggeliaActive: false,
       };
 
       if (userData.length > 0) {
@@ -257,8 +271,13 @@ export default function RegFormNanny() {
         await setDoc(doc(FIREBASE_DB, "user", existingDocId), payload, {
           merge: true,
         });
+        setSuccessMessage(true); // Show success message
+        // Delay navigation to let the message show
+        setTimeout(() => {
+          navigate("/profileNanny"); // Replace with your desired route
+        }, 1500); // 3-second delay
       }
-      //navigate("/home");
+      //navigate("/profileNanny");
     } catch {}
   };
 
@@ -280,6 +299,7 @@ export default function RegFormNanny() {
   const [onomaMiteras, setOnomaMiteras] = useState("");
   const [genisi, setGenisi] = useState("");
   const [formData, setFormData] = useState(""); // Input data for validation
+  const [sex, setSex] = useState("");
   //vars of step 1
   const [tilefwno, setTilefwno] = useState("");
   const [kinito, setKinito] = useState("");
@@ -367,6 +387,10 @@ export default function RegFormNanny() {
     }
   };
 
+  const handleSexChange = (event) => {
+    setSex(event.target.value); // Update state when the user selects an option
+  };
+
   //----------------------------------------------------------------------------------------------------------------------------
   //step 1 handlers
   const handleTilefwnoChange = (e) => {
@@ -404,10 +428,19 @@ export default function RegFormNanny() {
   const handleMailChange = (e) => {
     const value = e.target.value;
     setMail(value);
+    if (isValidEmail(value)) setMailError(""); // Update error state
+  };
+  const handleEmailBlur = (e) => {
+    if (isValidEmail(mail))
+      setMailError(""); // Update error state
+    else
+      setMailError(
+        "Η διεύθυνση Email πρέπει να είναι της μορφής xxxxx@xxxx.xxx"
+      );
   };
   const handleAddressChange = (e) => {
     const value = e.target.value;
-    if (isValidName(value)) {
+    if (isValidAddress(value)) {
       setAddress(value); // Update state if valid
       setAddressError(""); // Clear error message
     } else {
@@ -415,6 +448,9 @@ export default function RegFormNanny() {
         'Στο πεδίο " Διεύθυνση " επιτρέπονται μόνο ελληνικοί,λατινικοί χαρακτήρες και κενά'
       );
     }
+  };
+  const handleAddressBlur = (e) => {
+    if (isValidAddress(address)) setAddressError(""); // Update error state
   };
   const handleCityChange = (e) => {
     const value = e.target.value;
@@ -785,31 +821,63 @@ export default function RegFormNanny() {
                     />
                   </div>
                   &nbsp;
-                  {/* Date Picker Field */}
-                  {/*	&nbsp; Date of Birth */}
-                  <label
-                    htmlFor="textBox"
-                    className="form-label"
-                    style={{ fontSize: "16px" }}
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "16px", // Space between DatePicker and Select
+                      alignItems: "center", // Vertical alignment
+                    }}
                   >
-                    Ημερομηνία Γέννησης <span style={{ color: "red" }}>*</span>
-                  </label>
-                  <DatePicker
-                    id="genisi"
-                    className="form-control"
-                    selected={genisi}
-                    onChange={(date) => setGenisi(date)}
-                    dateFormat="dd/MM/yyyy"
-                    placeholderText="Επιλέξτε ημερομηνία"
-                    maxDate={eighteenYearsAgo} // Prevent future dates
-                    showYearDropdown // Enables year dropdown
-                    scrollableYearDropdown // Allows scrolling through the years
-                    yearDropdownItemNumber={100} // Number of years to show in the dropdown
-                    showMonthDropdown // Enables month dropdown
-                    required
-                  />
-                </div>
+                    {/* Date Picker */}
+                    <div style={{ flex: 1 }}>
+                      <label
+                        htmlFor="genisi"
+                        className="form-label"
+                        style={{ fontSize: "16px" }}
+                      >
+                        Ημερομηνία Γέννησης{" "}
+                        <span style={{ color: "red" }}>*</span>
+                      </label>
+                      <DatePicker
+                        id="genisi"
+                        className="form-control"
+                        selected={genisi}
+                        onChange={(date) => setGenisi(date)}
+                        dateFormat="dd/MM/yyyy"
+                        placeholderText="Επιλέξτε ημερομηνία"
+                        maxDate={eighteenYearsAgo}
+                        showYearDropdown
+                        scrollableYearDropdown
+                        yearDropdownItemNumber={100}
+                        showMonthDropdown
+                        required
+                        style={{ width: "100%", height: "40px" }} // Consistent height
+                      />
+                    </div>
 
+                    {/* Select Box */}
+                    <div style={{ flex: 1 }}>
+                      <label
+                        htmlFor="sex"
+                        className="form-label"
+                        style={{ fontSize: "16px", marginBottom: "8px" }}
+                      >
+                        Φύλο
+                      </label>
+                      <Select
+                        id="sex"
+                        value={sex}
+                        onChange={handleSexChange}
+                        displayEmpty
+                        fullWidth
+                        style={{ width: "100%", height: "40px" }} // Consistent height
+                      >
+                        <MenuItem value="Άνδρας">Άνδρας</MenuItem>
+                        <MenuItem value="Γυναίκα">Γυναίκα</MenuItem>
+                      </Select>
+                    </div>
+                  </div>
+                </div>
                 {formData.trim() === "" && (
                   <Typography
                     variant="body2"
@@ -884,6 +952,7 @@ export default function RegFormNanny() {
                       variant="outlined"
                       value={mail}
                       onChange={handleMailChange}
+                      onBlur={handleEmailBlur}
                       fullWidth
                       error={Boolean(mailError)} // Highlight input if there's an error
                       helperText={mailError} // Display error message below the input
@@ -902,6 +971,7 @@ export default function RegFormNanny() {
                       variant="outlined"
                       value={address}
                       onChange={handleAddressChange}
+                      onBlur={handleAddressBlur}
                       fullWidth
                       error={Boolean(addressError)} // Highlight input if there's an error
                       helperText={addressError} // Display error message below the input
@@ -1180,7 +1250,7 @@ export default function RegFormNanny() {
                     type="file"
                     className="form-control"
                     onChange={handleFileUploadSpoudes}
-                    style={{ marginBottom: "8px" }}
+                    style={{ marginBottom: "8px", border: "1px solid black" }}
                   />
                   &nbsp;
                   <div
@@ -1234,7 +1304,7 @@ export default function RegFormNanny() {
                     type="file"
                     className="form-control"
                     onChange={handleFileUploadFirstAid}
-                    style={{ marginBottom: "8px" }}
+                    style={{ marginBottom: "8px", border: "1px solid black" }}
                     disabled={firstAid != "ΝΑΙ"}
                   />
                   &nbsp;
@@ -1252,7 +1322,7 @@ export default function RegFormNanny() {
                     type="file"
                     className="form-control"
                     onChange={handleFileUploadPathol}
-                    style={{ marginBottom: "8px" }}
+                    style={{ marginBottom: "8px", border: "1px solid black" }}
                   />
                   <label
                     htmlFor="textBox"
@@ -1267,7 +1337,7 @@ export default function RegFormNanny() {
                     type="file"
                     className="form-control"
                     onChange={handleFileUploadDerm}
-                    style={{ marginBottom: "8px" }}
+                    style={{ marginBottom: "8px", border: "1px solid black" }}
                   />
                   <label
                     htmlFor="textBox"
@@ -1282,7 +1352,7 @@ export default function RegFormNanny() {
                     type="file"
                     className="form-control"
                     onChange={handleFileUploadPsi}
-                    style={{ marginBottom: "8px" }}
+                    style={{ marginBottom: "8px", border: "1px solid black" }}
                   />
                   &nbsp;
                   <Typography variant="h6">Υπεύθυνη Δήλωση</Typography>
@@ -1299,7 +1369,7 @@ export default function RegFormNanny() {
                     type="file"
                     className="form-control"
                     onChange={handleFileUploadYd}
-                    style={{ marginBottom: "8px" }}
+                    style={{ marginBottom: "8px", border: "1px solid black" }}
                   />
                   &nbsp;
                   <Typography variant="h6">
@@ -1318,7 +1388,7 @@ export default function RegFormNanny() {
                     type="file"
                     className="form-control"
                     onChange={handleFileUploadAlo}
-                    style={{ marginBottom: "8px" }}
+                    style={{ marginBottom: "8px", border: "1px solid black" }}
                   />
                   &nbsp;
                 </div>
@@ -1484,16 +1554,7 @@ export default function RegFormNanny() {
                     </div>
                   </div>
                 </div>
-
-                {formData.trim() === "" && (
-                  <Typography
-                    variant="body2"
-                    color="error"
-                    sx={{ marginTop: "10px" }}
-                  >
-                    Please fill out the field to proceed.
-                  </Typography>
-                )}
+                &nbsp;
               </div>
             )}
           </Box>
@@ -1593,6 +1654,21 @@ export default function RegFormNanny() {
               handleCloseSubmit={handleCloseSubmit}
               handleConfirmSubmit={handleConfirmSubmit}
             />
+            {/* Success Snackbar */}
+            <Snackbar
+              open={successMessage}
+              autoHideDuration={4000} // Auto-hide after 4 seconds
+              onClose={handleCloseSuccessMessage}
+              anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            >
+              <Alert
+                onClose={handleCloseSuccessMessage}
+                severity="success"
+                sx={{ width: "100%" }}
+              >
+                Data saved successfully!
+              </Alert>
+            </Snackbar>
             ;
           </Box>
         </Box>

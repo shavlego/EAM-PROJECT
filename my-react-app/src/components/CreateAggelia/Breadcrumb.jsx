@@ -8,8 +8,11 @@ function Breadcrumb() {
           <li className="breadcrumb-item">
             <a href="/">Αρχική</a>
           </li>
+          <li className="breadcrumb-item">
+            <a href="/NannyMenu">Μενού Νταντάς</a>
+          </li>
           <li className="breadcrumb-item active" aria-current="page">
-            Οδηγίες για Νταντάδες
+            Δημιουργία/ Επεξεργασία Αγγελίας
           </li>
         </ol>
       </nav>

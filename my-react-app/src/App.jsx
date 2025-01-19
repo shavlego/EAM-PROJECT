@@ -46,13 +46,11 @@ function App() {
         <Route path="/findNanny" element={<FindNanny />} />
         <Route path="/Anouncements" element={<Anouncements />} />
         <Route path="/SandBox" element={<SandBox />} />
+        <Route path="/NannyMenu" element={<NannyMenu />} />
+        <Route path="/CreateAggelia" element={<CreateAggelia />} />
         <Route
           path="/scheduleAppointment/:nannyId"
           element={<ScheduleAppointment />}
-        />
-        <Route
-          path="/applyForNanny/:nannyId"
-          element={<ApplyForNanny />}
         />
         <Route path="/registerFormNanny" element={<RegFormNanny />} />
       </Routes>

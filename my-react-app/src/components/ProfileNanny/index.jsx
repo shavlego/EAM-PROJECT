@@ -4,6 +4,7 @@ import "./index.css";
 import { useEffect, useState } from "react";
 import { FIREBASE_AUTH, FIREBASE_DB } from "../../firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
+import ConfirmationModals from "./ConfirmationModals";
 import {
   collection,
   query,
@@ -24,35 +25,247 @@ import {
   InputLabel,
   Grid2,
   Checkbox,
+  Alert,
+  Snackbar,
 } from "@mui/material";
+//import Snackbar from "@mui/material/Snackbar";
+//import Alert from "@mui/material/Alert";
 import Breadcrumb from "./Breadcrumb";
 import { useNavigate } from "react-router-dom";
 
 export default function NannyProfile() {
   const [email, setEmail] = useState(null);
+  const [emailError, setEmailError] = useState("");
   const [userId, setUserId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [regSubmitted, setRegSubmitted] = useState(null);
+  const [regSubmitted, setRegSubmitted] = useState("");
   const navigate = useNavigate();
+  const [successMessage, setSuccessMessage] = useState(false); // State for success message
 
   // Form fields
   const [name, setName] = useState("");
   const [surName, setSurName] = useState("");
   const [ilikia, setIlikia] = useState("");
   const [address, setAddress] = useState("");
+  const [addressError, setAddressError] = useState("");
   const [typeOfWork, setTypeOfWork] = useState("");
   const [phone, setPhone] = useState("");
+  const [phoneError, setPhoneError] = useState("");
   const [cellPhone, setCellPhone] = useState("");
+  const [cellPhoneError, setCellPhoneError] = useState("");
   const [perioxi, setPerioxi] = useState("");
+  const [perioxiError, setPerioxiError] = useState("");
   const [tk, setTk] = useState("");
   const [city, setCity] = useState("");
+  const [cityError, setCityError] = useState("");
   const [host, setHost] = useState("");
   const [childAges, setChildAges] = useState("");
   const [ekpaideusi, setEkpaideusi] = useState();
   const [bio, setBio] = useState(""); // State for additional text
+  const [ligaLogia, setLigaLogia] = useState("");
   const [userData, setUserData] = useState([]); // For fetched data
 
+  //Modals for new registration
+  const [regModalOpen, setRegModalOpen] = useState(false);
+  const [cancelModalOpen, setCancelModalOpen] = useState(false);
+
+  const handleRegButtonClick = () => {
+    setRegModalOpen(true);
+  };
+  const handleCloseReg = () => {
+    setRegModalOpen(false);
+  };
+  const handleCloseCancel = () => {
+    setCancelModalOpen(false);
+  };
+  const handleConfirmCancel = async (e) => {
+    setCancelModalOpen(false);
+    navigate("/");
+  };
+
+  const handleCloseSuccessMessage = () => {
+    setSuccessMessage(false); // Close success message
+  };
+  //here we need to open set the submit var and navigate to registration
+  const handleConfirmReg = async (e) => {
+    setRegModalOpen(false);
+    try {
+      const payload = {
+        phone: phone,
+        cellPhone: cellPhone,
+        address: address,
+        perioxi: perioxi,
+        tk: tk,
+        region: city,
+        host: host, //Dynatotita filoksenias stin oikia
+        type: typeOfWork, //pliris/meriki
+        childAges: childAges, //0-6 Μηνών/6-12 Μηνών/1-2.5 Έτη/0-2.5 Έτη
+        regSubmitted: false,
+        userId,
+        bio: bio, //bio of nanny
+        ligaLogia: ligaLogia,
+      };
+
+      if (userData.length > 0) {
+        const existingDocId = userData[0].id; // Assuming only one document per user
+        await setDoc(doc(FIREBASE_DB, "user", existingDocId), payload, {
+          merge: true,
+        });
+      }
+      navigate("/registerFormNanny");
+    } catch {}
+  };
+
+  //button handlers
+  const handleSaveClick = async (e) => {
+    if (!phone || !cellPhone || !address || !perioxi || !city || !email) {
+      alert("Please fill in all fields before proceeding.");
+      return;
+    }
+    //need to send info to firebase
+    try {
+      const payload = {
+        phone: phone,
+        cellPhone: cellPhone,
+        address: address,
+        perioxi: perioxi,
+        region: city,
+        userId,
+        bio: bio, //bio of nanny
+        ligaLogia: ligaLogia,
+      };
+
+      if (userData.length > 0) {
+        const existingDocId = userData[0].id; // Assuming only one document per user
+        await setDoc(doc(FIREBASE_DB, "user", existingDocId), payload, {
+          merge: true,
+        });
+        setSuccessMessage(true); // Show success messag
+      }
+    } catch {}
+  };
+  const handleCancelClick = () => {
+    //need to call modal if sure
+    setCancelModalOpen(true);
+  };
+  //----------------------------------------------------------------------------------------
+  //value change handlers
+  //check the validity of the data
+  const isValidName = (value) => /^[A-Za-zΑ-Ωα-ωΆ-Ώά-ώ\s]*$/.test(value); //i will use the same for eponymo,onoma patros,mitros
+  const isValidEmail = (value) =>
+    /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(value);
+  const isValidNumber = (value, minLength = 1, maxLength = Infinity) => {
+    // Check if the value contains only digits
+    const isNumber = /^[0-9]*$/.test(value);
+    // Check if the length is within the specified range
+    const isCorrectLength =
+      value.length >= minLength && value.length <= maxLength;
+    return isNumber && isCorrectLength;
+  };
+  const isValidAddress = (value) => {
+    // Regular expression to allow letters, numbers, and spaces
+    const regex = /^[A-Za-zΑ-Ωα-ωΆ-Ώά-ώ0-9\s]*$/;
+    return regex.test(value);
+  };
+
+  const handlePerioxiChange = (e) => {
+    const value = e.target.value;
+    if (isValidName(value)) {
+      setPerioxi(value); // Update state if valid
+      setPerioxiError(""); // Clear error message
+    } else {
+      setPerioxiError(
+        'Στο πεδίο " Περιοχή " επιτρέπονται μόνο ελληνικοί,λατινικοί χαρακτήρες και κενά'
+      );
+    }
+  };
+  const handlePerioxiBlur = () => {
+    if (isValidName(perioxi)) setPerioxiError(""); // Update error state
+  };
+
+  const handlePhoneChange = (e) => {
+    const value = e.target.value;
+    if (isValidNumber(value, 0, 10)) {
+      //only numbers and 10 digits
+      setPhone(value); //set the val
+      setPhoneError(""); //reset error
+    } else {
+      setPhoneError("Ο αριθμός τηλεφώνου πρέπει να περιέχει 10 ψηφία.");
+    }
+  };
+  const handlePhoneBlur = () => {
+    if (isValidNumber(phone)) setTilefwnoError(""); // Update error state
+  };
+
+  const handleCellPhoneChange = (e) => {
+    const value = e.target.value;
+    if (isValidNumber(value, 0, 10)) {
+      //only numbers and 10 digits
+      setCellPhone(value); //set the val
+      setCellPhoneError(""); //reset error
+    } else {
+      setCellPhoneError(
+        "Ο αριθμός κινητού τηλεφώνου πρέπει να περιέχει 10 ψηφία."
+      );
+    }
+  };
+  const handleCellPhoneBlur = () => {
+    if (isValidNumber(cellPhone)) setKinitoError(""); // Update error state
+  };
+
+  const handleEmailChange = (e) => {
+    const value = e.target.value;
+    setEmail(value);
+    if (isValidEmail(value)) setEmailError(""); // Update error state
+  };
+  const handleEmailBlur = () => {
+    if (isValidEmail(email))
+      setEmailError(""); // Update error state
+    else
+      setEmailError(
+        "Η διεύθυνση Email πρέπει να είναι της μορφής xxxxx@xxxx.xxx"
+      );
+  };
+
+  const handleAddressChange = (e) => {
+    const value = e.target.value;
+    if (isValidAddress(value)) {
+      setAddress(value); // Update state if valid
+      setAddressError(""); // Clear error message
+    } else {
+      setAddressError(
+        'Στο πεδίο " Διεύθυνση " επιτρέπονται μόνο ελληνικοί,λατινικοί χαρακτήρες και κενά'
+      );
+    }
+  };
+  const handleAddressBlur = () => {
+    if (isValidAddress(address)) setAddressError(""); // Update error state
+  };
+
+  const handleCityChange = (e) => {
+    const value = e.target.value;
+    if (isValidName(value)) {
+      setCity(value); // Update state if valid
+      setCityError(""); // Clear error message
+    } else {
+      setCityError(
+        'Στο πεδίο " Πόλη κατοικίας " επιτρέπονται μόνο ελληνικοί,λατινικοί χαρακτήρες και κενά'
+      );
+    }
+  };
+  const handleCityBlur = () => {
+    if (isValidName(city)) setCityError(""); // Update error state
+  };
+  const handleLigaLogiaChange = (e) => {
+    const value = e.target.value;
+    setLigaLogia(value);
+  };
+  const handleBioChange = (e) => {
+    const value = e.target.value;
+    setBio(value);
+  };
+  //----------------------------------------------------------------------------------------
   // Track authentication
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
@@ -105,7 +318,9 @@ export default function NannyProfile() {
         setEkpaideusi(user.ekpaideusi || "");
         setTypeOfWork(user.type);
         setBio(user.bio || "");
-        setRegSubmitted(user.regSubmitted);
+        setLigaLogia(user.ligaLogia || "");
+        setRegSubmitted(user.regSubmitted || false);
+        console.log(user.regSubmitted);
         //-------------------------------------------------------
 
         //setExpertise(user.expertise || "");
@@ -133,180 +348,338 @@ export default function NannyProfile() {
   return (
     <div className="profile-page container">
       {console.log(regSubmitted)}
-      {regSubmitted == false && navigate("/registerFormNanny")}
+      {regSubmitted === false && navigate("/registerFormNanny")}
       <Header />
       <h1>Δημιουργία / Επεξεργασία Προφίλ - Νταντάς</h1>
       <Breadcrumb />
-      <Box sx={{ padding: "20px" }}>
-        <Typography variant="h5">
-          Επεξεργασία Προφίλ - Βιογραφικού Νταντάς
-        </Typography>
-
-        <Grid2 container spacing={2} sx={{ marginTop: "20px" }}>
+      <div className="container py-4">
+        <div className="row mb-3">
           {/* Profile Picture Section */}
-          <Grid2 xs={12} sm={4}>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column", // Ensure button goes below the image
-                alignItems: "center", // Center align items
-                padding: "10px",
-                borderRadius: "8px",
-                border: "2px solid #c1c1c1",
+          <div className="col-12 col-sm-4 d-flex flex-column align-items-left">
+            <div
+              className="border border-secondary rounded text-center custom-bg"
+              style={{
+                padding: "10px", // Reduced padding
+                height: "100%",
               }}
             >
-              <img
-                src="/Images/logo.png"
-                alt="Profile"
+              <div
                 style={{
+                  width: "120px", // Reduced image size
+                  height: "120px",
+                  overflow: "hidden",
                   borderRadius: "50%",
-                  width: "150px",
-                  height: "150px",
-                  objectFit: "cover", // Ensures the image maintains its aspect ratio
-                }}
-              />
-              <Button
-                variant="contained"
-                component="label"
-                sx={{
-                  marginTop: "10px",
-                  backgroundColor: "#2e86de",
-                  color: "white",
+                  margin: "0 auto",
                 }}
               >
-                Αλλαγή Εικόνας Προφίλ
-                <input
-                  type="file"
-                  hidden
-                  //onChange={handleProfilePictureChange}
+                <img
+                  src="/Images/nanny1.png"
+                  alt="Profile"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
                 />
-              </Button>
-            </Box>
-          </Grid2>
+              </div>
+              <button className="btn btn-primary mt-2">
+                Αλλαγή Εικόνας Προφίλ
+              </button>
+            </div>
+          </div>
+
           {/* Personal Info Section */}
-          <Grid2 xs={12}>
-            <Box
-              sx={{
-                backgroundColor: "#d4e157",
-                padding: "20px",
-                borderRadius: "8px",
+          <div className="col-12 col-sm-6">
+            <div
+              className="custom-bg text-dark rounded"
+              style={{
+                padding: "15px", // Reduced padding
               }}
             >
-              <Typography variant="h6">Προσωπικές Πληροφορίες</Typography>
-              <TextField
-                label="Ονοματεπώνυμο"
-                fullWidth
-                sx={{ marginBottom: "10px", marginTop: "15px" }}
-                value={name + " " + surName}
-              />
-              <Grid2 container spacing={2}>
-                <Grid2 xs={6}>
-                  <TextField
-                    label="Ηλικία"
+              <h6 className="text-center">Προσωπικές Πληροφορίες</h6>
+              <p className="small text-muted">
+                Οι προσωπικές πληροφορίες μπορούν να αλλάξουν μόνο με νέα
+                αίτησης εγγραφής. Για νέα αίτηση χρησιμοποιήστε το πλήκτρο
+                "Φόρμα Επανεγγραφής".
+              </p>
+              <div className="mb-2">
+                <label className="form-label">Ονοματεπώνυμο</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={`${name} ${surName}`}
+                  readOnly
+                />
+              </div>
+              <div className="row">
+                <div className="col-6 mb-2">
+                  <label className="form-label">Ηλικία</label>
+                  <input
+                    type="text"
+                    className="form-control"
                     value={ilikia}
-                    fullWidth
-                    //onChange={(e) => setAge(e.target.value)}
+                    readOnly
                   />
-                </Grid2>
-              </Grid2>
-              <Grid2 container spacing={2}>
-                <Grid2 xs={6}>
-                  <TextField
-                    label="Επίπεδο Σπουδών"
-                    fullWidth
-                    sx={{ marginTop: "10px" }}
+                </div>
+                <div className="col-6 mb-2">
+                  <label className="form-label">Επίπεδο Σπουδών</label>
+                  <input
+                    type="text"
+                    className="form-control"
                     value={ekpaideusi}
-                    //onChange={(e) => setEducationLevel(e.target.value)}
+                    readOnly
                   />
-                </Grid2>
-              </Grid2>
-            </Box>
-          </Grid2>
-        </Grid2>
-        <Grid2 container spacing={2} sx={{ marginTop: "20px" }}>
-          <Grid2 xs={12} sm={8}>
-            <Box
-              sx={{
-                backgroundColor: "#d4e157",
-                padding: "20px",
-                borderRadius: "8px",
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Additional Button Section */}
+          <div className="col-12 col-sm-2 d-flex align-items-center justify-content-center">
+            <button
+              onClick={handleRegButtonClick}
+              className="btn btn-primary rounded-pill px-3 py-2"
+            >
+              Φόρμα Eπανεγγραφής
+            </button>
+          </div>
+        </div>
+
+        {/* Address Section */}
+        <div className="row mb-3">
+          <div className="col-12 col-md-6">
+            <div
+              className="custom-bgy text-dark rounded"
+              style={{
+                padding: "15px", // Reduced padding
               }}
             >
-              <Typography variant="h6">Διεύθυνση Νταντάς</Typography>
-              <TextField
-                label="Διεύθυνση"
-                fullWidth
-                sx={{ marginBottom: "10px", marginTop: "15px" }}
-                value={address}
-              />
-              <Grid2 container spacing={2}>
-                <Grid2 xs={6}>
-                  <TextField
-                    label="Περιοχή"
+              <h6>Διεύθυνση Νταντάς</h6>
+              <div className="mb-2">
+                <label className="form-label">Διεύθυνση</label>
+                <input
+                  type="text"
+                  className={`form-control ${addressError ? "is-invalid" : ""}`}
+                  value={address}
+                  onChange={handleAddressChange}
+                  onBlur={handleAddressBlur}
+                />
+                {addressError && (
+                  <div className="invalid-feedback">{addressError}</div>
+                )}
+              </div>
+              <div className="row">
+                <div className="col-6 mb-2">
+                  <label className="form-label">Περιοχή</label>
+                  <input
+                    type="text"
+                    className={`form-control ${perioxiError ? "is-invalid" : ""}`}
                     value={perioxi}
-                    fullWidth
-                    //onChange={(e) => setAge(e.target.value)}
+                    onChange={handlePerioxiChange}
+                    onBlur={handlePerioxiBlur}
                   />
-                </Grid2>
-              </Grid2>
-              <Grid2 container spacing={2}>
-                <Grid2 xs={6}>
-                  <TextField
-                    label="Πόλη"
-                    fullWidth
-                    sx={{ marginTop: "10px" }}
+                  {perioxiError && (
+                    <div className="invalid-feedback">{perioxiError}</div>
+                  )}
+                </div>
+                <div className="col-6 mb-2">
+                  <label className="form-label">Πόλη</label>
+                  <input
+                    type="text"
+                    className={`form-control ${cityError ? "is-invalid" : ""}`}
                     value={city}
-                    //onChange={(e) => setEducationLevel(e.target.value)}
+                    onChange={handleCityChange}
+                    onBlur={handleCityBlur}
                   />
-                </Grid2>
-              </Grid2>
-            </Box>
-          </Grid2>
-          <Grid2 xs={12} sm={8}>
-            <Box
-              sx={{
-                backgroundColor: "#d4e157",
-                padding: "20px",
-                borderRadius: "8px",
+                  {cityError && (
+                    <div className="invalid-feedback">{cityError}</div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Contact Info Section */}
+          <div className="col-12 col-md-6">
+            <div
+              className="custom-bgy text-dark rounded"
+              style={{
+                padding: "15px", // Reduced padding
               }}
             >
-              <Typography variant="h6">Στοιχεία Επικοινωνίας</Typography>
-              <TextField
-                label="Σταθερό Τηλέφωνο"
-                fullWidth
-                sx={{ marginBottom: "10px", marginTop: "15px" }}
-                value={phone}
-              />
-              <Grid2 container spacing={2}>
-                <Grid2 xs={6}>
-                  <TextField
-                    label="Κινητό Τηλέφωνο"
+              <h6>Στοιχεία Επικοινωνίας</h6>
+              <div className="mb-2">
+                <label className="form-label">Σταθερό Τηλέφωνο</label>
+                <input
+                  type="text"
+                  className={`form-control ${phoneError ? "is-invalid" : ""}`}
+                  value={phone}
+                  onChange={handlePhoneChange}
+                  onBlur={handlePhoneBlur}
+                />
+                {phoneError && (
+                  <div className="invalid-feedback">{phoneError}</div>
+                )}
+              </div>
+              <div className="row">
+                <div className="col-6 mb-2">
+                  <label className="form-label">Κινητό Τηλέφωνο</label>
+                  <input
+                    type="text"
+                    className={`form-control ${cellPhoneError ? "is-invalid" : ""}`}
                     value={cellPhone}
-                    fullWidth
-                    //onChange={(e) => setAge(e.target.value)}
+                    onChange={handleCellPhoneChange}
+                    onBlur={handleCellPhoneBlur}
                   />
-                </Grid2>
-              </Grid2>
-              <Grid2 container spacing={2}>
-                <Grid2 xs={6}>
-                  <TextField
-                    label="Email"
-                    fullWidth
-                    sx={{ marginTop: "10px" }}
+                  {cellPhoneError && (
+                    <div className="invalid-feedback">{cellPhoneError}</div>
+                  )}
+                </div>
+                <div className="col-6 mb-2">
+                  <label className="form-label">Email</label>
+                  <input
+                    type="text"
+                    className={`form-control ${emailError ? "is-invalid" : ""}`}
                     value={email}
-                    disabled
-                    //onChange={(e) => setEducationLevel(e.target.value)}
+                    onChange={handleEmailChange}
+                    onBlur={handleEmailBlur}
                   />
-                </Grid2>
-              </Grid2>
-            </Box>
-          </Grid2>
-        </Grid2>
-      </Box>
+                  {emailError && (
+                    <div className="invalid-feedback">{emailError}</div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Custom Text Section */}
+        <div className="row mb-3">
+          <div className="col-12">
+            <div
+              className="p-3 rounded custom-bg"
+              style={{
+                borderRadius: "10px",
+              }}
+            >
+              <label className="form-label" style={{ color: "black" }}>
+                Λίγα Λόγια για Εσάς
+              </label>
+              <textarea
+                className="form-control"
+                value={ligaLogia}
+                onChange={handleLigaLogiaChange}
+                rows="3"
+                placeholder="Γράψτε κάτι για εσάς..."
+                style={{
+                  border: "2px solid black",
+                  borderRadius: "8px",
+                }}
+              ></textarea>
+            </div>
+          </div>
+        </div>
+        {/* Custom Text Section */}
+        <div className="row mb-3">
+          <div className="col-12">
+            <div
+              className="p-3 rounded custom-bgy"
+              style={{
+                borderRadius: "10px",
+              }}
+            >
+              <label className="form-label" style={{ color: "black" }}>
+                Σύντομο Βιογραφικό
+              </label>
+              <textarea
+                className="form-control"
+                value={bio}
+                onChange={handleBioChange}
+                rows="3"
+                placeholder="Γράψτε κάτι για εσάς..."
+                style={{
+                  border: "2px solid black",
+                  borderRadius: "8px",
+                }}
+              ></textarea>
+              <div className="row">
+                <div>
+                  <label
+                    htmlFor="textBox"
+                    className="form-label"
+                    style={{ fontSize: "16px" }}
+                  >
+                    Επισύναψη Βιογραφικού
+                  </label>
+                  <input
+                    id="biografiko"
+                    type="file"
+                    className="form-control"
+                    //onChange={handleFileUploadFirstAid}
+                    style={{ marginBottom: "8px" }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="container d-flex justify-content-center mt-4">
+          <Button
+            variant="contained"
+            onClick={handleCancelClick}
+            style={{
+              backgroundColor: "#FF0000",
+              color: "white",
+              borderRadius: "20px", // Rounded corners
+              minWidth: "180px",
+              marginRight: "10px", // Gap between buttons
+            }}
+          >
+            ΑΚΥΡΩΣΗ
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleSaveClick}
+            style={{
+              backgroundColor: "#008000",
+              color: "white",
+              borderRadius: "20px", // Rounded corners
+              minWidth: "180px",
+            }}
+          >
+            ΑΠΟΘΗΚΕΥΣΗ
+          </Button>
+        </div>
+      </div>
+
       {/* Error message */}
       {error && <div className="error-message">{error}</div>}
 
       <Footer />
+      {/* Modal Dialog */}
+      <ConfirmationModals
+        cancelModalOpen={cancelModalOpen}
+        handleCloseCancel={handleCloseCancel}
+        handleConfirmCancel={handleConfirmCancel}
+        regModalOpen={regModalOpen}
+        handleCloseReg={handleCloseReg}
+        handleConfirmReg={handleConfirmReg}
+      />
+      {/* Success Snackbar */}
+      <Snackbar
+        open={successMessage}
+        autoHideDuration={4000} // Auto-hide after 4 seconds
+        onClose={handleCloseSuccessMessage}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseSuccessMessage}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          Data saved successfully!
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
