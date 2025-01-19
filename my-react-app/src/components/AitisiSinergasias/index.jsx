@@ -39,6 +39,13 @@ export default function AitisiSinergasias() {
   const [role, setRole] = useState("");
   const [loadingAuth, setLoadingAuth] = useState(true); // Track auth state loading
   const [loadingUserData, setLoadingUserData] = useState(true); // Track user data loading
+  //vars of application choices
+  const [typeOfWork, setTypeOfWork] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [duration, setDuration] = useState("");
+  const [childGenre, setChildGenre] = useState("");
+  const [childAge, setChildAge] = useState("");
+  const [host, setHost] = useState("");
 
   //nanny vars
   const location = useLocation();
@@ -54,6 +61,26 @@ export default function AitisiSinergasias() {
   const [nannyAge, setNannyAge] = useState("");
   const [nannyChildAges, setNannyChildAges] = useState("");
 
+  //change handlers
+
+  const handletypeOfWorkChange = (e) => {
+    setTypeOfWork(e.target.value);
+  };
+  const handleHostChange = (e) => {
+    setHost(e.target.value);
+  };
+  const handleDurationChange = (e) => {
+    setDuration(e.target.value);
+  };
+  const handleStartDateChange = (e) => {
+    setStartDate(e.target.value);
+  };
+  const handleChildAgeChange = (e) => {
+    setChildAge(e.target.value);
+  };
+  const handleChildGenreChange = (e) => {
+    setChildGenre(e.target.value);
+  };
   //----------------------------------------------------------------------------------------
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
@@ -164,6 +191,48 @@ export default function AitisiSinergasias() {
       console.error("Error fetching user data:", error);
     }
   };
+
+  const handleSaveOrSubmit = async (isSubmit) => {
+    const { childAge, typeOfWork, childGender, startDate, duration } = formData;
+    //Validate required fields
+    if (!childAge || !childGender || !startDate || !duration || typeOfWork) {
+      setError("Παρακαλώ συμπληρώστε όλα τα πεδία.");
+      return;
+    }
+    try {
+      const application = {
+        ...formData,
+        parentId: userId,
+        nannyId, // Include the nanny's ID
+        isSubmitted: isSubmit, // Set whether the application is submitted or just stored
+      };
+      console.log("Nanny ID:", nannyId);
+      console.log("Application:", application);
+      // Update parent's database
+      const parentRef = doc(FIREBASE_DB, "user", userId);
+      console.log("Parent Ref:", parentRef);
+      await updateDoc(parentRef, {
+        applications: arrayUnion(application),
+      });
+      if (isSubmit) {
+        // Update nanny's database
+        const nannyRef = doc(FIREBASE_DB, "user", nannyId);
+        console.log("Nanny Ref:", nannyRef);
+        await updateDoc(nannyRef, {
+          applications: arrayUnion(application),
+        });
+        setSuccess("Η αίτηση υποβλήθηκε με επιτυχία!");
+      } else {
+        setSuccess("Η αίτηση αποθηκεύτηκε με επιτυχία!");
+      }
+      setError("");
+      setTimeout(() => navigate("/profileParent"), 2000);
+    } catch (err) {
+      console.error("Error saving/submitting application:", err);
+      setError("Αποτυχία υποβολής της αίτησης. Δοκιμάστε ξανά.");
+    }
+  };
+
   return (
     <div>
       <Header />
@@ -237,126 +306,180 @@ export default function AitisiSinergasias() {
         </div>
         <div className="container">
           <h3 style={{ textAlign: "center" }}>Επιλογές Συνεργασίας</h3>
-          <div
-            className="d-flex align-items-center "
-            style={{ gap: "16px", marginBottom: "16px" }}
-          >
-            <FormControl
-              style={{ flexGrow: 2, minWidth: "320px" }}
-              fullWidth
-              variant="outlined"
-            >
-              {/* Label for the combobox */}
-              <label
-                htmlFor="typeOfWork"
-                className="form-label"
-                style={{
-                  fontSize: "16px",
-                  marginBottom: "8px",
-                  display: "block",
-                }}
-              >
-                Τύπος Απασχόλησης
-              </label>
-              {/* Combobox */}
-              <Select
-                id="typeOfWork"
-                //  value={typeOfWork} // Bind the current state to the Select value
-                // onChange={handletypeOfWorkChange} // Handle selection change
-                displayEmpty
-              >
-                {/* Dropdown options */}
-                <MenuItem value="Πλήρης">Πλήρης</MenuItem>
-                <MenuItem value="Μερική">Μερική</MenuItem>
-              </Select>
-            </FormControl>
-            {/* Combobox dynatotita filoksenias */}
-            <FormControl
-              style={{ flexGrow: 2, minWidth: "320px" }}
-              fullWidth
-              variant="outlined"
-            >
-              {/* Label for the combobox */}
-              <label
-                htmlFor="host"
-                className="form-label"
-                style={{
-                  fontSize: "16px",
-                  marginBottom: "8px",
-                  display: "block",
-                }}
-              >
-                Χώρος φύλαξης
-              </label>
-              {/* Combobox */}
-              <Select
-                id="host"
-                //value={host} // Bind the current state to the Select value
-                // onChange={handleHostChange} // Handle selection change
-                displayEmpty
-              >
-                {/* Dropdown options */}
-                <MenuItem value=""></MenuItem>
-                <MenuItem value="Οικεία Γονέα">Οικεία Γονέα</MenuItem>
-                <MenuItem value="Οικεία Νταντάς">Οικεία Νταντάς</MenuItem>
-              </Select>
-            </FormControl>
+          <div className="row mb-3">
+            {/* Τύπος Απασχόλησης */}
+            <div className="col-md-4">
+              <FormControl fullWidth>
+                <label
+                  htmlFor="typeOfWork"
+                  className="form-label"
+                  style={{
+                    fontSize: "16px",
+                    marginBottom: "8px",
+                  }}
+                >
+                  Τύπος Απασχόλησης
+                </label>
+                <Select
+                  id="typeOfWork"
+                  value={typeOfWork}
+                  onChange={handletypeOfWorkChange}
+                  displayEmpty
+                >
+                  <MenuItem value="Πλήρης">Πλήρης</MenuItem>
+                  <MenuItem value="Μερική">Μερική</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
 
-            {/* Combobox 2 */}
-            <FormControl
-              style={{ flexGrow: 4, minWidth: "250px" }}
-              fullWidth
-              variant="outlined"
-            >
-              {/* Label for the combobox */}
-              <label
-                htmlFor="cohabitants"
-                className="form-label"
-                style={{
-                  fontSize: "16px",
-                  marginBottom: "8px",
-                  display: "block",
-                }}
-              >
-                Διάρκεια Συνεργασίας
-              </label>
-              {/* Combobox */}
-              <Select
-                id="cohabitants"
-                //value={coHost}
-                // onChange={handleCoHostChange}
-                displayEmpty
-                //  disabled={host != "ΝΑΙ"}
-              >
-                {/* Dropdown options */}
-                <MenuItem value="1 Μήνας">1 Μήνας</MenuItem>
-                <MenuItem value="3 Μήνες">3 Μήνες</MenuItem>
-                <MenuItem value="6 Μήνες">6 Μήνες</MenuItem>
-              </Select>
-            </FormControl>
+            {/* Χώρος φύλαξης */}
+            <div className="col-md-4">
+              <FormControl fullWidth>
+                <label
+                  htmlFor="host"
+                  className="form-label"
+                  style={{
+                    fontSize: "16px",
+                    marginBottom: "8px",
+                  }}
+                >
+                  Χώρος φύλαξης
+                </label>
+                <Select
+                  id="host"
+                  value={host}
+                  onChange={handleHostChange}
+                  displayEmpty
+                >
+                  <MenuItem value="Οικεία Γονέα">Οικεία Γονέα</MenuItem>
+                  <MenuItem value="Οικεία Νταντάς">Οικεία Νταντάς</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
+
+            {/* Διάρκεια Συνεργασίας */}
+            <div className="col-md-4">
+              <FormControl fullWidth>
+                <label
+                  htmlFor="cohabitants"
+                  className="form-label"
+                  style={{
+                    fontSize: "16px",
+                    marginBottom: "8px",
+                  }}
+                >
+                  Διάρκεια Συνεργασίας
+                </label>
+                <Select
+                  id="cohabitants"
+                  value={duration}
+                  onChange={handleDurationChange}
+                  displayEmpty
+                >
+                  <MenuItem value="1 Μήνας">1 Μήνας</MenuItem>
+                  <MenuItem value="3 Μήνες">3 Μήνες</MenuItem>
+                  <MenuItem value="6 Μήνες">6 Μήνες</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
           </div>
-          <FormControl
-            style={{ flexGrow: 4, minWidth: "120px" }}
-            fullWidth
-            variant="outlined"
+
+          {/* Second Row */}
+          <div className="row">
+            {/* Ημερομηνία Έναρξης */}
+            <div className="col-md-4">
+              <div className="form-group">
+                <label
+                  htmlFor="startDate"
+                  className="form-label"
+                  style={{
+                    fontSize: "16px",
+                  }}
+                >
+                  Ημερομηνία Έναρξης
+                </label>
+                <input
+                  type="date"
+                  name="startDate"
+                  value={startDate}
+                  onChange={handleStartDateChange}
+                  className="form-control"
+                />
+              </div>
+            </div>
+
+            {/* Ηλικία παιδιού */}
+            <div className="col-md-4">
+              <FormControl fullWidth>
+                <label
+                  htmlFor="childAge"
+                  className="form-label"
+                  style={{
+                    fontSize: "16px",
+                    marginBottom: "8px",
+                  }}
+                >
+                  Ηλικία παιδιού
+                </label>
+                <Select
+                  id="childAge"
+                  value={childAge}
+                  onChange={handleChildAgeChange}
+                  displayEmpty
+                >
+                  <MenuItem value="0-6 Μηνών">0-6 Μηνών</MenuItem>
+                  <MenuItem value="6-12 Μηνών">6-12 Μηνών</MenuItem>
+                  <MenuItem value="1-2,5 Έτη">1-2,5 Έτη</MenuItem>
+                  <MenuItem value="0-2,5 Έτη">0-2,5 Έτη</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
+
+            {/* Φύλο Παιδιού */}
+            <div className="col-md-4">
+              <FormControl fullWidth>
+                <label
+                  htmlFor="childGenre"
+                  className="form-label"
+                  style={{
+                    fontSize: "16px",
+                    marginBottom: "8px",
+                  }}
+                >
+                  Φύλο Παιδιού
+                </label>
+                <Select
+                  id="childGenre"
+                  value={childGenre}
+                  onChange={handleChildGenreChange}
+                  displayEmpty
+                >
+                  <MenuItem value="Αγόρι">Αγόρι</MenuItem>
+                  <MenuItem value="Κορίτσι">Κορίτσι</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
+          </div>
+        </div>
+        <div className="text-center my-4">
+          <button
+            className="btn btn-danger mx-2"
+            onClick={() => navigate("/profileParent")}
           >
-            <label
-              htmlFor="textBox"
-              className="form-label"
-              style={{ fontSize: "16px" }}
-            >
-              Πόλη Κατοικίας <span style={{ color: "red" }}>* </span>
-            </label>
-            <TextField
-              id="city"
-              variant="outlined"
-              //value={city}
-              // onChange={handleCityChange}
-              fullWidth
-              //  error={Boolean(tkError)} // Highlight input if there's an error
-              //   helperText={tkError} // Display error message below the input
-            />
-          </FormControl>
+            Ακύρωση
+          </button>
+          <button
+            className="btn btn-warning mx-2"
+            onClick={() => handleSaveOrSubmit(false)}
+          >
+            Αποθήκευση
+          </button>
+          <button
+            className="btn btn-success mx-2"
+            onClick={() => handleSaveOrSubmit(true)}
+          >
+            Υποβολή
+          </button>
         </div>
       </div>
       <Footer />
