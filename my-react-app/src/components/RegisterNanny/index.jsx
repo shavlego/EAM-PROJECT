@@ -64,7 +64,7 @@ export default function Register() {
             onChange={(e) => setEmail(e.target.value)}
           />
           <label>
-            Password: <span style={{ color: "red" }}>*</span>
+            Κωδικός: <span style={{ color: "red" }}>*</span>
           </label>
           <input
             type="password"
@@ -72,7 +72,7 @@ export default function Register() {
             onChange={(e) => setPassword(e.target.value)}
           />
           <label>
-            Repeat Password: <span style={{ color: "red" }}>*</span>
+            Επανάληψη Κωδικού: <span style={{ color: "red" }}>*</span>
           </label>
           <input
             type="password"
@@ -80,8 +80,8 @@ export default function Register() {
             onChange={(e) => setRepeatPassword(e.target.value)}
           />
         </div>
-        <button type="submit"> {loading ? "Creating user" : "Register"}</button>
-        <a href="/">Already have an Account?</a>
+        <button type="submit"> {loading ? "Creating user" : "Εγγραφή"}</button>
+        <a href="/">Έχω ήδη εγγραφεί</a>
       </form>
     </div>
   );

@@ -91,7 +91,7 @@ export default function LoginParent() {
           />
         </div>
         <div className="login-row">
-          <label>Password:</label>
+          <label>Κωδκός:</label>
           &nbsp;&nbsp;&nbsp;
           <input
             type="password"
@@ -106,8 +106,8 @@ export default function LoginParent() {
           </button>
         </div>
         <div className="links">
-          <a href="/registerParent">Create new user</a>
-          <a href="/">Forgot password</a>
+          <a href="/registerParent">Εγγραφή ως γονέας</a>
+          <a href="/">Ξέχασα τον κωδικό μου</a>
         </div>
       </form>
     </div>

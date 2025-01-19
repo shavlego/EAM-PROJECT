@@ -7,7 +7,7 @@ function Hero() {
   };
 
   const handleBecomeNannyClick = function () {
-    nav("/nannyInfo");
+    nav("/loginNanny");
   };
 
   return (
@@ -28,9 +28,10 @@ function Hero() {
         </div>
         <div className="col-md-6 ">
           <p className="fs-5">
-            Πρόκειται για κρατικό πρόγραμμα το οποίο επιδοτεί 100% γονείς που
-            επιθυμούν να μισθώσουν Νταντά για το παιδί τους. Επίσης προσφέρει
-            ευκαιρίες εργασίας σε όσους θέλουν να απασχοληθούν ως "Νταντά"
+            Μέσω της δράσης "Νταντάδες της Γειτονιάς" παρέχεται 100% επιδότηση
+            σε γονείς/κηδεμόνες που αναζητούν "νταντά" για την φύλαξη
+            νηπίων/βρεφών. Οι ενδιαφερόμενοι για απασχόληση ως "νταντά" έχουν
+            την δυνατότητα να δηλώσουν συμμετοχή στη δράση.
           </p>
           <div className="buttons d-flex  justify-content-center gap-2">
             {/* px-lg for larger screens px-md for medium screens and px-sm for small screens */}
@@ -48,7 +49,8 @@ function Hero() {
             </button>
           </div>
           <p className="text-muted mt-3">
-            Απαιτείται σύνδεση με κωδικούς taxisnet.
+            Για την Εγγραφή σας στο πρόγραμμα επιλέξτε το πλήκρτρο σύνδεση στο
+            πάνω δεξιά μέρος της οθόνης.
           </p>
         </div>
       </div>

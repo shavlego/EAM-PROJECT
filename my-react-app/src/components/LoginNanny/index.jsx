@@ -1,4 +1,5 @@
 import "./index.css";
+
 import { useEffect, useState } from "react";
 import {
   onAuthStateChanged,
@@ -15,6 +16,7 @@ export default function LoginNanny() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [authChecked, setAuthChecked] = useState(false); // State to track if auth is checked
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const navigate = useNavigate();
 
@@ -64,7 +66,7 @@ export default function LoginNanny() {
       if (currentUser) {
         // Wait for the user to be authenticated before checking the role
         setAuthChecked(true); // Mark auth as checked
-
+        setIsLoggedIn(true);
         // No navigation should happen here, because we are checking the role in handleLogin
       } else {
         setAuthChecked(true); // Ensure the auth check is completed even if no user is logged in
@@ -81,6 +83,7 @@ export default function LoginNanny() {
 
   return (
     <div className="login">
+      {isLoggedIn && navigate("/nannyMenu")}
       <form onSubmit={handleLogin} className="login-container">
         <h2>Login</h2>
         {error && <p className="error-message">{error}</p>}{" "}
@@ -96,7 +99,7 @@ export default function LoginNanny() {
           />
         </div>
         <div className="login-row">
-          <label>Password:</label>
+          <label>Κωδικός:</label>
           &nbsp;&nbsp;&nbsp;
           <input
             type="password"
@@ -111,8 +114,8 @@ export default function LoginNanny() {
           </button>
         </div>
         <div className="links">
-          <a href="/registerNanny">Create new user</a>
-          <a href="/">Forgot password</a>
+          <a href="/registerNanny">Εγγραφή ως Νταντά</a>
+          <a href="/">Ξέχασα τον Κωδικό μου</a>
         </div>
       </form>
     </div>

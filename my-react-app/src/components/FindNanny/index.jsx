@@ -3,12 +3,21 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import { FIREBASE_DB } from "../../firebase";
 import Header from "../Header";
 import Footer from "../Footer";
-import "./index.css"
-import { Container, Row, Col, Card, Button, Form, Table } from "react-bootstrap";
+import "./index.css";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Button,
+  Form,
+  Table,
+  Breadcrumb,
+} from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import "./Breadcrumb";
 
 function FindNanny() {
-
   const navigate = useNavigate();
   const [nannies, setNannies] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -30,10 +39,9 @@ function FindNanny() {
     "Ρόδος",
   ];
 
-
   useEffect(() => {
     fetchNannies();
-  }, [region,employmentType,specialty]);
+  }, [region, employmentType, specialty]);
 
   const fetchNannies = async () => {
     setLoading(true);
@@ -45,7 +53,8 @@ function FindNanny() {
 
       if (region) q = query(q, where("region", "==", region));
       if (employmentType) q = query(q, where("type", "==", employmentType));
-      if (specialty !== "") q = query(q, where("expertise", "==", specialty === "true"));
+      if (specialty !== "")
+        q = query(q, where("expertise", "==", specialty === "true"));
 
       const querySnapshot = await getDocs(q);
       const fetchedNannies = querySnapshot.docs.map((doc) => ({
@@ -62,13 +71,14 @@ function FindNanny() {
     }
   };
 
-
-
   const renderAvailability = (availability) => {
     return availability?.map((row, rowIndex) => (
       <tr key={rowIndex}>
         {row.map((available, colIndex) => (
-          <td key={colIndex} className={available ? "bg-success" : "bg-light"}></td>
+          <td
+            key={colIndex}
+            className={available ? "bg-success" : "bg-light"}
+          ></td>
         ))}
       </tr>
     ));
@@ -76,7 +86,11 @@ function FindNanny() {
 
   const renderNannies = () => {
     if (nannies.length === 0) {
-      return <p className="text-center text-warning">Δεν βρέθηκαν νταντάδες με τα επιλεγμένα φίλτρα.</p>;
+      return (
+        <p className="text-center text-warning">
+          Δεν βρέθηκαν νταντάδες με τα επιλεγμένα φίλτρα.
+        </p>
+      );
     }
 
     return nannies.map((nanny) => (
@@ -95,7 +109,9 @@ function FindNanny() {
                       margin: "0 auto",
                     }}
                   ></div>
-                  <p className="mt-2">{nanny.expertise ? 'Επαγγελματίας' : 'Φοιτήτρια'}</p>
+                  <p className="mt-2">
+                    {nanny.expertise ? "Επαγγελματίας" : "Φοιτήτρια"}
+                  </p>
                   <p className="mt-2">{nanny.region}</p>
                 </div>
               </Col>
@@ -103,17 +119,18 @@ function FindNanny() {
                 <Card.Title>{nanny.fullName}</Card.Title>
                 <Card.Text>{nanny.bio}</Card.Text>
                 <p>
-                  <strong>Βαθμολογία:</strong> {nanny.rating?.toFixed(1) || "N/A"} ⭐
+                  <strong>Βαθμολογία:</strong>{" "}
+                  {nanny.rating?.toFixed(1) || "N/A"} ⭐
                 </p>
                 <p>
                   <strong>Τύπος Απασχόλησης:</strong> {nanny.type || "N/A"}
                 </p>
                 <Button
-                variant="primary"
-                onClick={() => navigate(`../scheduleAppointment/${nanny.id}`)}
-                  >
-                    Προγραμματισμός Ραντεβού
-              </Button>
+                  variant="primary"
+                  onClick={() => navigate(`../scheduleAppointment/${nanny.id}`)}
+                >
+                  Προγραμματισμός Ραντεβού
+                </Button>
                 <Button variant="success">Αίτηση Συνεργασίας</Button>
               </Col>
             </Row>
@@ -139,15 +156,16 @@ function FindNanny() {
     ));
   };
 
-
   return (
     <div>
       <Header />
+      <Breadcrumb />
       <Container>
         <h1 className="text-center my-4">Αναζήτηση "Νταντάδων"</h1>
         <p className="text-center">
-          Βρες την ιδανική νταντά για εσένα και το παιδί σου. Χρησιμοποίησε τα φίλτρα,
-          εντόπισε τον κατάλληλο επαγγελματία και ολοκλήρωσε την αίτηση συνεργασίας.
+          Βρες την ιδανική νταντά για εσένα και το παιδί σου. Χρησιμοποίησε τα
+          φίλτρα, εντόπισε τον κατάλληλο επαγγελματία και ολοκλήρωσε την αίτηση
+          συνεργασίας.
         </p>
         <Row className="mb-4">
           <Col md={3}>
