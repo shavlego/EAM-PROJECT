@@ -92,7 +92,46 @@ export default function NannyApplications() {
           αιτήσεις.
         </p>
       </div>
-      <div className="container"></div>
+      <div className="container">
+        <Container className="mt-4">
+          <h3 className="text-start">Αιτήσεις</h3>{" "}
+          {/* Header aligned to the left */}
+          {appArray.length > 0 ? (
+            <div className="card-container">
+              {appArray.map((application, index) => (
+                <div className="card mb-3" key={index}>
+                  <Card className="text-start">
+                    <Card.Body>
+                      <h5>Αίτηση #{index + 1}</h5>
+                      <p>
+                        <strong>Child Age:</strong> {application.childAge}
+                      </p>
+                      <p>
+                        <strong>Child Gender:</strong> {application.childGender}
+                      </p>
+                      <p>
+                        <strong>Duration:</strong> {application.duration}
+                      </p>
+                      <p>
+                        <strong>Start Date:</strong> {application.startDate}
+                      </p>
+                      <p>
+                        <strong>Type:</strong> {application.type}
+                      </p>
+                      <p>
+                        <strong>Ωράριο:</strong> {application.hours}
+                      </p>
+                    </Card.Body>
+                    <button>Αποδοχή</button>
+                  </Card>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-center">No applications found.</p>
+          )}
+        </Container>
+      </div>
       <Footer />
     </div>
   );

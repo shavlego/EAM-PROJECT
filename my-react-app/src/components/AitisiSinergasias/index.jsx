@@ -51,6 +51,7 @@ export default function AitisiSinergasias() {
   const [childGender, setChildGender] = useState("");
   const [childAge, setChildAge] = useState("");
   const [host, setHost] = useState("");
+  const [hours, setHours] = useState("");
 
   //nanny vars
   const location = useLocation();
@@ -85,6 +86,10 @@ export default function AitisiSinergasias() {
   };
   const handleChildGenderChange = (e) => {
     setChildGender(e.target.value);
+  };
+  const handleHoursChange = (e) => {
+    console.log("Test");
+    setHours(e.target.value);
   };
   //----------------------------------------------------------------------------------------
   useEffect(() => {
@@ -204,13 +209,21 @@ export default function AitisiSinergasias() {
       duration !== "" &&
       startDate !== "" &&
       childAge !== "" &&
+      hours !== "" &&
       childGender !== ""
     );
   };
 
   const handleSaveOrSubmit = async (isSubmit) => {
     //Validate required fields
-    if (!childAge || !childGender || !startDate || !duration || !typeOfWork) {
+    if (
+      !childAge ||
+      !childGender ||
+      !startDate ||
+      !duration ||
+      !typeOfWork ||
+      !hours
+    ) {
       setError("Παρακαλώ συμπληρώστε όλα τα πεδία.");
       return;
     }
@@ -221,6 +234,7 @@ export default function AitisiSinergasias() {
         type: typeOfWork,
         childAge: childAge,
         childGender: childGender,
+        hours: hours,
         parentId: userId,
         nannyId, // Include the nanny's ID
         isSubmitted: isSubmit, // Set whether the application is submitted or just stored
@@ -330,7 +344,7 @@ export default function AitisiSinergasias() {
           <h3 style={{ textAlign: "center" }}>Επιλογές Συνεργασίας</h3>
           <div className="row mb-3">
             {/* Τύπος Απασχόλησης */}
-            <div className="col-md-4">
+            <div className="col-md-3">
               <FormControl fullWidth>
                 <label
                   htmlFor="typeOfWork"
@@ -355,7 +369,7 @@ export default function AitisiSinergasias() {
             </div>
 
             {/* Χώρος φύλαξης */}
-            <div className="col-md-4">
+            <div className="col-md-3">
               <FormControl fullWidth>
                 <label
                   htmlFor="host"
@@ -380,7 +394,7 @@ export default function AitisiSinergasias() {
             </div>
 
             {/* Διάρκεια Συνεργασίας */}
-            <div className="col-md-4">
+            <div className="col-md-3">
               <FormControl fullWidth>
                 <label
                   htmlFor="cohabitants"
@@ -404,9 +418,69 @@ export default function AitisiSinergasias() {
                 </Select>
               </FormControl>
             </div>
+            {/* Ωράριο*/}
+            {typeOfWork == "Πλήρης" && (
+              <div className="col-md-3">
+                <FormControl fullWidth>
+                  <label
+                    htmlFor="wrario"
+                    className="form-label"
+                    style={{
+                      fontSize: "16px",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    Ωράριο<span style={{ color: "red" }}>* </span>
+                  </label>
+                  <Select
+                    id="wrario"
+                    value={hours}
+                    onChange={handleHoursChange}
+                    displayEmpty
+                  >
+                    <MenuItem value="6:00 - 14:00">6:00 - 14:00</MenuItem>
+                    <MenuItem value="7:00 - 15:00">7:00 - 15:00</MenuItem>
+                    <MenuItem value="8:00 - 16:00">8:00 - 16:00</MenuItem>
+                    <MenuItem value="9:00 - 17:00">9:00 - 17:00</MenuItem>
+                    <MenuItem value="10:00 - 18:00">10:00 - 18:00</MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
+            )}
+            {typeOfWork == "Μερική" && (
+              <div className="col-md-3">
+                <FormControl fullWidth>
+                  <label
+                    htmlFor="wrario"
+                    className="form-label"
+                    style={{
+                      fontSize: "16px",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    Ωράριο<span style={{ color: "red" }}>* </span>
+                  </label>
+                  <Select
+                    id="wrario"
+                    value={hours}
+                    onChange={handleHoursChange}
+                    displayEmpty
+                  >
+                    <MenuItem value="6:00 - 10:00">6:00 - 10:00</MenuItem>
+                    <MenuItem value="7:00 - 11:00">7:00 - 11:00</MenuItem>
+                    <MenuItem value="8:00 - 12:00">8:00 - 12:00</MenuItem>
+                    <MenuItem value="9:00 - 13:00">9:00 - 13:00</MenuItem>
+                    <MenuItem value="10:00 - 14:00">10:00 - 14:00</MenuItem>
+                    <MenuItem value="11:00 - 15:00">11:00 - 15:00</MenuItem>
+                    <MenuItem value="12:00 - 16:00">12:00 - 16:00</MenuItem>
+                    <MenuItem value="13:00 - 17:00">13:00 - 17:00</MenuItem>
+                    <MenuItem value="14:00 - 18:00">13:00 - 18:00</MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
+            )}
           </div>
 
-          {/* Second Row */}
           <div className="row">
             {/* Ημερομηνία Έναρξης */}
             <div className="col-md-4">

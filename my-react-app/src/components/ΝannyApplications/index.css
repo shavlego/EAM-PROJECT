@@ -9,3 +9,7 @@
   /* flex-direction: column; */
   justify-content: space-between;
 }
+
+.container {
+  text-align: left;
+}
