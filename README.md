@@ -1,6 +1,10 @@
 # EAM-PROJECT
 EAM PROJECT (2024_2025)
 
+Κιοσές Χαράλαμπος - ΑΜ 1115201100059
+Mnatobishvili Shavlego - ΑΜ 1115201200113
+Χρονέας Ανδρέας – ΑΜ 1115202100217
+
 How to Setup Your Environment:
 
 	1: Install Node.js from https://nodejs.org/en
