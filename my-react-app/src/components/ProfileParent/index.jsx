@@ -233,8 +233,6 @@ export default function ParentProfile() {
               </div>
             </form>
           </div>
-
-          {/* 4th Column: About Me, Buttons */}
           <div className="col-md-3">
             <div className="form-group mb-3">
               <label>About Me (Bio):</label>
@@ -257,6 +255,7 @@ export default function ParentProfile() {
               <button
                 type="submit"
                 className="btn btn-success"
+                onClick={handleFormSubmit}
                 disabled={loading}
               >
                 {loading ? "Επεξεργασία.." : "Αποθήκευση"}

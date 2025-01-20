@@ -129,6 +129,7 @@ export default function NannyApplications() {
           "Application with the specified nannyId not found.",
           userId
         );
+        navigate("/nannyMenu");
         return;
       }
 

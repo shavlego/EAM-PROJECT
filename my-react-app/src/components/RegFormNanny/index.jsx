@@ -607,6 +607,9 @@ export default function RegFormNanny() {
     if (!genisi) {
       isValid = false;
     }
+    if (!sex) {
+      isValid = false;
+    }
 
     return isValid;
   };
@@ -674,8 +677,15 @@ export default function RegFormNanny() {
     if (!typeOfWork.trim()) {
       isValid = false;
     }
+    if (!childAges.trim()) {
+      isValid = false;
+    }
+
+    if (!host.trim()) {
+      isValid = false;
+    }
     //if the user selects his address then he must check the cohost field
-    if (host == "NAI") {
+    if (host == "ΝΑΙ") {
       if (coHost == "") {
         isValid = false;
       }
@@ -719,7 +729,7 @@ export default function RegFormNanny() {
   return (
     <div>
       <Header />
-      <h1>Αίτηση Εγγραφής ως υποψήδια Ννταντά</h1>
+      <h1>Αίτηση Εγγραφής ως υποψήφια Ννταντά</h1>
       <h6 className="container">
         Για την ολοκλήρωση της αίτησης σας θα πρέπει να συμπληρώσετε όλα τα
         πεδία με ένδειξη <span style={{ color: "red" }}>* </span>και να
@@ -868,7 +878,7 @@ export default function RegFormNanny() {
                         className="form-label"
                         style={{ fontSize: "16px", marginBottom: "8px" }}
                       >
-                        Φύλο
+                        Φύλο <span style={{ color: "red" }}>*</span>
                       </label>
                       <Select
                         id="sex"
@@ -1080,6 +1090,7 @@ export default function RegFormNanny() {
                         }}
                       >
                         Τύπος Απασχόλησης Πλήρης/Μερική
+                        <span style={{ color: "red" }}>* </span>
                       </label>
                       {/* Combobox */}
                       <Select
@@ -1110,6 +1121,7 @@ export default function RegFormNanny() {
                         }}
                       >
                         Δυνατότητα Φιλοξενίας στην οικία μου
+                        <span style={{ color: "red" }}>* </span>
                       </label>
                       {/* Combobox */}
                       <Select
@@ -1178,6 +1190,7 @@ export default function RegFormNanny() {
                         }}
                       >
                         Ηλικίες παιδιών που δύναται να φροντίσει:
+                        <span style={{ color: "red" }}>* </span>
                       </label>
                       {/* Combobox */}
                       <Select
