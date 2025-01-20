@@ -84,43 +84,63 @@ function ParentApplication() {
       startDate,
       endDate,
     } = formData;
-
+  
     // Validate required fields
     if (!fullName || !region || !address || !phone || !email || !childAge || !childGender || !startDate || !endDate) {
       setError("Παρακαλώ συμπληρώστε όλα τα πεδία.");
       return;
     }
-
+  
     try {
       const application = {
         ...formData,
         parentId: user.uid,
         parentEmail: user.email,
-        nannyId, // Include the nanny's ID
+        nannyId,
         isSubmitted: isSubmit, // Set whether the application is submitted or just stored
       };
+  
       console.log("Nanny ID:", nannyId);
       console.log("Application:", application);
-
-      // Update parent's database
+  
       const parentRef = doc(FIREBASE_DB, "user", user.uid);
-      console.log("Parent Ref:", parentRef);
-      await updateDoc(parentRef, {
-        applications: arrayUnion(application),
-      });
-
+  
       if (isSubmit) {
-        // Update nanny's database
+        // 1. Remove the saved application (if it exists)
+        const parentDoc = await getDoc(parentRef);
+        if (parentDoc.exists()) {
+          const applications = parentDoc.data().applications || [];
+          const updatedApplications = applications.filter(
+            (app) => app.nannyId !== nannyId || app.isSubmitted
+          );
+  
+          // Update the parent's database with the filtered applications
+          await updateDoc(parentRef, {
+            applications: updatedApplications,
+          });
+        }
+  
+        // 2. Add the submitted application to the parent's database
+        await updateDoc(parentRef, {
+          applications: arrayUnion(application),
+        });
+  
+        // 3. Update the nanny's database
         const nannyRef = doc(FIREBASE_DB, "user", nannyId);
-        console.log("Nanny Ref:", nannyRef);
         await updateDoc(nannyRef, {
           applications: arrayUnion(application),
         });
+  
         setSuccess("Η αίτηση υποβλήθηκε με επιτυχία!");
       } else {
+        // Save the application without submitting it
+        await updateDoc(parentRef, {
+          applications: arrayUnion(application),
+        });
+  
         setSuccess("Η αίτηση αποθηκεύτηκε με επιτυχία!");
       }
-
+  
       setError("");
       setTimeout(() => navigate("/profileParent"), 2000);
     } catch (err) {
@@ -128,6 +148,7 @@ function ParentApplication() {
       setError("Αποτυχία υποβολής της αίτησης. Δοκιμάστε ξανά.");
     }
   };
+  
 
   return (
     <div>

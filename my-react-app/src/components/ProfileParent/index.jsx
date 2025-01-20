@@ -1,11 +1,13 @@
 import Header from "../Header";
 import Footer from "../Footer";
 import "./index.css";
+
 import { useEffect, useState } from "react";
 import { FIREBASE_AUTH, FIREBASE_DB } from "../../firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { collection, doc,setDoc , query, where, getDocs } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import Breadcrumb from "./Breadcrumb";
 
 export default function ParentProfile() {
   const [email, setEmail] = useState(null);
@@ -125,12 +127,8 @@ export default function ParentProfile() {
   return (
     <div className="profile-page">
       <Header />
+      <Breadcrumb />
       <h1>Δημιουργία Επεξεργασία Προφίλ - Γονέα/Κηδεμόνα</h1>
-
-      {/* Breadcrumb */}
-      <div className="breadcrumb">
-        <a href="/">Αρχική</a> &gt; <span>Προφίλ - Γονέα/Κηδεμόνα</span>
-      </div>
 
       {/* Error message */}
       {error && <div className="error-message">{error}</div>}
