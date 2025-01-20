@@ -32,7 +32,7 @@ export default function NannyMenu() {
     navigate("/CreateAggelia");
   };
   const handleNotificationsClick = () => {
-    navigate("/NannyNotifications");
+    navigate("/NannyNotification");
   };
 
   //----------------------------------------------------------------------------------------
@@ -346,7 +346,7 @@ export default function NannyMenu() {
               />
               <Card.Body>
                 <Card.Title style={{ fontWeight: "bold", color: "#FF8F00" }}>
-                  Ειδοποιήσεις - Υπογραγή Συμφωνητικού, Λήψη Voucher
+                  Ειδοποιήσεις - Υπογραφή Συμφωνητικού, Λήψη Voucher
                 </Card.Title>
                 {/* Notification Badge */}
                 {hasNotifications && (

@@ -15,6 +15,10 @@ function Header() {
   const [userRole, setUserRole] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login state locally
   const [userMail, setUserMail] = useState(false);
+  const [userData, setUserData] = useState([]); // For fetched data
+  const [hasNotifications, setHasNotifications] = useState(false);
+  const [NotificationCount, setNotificationCount] = useState(0);
+  const [appArray, setAppArray] = useState([]);
 
   // Listen to auth state changes
   useEffect(() => {
@@ -59,6 +63,51 @@ function Header() {
       }
     } catch (error) {
       console.error("Error fetching username:", error);
+    }
+  };
+
+  // Fetch user data after userId is set
+  useEffect(() => {
+    if (userId) fetchUserData();
+  }, [userId]);
+
+  // Fetch user data
+  const fetchUserData = async () => {
+    try {
+      const q = query(
+        collection(FIREBASE_DB, "user"),
+        where("userId", "==", userId)
+      );
+      const querySnapshot = await getDocs(q);
+      const users = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setUserData(users);
+      //If user data exists, populate the form fields
+      if (users.length > 0) {
+        const user = users[0]; // Assuming there's only one document per user
+        //need to check if there are any notifications
+        console.log("user id ", userId);
+        console.log();
+        setAppArray(user.applications || []); //get array of notifications
+        if (user.role == false) {
+          setHasNotifications(user.applications.length > 0);
+          setNotificationCount(user.applications.length);
+        } else {
+          const approvedApplications = user.applications.filter(
+            (app) => app.approved === true
+          );
+          setHasNotifications(approvedApplications.length > 0);
+          setNotificationCount(approvedApplications.length);
+        }
+
+        //-------------------------------------------------------
+
+        //setExpertise(user.expertise || "");
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
     }
   };
 
@@ -210,6 +259,15 @@ function Header() {
                 aria-expanded="false"
               >
                 {userName ? userName : email}
+
+                {hasNotifications && (
+                  <span
+                    className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                    style={{ fontSize: "0.75rem" }}
+                  >
+                    {NotificationCount}
+                  </span>
+                )}
               </button>
               <ul className="dropdown-menu" aria-labelledby="userDropdown">
                 <li>
@@ -226,6 +284,32 @@ function Header() {
                     }}
                   >
                     Προφίλ
+                  </a>
+                </li>
+                <li>
+                  <a
+                    className="dropdown-item"
+                    href="#"
+                    onClick={() => {
+                      // Navigate based on user role
+                      if (userRole == false) {
+                        navigate("/NannyNotification");
+                      } else {
+                        navigate("/ParentNotification");
+                      }
+                    }}
+                  >
+                    <span>
+                      Ειδοποιήσεις{" "}
+                      {hasNotifications && (
+                        <span
+                          className="badge rounded-pill bg-danger ms-2"
+                          style={{ fontSize: "0.75rem" }}
+                        >
+                          {NotificationCount}
+                        </span>
+                      )}
+                    </span>
                   </a>
                 </li>
                 {userRole == false && (

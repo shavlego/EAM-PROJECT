@@ -1,45 +1,24 @@
 import Header from "../Header";
 import Footer from "../Footer";
+import Breadcrumb from "./Breadcrumb";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FIREBASE_AUTH, FIREBASE_DB } from "../../firebase";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import React from "react";
-import { Container, Row, Col, Card, Badge } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
-import Breadcrumb from "./Breadcrumb";
-import "./index.css";
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  setDoc,
-  doc,
-} from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
+import { Container, Row, Col, Card, Button } from "react-bootstrap";
+import { collection, query, where, getDocs } from "firebase/firestore";
 
 export default function NannyApplications() {
   const navigate = useNavigate();
   const [userId, setUserId] = useState(null);
   const [appArray, setAppArray] = useState([]);
   const [userData, setUserData] = useState([]); // For fetched data
-  const [hasNotifications, setHasNotifications] = useState(false);
 
-  const handleProfileClick = () => {
-    navigate("/profileNanny");
-  };
-  const handleAggeliaClick = () => {
-    navigate("/CreateAggelia");
-  };
-
-  //----------------------------------------------------------------------------------------
   // Track authentication
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
       if (user) {
         setUserId(user.uid);
-      } else {
-        //navigate("/loginNanny");
       }
     });
     return () => unsubscribe();
@@ -63,18 +42,47 @@ export default function NannyApplications() {
         ...doc.data(),
       }));
       setUserData(users);
-      //If user data exists, populate the form fields
-      if (users.length > 0) {
-        const user = users[0]; // Assuming there's only one document per user
-        //need to check if there are any notifications
-        setAppArray(user.applications || []); //get array of notifications
-        setHasNotifications(user.applications.length > 0);
-        //-------------------------------------------------------
 
-        //setExpertise(user.expertise || "");
+      // If user data exists, fetch parent details for applications
+      if (users.length > 0) {
+        const user = users[0];
+        const applications = user.applications || [];
+        const updatedApplications = await Promise.all(
+          applications.map(async (application) => {
+            const parentDetails = await fetchParentData(application.parentId);
+            return { ...application, parentDetails };
+          })
+        );
+        setAppArray(updatedApplications);
       }
     } catch (error) {
       console.error("Error fetching user data:", error);
+    }
+  };
+
+  // Fetch parent data
+  const fetchParentData = async (parentId) => {
+    try {
+      const q = query(
+        collection(FIREBASE_DB, "user"),
+        where("userId", "==", parentId)
+      );
+      const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        const parentDoc = querySnapshot.docs[0].data();
+        return {
+          parentFullName: parentDoc.fullName || "N/A",
+          parentPhone: parentDoc.phone || "N/A",
+          parentCellPhone: parentDoc.cellPhone || "N/A",
+          parentEmail: parentDoc.email || "N/A",
+          parentAddress: parentDoc.address || "N/A",
+          parentRegion: parentDoc.region || "N/A",
+        };
+      }
+      return null;
+    } catch (error) {
+      console.error("Error fetching parent data:", error);
+      return null;
     }
   };
 
@@ -88,45 +96,95 @@ export default function NannyApplications() {
         </h2>
         <p style={{ color: "#6c757d", fontSize: "1.1rem" }}>
           Σε αυτή τη σελίδα θα βρείτε τις αιτήσεις συνεργασίας που σας έχουν
-          στείλει οι γονείς. Μπορείτε να αοδεχτείτε ή να απορρίψετε τις
+          στείλει οι γονείς. Μπορείτε να αποδεχτείτε ή να απορρίψετε τις
           αιτήσεις.
         </p>
       </div>
+
       <div className="container">
         <Container className="mt-4">
-          <h3 className="text-start">Αιτήσεις</h3>{" "}
-          {/* Header aligned to the left */}
+          <h3 className="text-start">Αιτήσεις</h3>
           {appArray.length > 0 ? (
-            <div className="card-container">
+            <Row className="gy-4">
               {appArray.map((application, index) => (
-                <div className="card mb-3" key={index}>
-                  <Card className="text-start">
-                    <Card.Body>
-                      <h5>Αίτηση #{index + 1}</h5>
-                      <p>
-                        <strong>Child Age:</strong> {application.childAge}
-                      </p>
-                      <p>
-                        <strong>Child Gender:</strong> {application.childGender}
-                      </p>
-                      <p>
-                        <strong>Duration:</strong> {application.duration}
-                      </p>
-                      <p>
-                        <strong>Start Date:</strong> {application.startDate}
-                      </p>
-                      <p>
-                        <strong>Type:</strong> {application.type}
-                      </p>
-                      <p>
-                        <strong>Ωράριο:</strong> {application.hours}
-                      </p>
-                    </Card.Body>
-                    <button>Αποδοχή</button>
+                <Col md={12} key={index}>
+                  <Card className="shadow-sm p-3">
+                    <Row>
+                      {/* Left column: Application details */}
+                      <Col md={4}>
+                        <p style={{ fontSize: "20px", fontWeight: "bold" }}>
+                          Αίτηση #{index + 1}
+                        </p>
+                        <p>
+                          <strong>Child Age:</strong> {application.childAge}
+                        </p>
+                        <p>
+                          <strong>Child Gender:</strong>{" "}
+                          {application.childGender}
+                        </p>
+                        <p>
+                          <strong>Duration:</strong> {application.duration}
+                        </p>
+                        <p>
+                          <strong>Start Date:</strong> {application.startDate}
+                        </p>
+                        <p>
+                          <strong>Type:</strong> {application.type}
+                        </p>
+                        <p>
+                          <strong>Ωράριο:</strong> {application.hours}
+                        </p>
+                      </Col>
+
+                      {/* Right column: Parent details */}
+                      <Col md={4}>
+                        {application.parentDetails ? (
+                          <>
+                            <p style={{ fontSize: "20px", fontWeight: "bold" }}>
+                              Στοιχεία Γονέα
+                            </p>
+                            <p>
+                              <strong>Όνομα:</strong>{" "}
+                              {application.parentDetails.parentFullName}
+                            </p>
+                            <p>
+                              <strong>Τηλέφωνο:</strong>{" "}
+                              {application.parentDetails.parentPhone}
+                            </p>
+                            <p>
+                              <strong>Κινητό:</strong>{" "}
+                              {application.parentDetails.parentCellPhone}
+                            </p>
+                            <p>
+                              <strong>Email:</strong>{" "}
+                              {application.parentDetails.parentEmail}
+                            </p>
+                            <p>
+                              <strong>Διεύθυνση:</strong>{" "}
+                              {application.parentDetails.parentAddress}
+                            </p>
+                            <p>
+                              <strong>Πόλη:</strong>{" "}
+                              {application.parentDetails.parentRegion}
+                            </p>
+                          </>
+                        ) : (
+                          <p>Loading parent details...</p>
+                        )}
+                      </Col>
+                    </Row>
+
+                    {/* Buttons */}
+                    <div className="d-flex justify-content-end mt-3">
+                      <Button variant="success" className="me-2">
+                        Αποδοχή
+                      </Button>
+                      <Button variant="danger">Απόρριψη</Button>
+                    </div>
                   </Card>
-                </div>
+                </Col>
               ))}
-            </div>
+            </Row>
           ) : (
             <p className="text-center">No applications found.</p>
           )}
