@@ -49,4 +49,6 @@ How to Setup Your Environment:
 
   Για διευκόλυνση παραθέτουμε 10λεπτ βίντεο με τις δυνατότητες και την λειτουργία καθώς και κάποιες ελλείψεις (κάποια * που έλειπαν και έλεγχοι στο register νταντάς διορθώθηκαν).
   Μπορείτε να κατεβάσετε το βίντεο απο το https://we.tl/t-QRTHTJikaJ
+
+  git link: https://github.com/shavlego/EAM-PROJECT.git
   
