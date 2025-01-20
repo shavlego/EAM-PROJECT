@@ -244,7 +244,7 @@ function Header() {
                     <a
                       className="dropdown-item"
                       href="#"
-                      onClick={() => navigate("/")}
+                      onClick={() => navigate("/parentMenu")}
                     >
                       Μενού Γονέα
                     </a>

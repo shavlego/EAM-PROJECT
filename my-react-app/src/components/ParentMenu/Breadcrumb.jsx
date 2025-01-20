@@ -1,4 +1,4 @@
-import React from "react";
+
 
 function Breadcrumb() {
   return (
@@ -8,11 +8,8 @@ function Breadcrumb() {
           <li className="breadcrumb-item">
             <a href="/">Αρχική</a>
           </li>
-          <li className="breadcrumb-item">
-            <a href="/ParentMenu">Menu Γονέα </a>
-          </li>
           <li className="breadcrumb-item active" aria-current="page">
-            Αναζήτηση "Νταντάς"
+            Μενού Γονέα
           </li>
         </ol>
       </nav>

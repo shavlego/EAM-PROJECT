@@ -23,10 +23,13 @@ import ApplyForNanny from "./components/ApplyForNanny";
 import CreateAggelia from "./components/CreateAggelia";
 import NannyNotification from "./components/NannyNotification";
 import NannyApplications from "./components/ΝannyApplications";
+
+import ParentMenu from "./components/ParentMenu"
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AitisiSinergasias from "./components/AitisiSinergasias";
+import ParentApplications from "./components/ParentApplications";
 
 function App() {
   return (
@@ -51,8 +54,11 @@ function App() {
         <Route path="/findNanny" element={<FindNanny />} />
         <Route path="/Anouncements" element={<Anouncements />} />
         <Route path="/SandBox" element={<SandBox />} />
+        <Route path="/ParentApplications" element={<ParentApplications />} />
+
 
         <Route path="/NannyMenu" element={<NannyMenu />} />
+        <Route path="/ParentMenu" element={<ParentMenu />} />
         <Route path="/CreateAggelia" element={<CreateAggelia />} />
         <Route path="/AitisiSinergasias" element={<AitisiSinergasias />} />
         <Route path="/NannyNotification" element={<NannyNotification />} />
@@ -61,7 +67,10 @@ function App() {
           path="/scheduleAppointment/:nannyId"
           element={<ScheduleAppointment />}
         />
-        <Route path="/applyForNanny/:nannyId" element={<ApplyForNanny />} />
+        <Route
+          path="/applyForNanny/:nannyId"
+          element={<ApplyForNanny />}
+        />
         <Route path="/registerFormNanny" element={<RegFormNanny />} />
       </Routes>
     </Router>

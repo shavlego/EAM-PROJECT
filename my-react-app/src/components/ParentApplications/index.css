@@ -1,0 +1,140 @@
+/* General styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  h3 {
+    font-size: 22px;
+    margin-bottom: 15px;
+  }
+  
+  p {
+    margin: 0;
+    font-size: 16px;
+    color: #555;
+  }
+  
+  /* Card styles */
+  .card {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .card p {
+    margin-bottom: 8px;
+  }
+  
+  /* Section-specific styles */
+  .card.saved {
+    background-color: #e8dcf4; /* Light purple */
+  }
+  
+  .card.pending {
+    background-color: #d9d9d9; /* Light gray */
+  }
+  
+  .card.accepted {
+    background-color: #c2f4cb; /* Light green */
+  }
+  
+  /* Button styles */
+  button {
+    border: none;
+    border-radius: 5px;
+    padding: 8px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-left: 8px;
+    transition: background-color 0.3s ease;
+  }
+  
+  button.btn-success {
+    background-color: #28a745;
+    color: #fff;
+  }
+  
+  button.btn-success:hover {
+    background-color: #218838;
+  }
+  
+  button.btn-warning {
+    background-color: #ffc107;
+    color: #fff;
+  }
+  
+  button.btn-warning:hover {
+    background-color: #e0a800;
+  }
+  
+  button.btn-danger {
+    background-color: #dc3545;
+    color: #fff;
+  }
+  
+  button.btn-danger:hover {
+    background-color: #c82333;
+  }
+  
+  button.btn-info {
+    background-color: #17a2b8;
+    color: #fff;
+  }
+  
+  button.btn-info:hover {
+    background-color: #138496;
+  }
+  
+  button.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  button.btn-primary:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Footer styles */
+  footer {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  footer a {
+    color: #17a2b8;
+    text-decoration: none;
+  }
+  
+  footer a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .card {
+      flex-direction: column;
+    }
+  
+    button {
+      margin: 5px 0;
+    }
+  }
+  
