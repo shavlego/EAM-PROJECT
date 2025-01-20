@@ -125,16 +125,20 @@ function FindNanny() {
                   <strong>Τύπος Απασχόλησης:</strong> {nanny.type || "N/A"}
                 </p>
                 <Button
-                variant="primary"
-                onClick={() => navigate(`../scheduleAppointment/${nanny.id}`)}
-                  >
-                    Προγραμματισμός Ραντεβού
+                  variant="primary"
+                  onClick={() => navigate(`../scheduleAppointment/${nanny.id}`)}
+                >
+                  Προγραμματισμός Ραντεβού
                 </Button>
                 <Button
-                variant="success "
-                onClick={() => navigate(`../applyForNanny/${nanny.id}`)}
-                  >
-                    Αίτηση συνεργασίας
+                  variant="success "
+                  onClick={() =>
+                    navigate("../AitisiSinergasias", {
+                      state: { nannyId: nanny.id },
+                    })
+                  }
+                >
+                  Αίτηση συνεργασίας
                 </Button>
               </Col>
             </Row>

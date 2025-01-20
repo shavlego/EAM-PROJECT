@@ -1181,7 +1181,6 @@ export default function RegFormNanny() {
                         displayEmpty
                       >
                         {/* Dropdown options */}
-                        <MenuItem value=""></MenuItem>
                         <MenuItem value="0-6 Μηνών">0-6 Μηνών</MenuItem>
                         <MenuItem value="6-12 Μηνών">6-12 Μηνών</MenuItem>
                         <MenuItem value="1-2,5 Έτη">1-2,5 Έτη</MenuItem>
