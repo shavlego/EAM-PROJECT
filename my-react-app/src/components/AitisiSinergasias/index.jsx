@@ -288,7 +288,9 @@ export default function AitisiSinergasias() {
             {" "}
             {/* First Column */}
             <div className="summary-container ">
-              <Typography variant="h5">Βασσικά Στοιχεία Νταντάς:</Typography>
+              <Typography variant="h5" style={{ fontWeight: "bold" }}>
+                Βασικά Στοιχεία Νταντάς
+              </Typography>
               <div className="summary-item" style={{ textAlign: "left" }}>
                 <strong>Όνομα Νταντάς:</strong>{" "}
                 {nannyName || "Δεν συμπληρώθηκε"}
@@ -298,42 +300,44 @@ export default function AitisiSinergasias() {
                 {nannySurName || "Δεν συμπληρώθηκε"}
               </div>
               <div className="summary-item" style={{ textAlign: "left" }}>
-                <strong>Φύλο :</strong> {nannySex || "Δεν συμπληρώθηκε"}
+                <strong>Φύλο:</strong> {nannySex || "Δεν συμπληρώθηκε"}
               </div>
               <div className="summary-item" style={{ textAlign: "left" }}>
-                <strong>Ηλικία :</strong> {nannyAge || "Δεν συμπληρώθηκε"}
+                <strong>Ηλικία:</strong> {nannyAge || "Δεν συμπληρώθηκε"}
               </div>
               <div className="summary-item" style={{ textAlign: "left" }}>
-                <strong>Περιοχή Κατοικίας Νταντάς :</strong>{" "}
+                <strong>Περιοχή Κατοικίας Νταντάς:</strong>{" "}
                 {nannyPerioxi || "Δεν συμπληρώθηκε"}
               </div>
               <div className="summary-item" style={{ textAlign: "left" }}>
-                <strong>Πόλη κατοικίας Νταντάς </strong>{" "}
+                <strong>Πόλη κατοικίας Νταντάς: </strong>{" "}
                 {nannyCity || "Δεν συμπληρώθηκε"}
               </div>
             </div>
             {/* Second Column */}
             <div className="summary-container">
-              <Typography variant="h5">Επιλογές Εργασίας Νταντάς</Typography>
+              <Typography variant="h5" style={{ fontWeight: "bold" }}>
+                Επιλογές Εργασίας Νταντάς
+              </Typography>
               <div className="summary-item" style={{ textAlign: "left" }}>
-                <strong>Τύπος Απασχόλησης που επιθυμεί ο/η "Νταντά" :</strong>{" "}
+                <strong>Τύπος Απασχόλησης που επιθυμεί ο/η Νταντά :</strong>{" "}
                 {nannyTypeOfWork || "Δεν συμπληρώθηκε"}
               </div>
               <div className="summary-item" style={{ textAlign: "left" }}>
-                <strong>Επιλογή Φιλοξενίας στο χώρο του/της "Νταντάς":</strong>{" "}
+                <strong>Επιλογή Φιλοξενίας στο χώρο του/της Νταντάς:</strong>{" "}
                 {nannyHost || "Δεν συμπληρώθηκε"}
               </div>
               {nannyHost == "ΝΑΙ" && (
                 <div className="summary-item" style={{ textAlign: "left" }}>
                   <strong>
-                    Υπάρχουν συνοικούντες στο χώρο του/της "Νταντάς":
+                    Υπάρχουν συνοικούντες στο χώρο του/της Νταντάς:
                   </strong>{" "}
                   {nannyCoHost || "Δεν συμπληρώθηκε"}
                 </div>
               )}
               <div className="summary-item" style={{ textAlign: "left" }}>
                 <strong>
-                  Εύρος Ηλικίας βρεφών/νηπίων που επέλεξε ο/η Νταντά":
+                  Εύρος Ηλικίας βρεφών/νηπίων που επέλεξε ο/η Νταντά:
                 </strong>{" "}
                 {nannyChildAges || "Δεν συμπληρώθηκε"}
               </div>

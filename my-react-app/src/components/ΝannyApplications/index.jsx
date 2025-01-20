@@ -6,7 +6,18 @@ import { useEffect, useState } from "react";
 import { FIREBASE_AUTH, FIREBASE_DB } from "../../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  getDoc,
+  updateDoc,
+  arrayRemove,
+  arrayUnion,
+  doc,
+  setDoc,
+} from "firebase/firestore";
 
 export default function NannyApplications() {
   const navigate = useNavigate();
@@ -77,12 +88,68 @@ export default function NannyApplications() {
           parentEmail: parentDoc.email || "N/A",
           parentAddress: parentDoc.address || "N/A",
           parentRegion: parentDoc.region || "N/A",
+          parentId: parentId,
         };
       }
       return null;
     } catch (error) {
       console.error("Error fetching parent data:", error);
       return null;
+    }
+  };
+
+  //button handlers
+  const handleAcceptClick = async (index) => {
+    console.log(
+      "Need to delete the rest of the nanny applications and send data to parent with id ",
+      appArray[index].parentId
+    );
+
+    try {
+      // Step 1: Get the parent's user document
+      const parentId = appArray[index].parentId;
+      const userDocRef = doc(FIREBASE_DB, "user", parentId);
+      const userDocSnapshot = await getDoc(userDocRef);
+
+      if (!userDocSnapshot.exists()) {
+        console.log("User document not found.");
+        return;
+      }
+
+      const userData = userDocSnapshot.data();
+      const applications = userData.applications || [];
+
+      // Step 2: Find the specific application by nannyId
+      const targetApplication = applications.find(
+        (application) => application.nannyId === userId
+      );
+
+      if (!targetApplication) {
+        console.log(
+          "Application with the specified nannyId not found.",
+          userId
+        );
+        return;
+      }
+
+      // Step 3: Modify the application (set approved to true)
+      const updatedApplication = {
+        ...targetApplication,
+        approved: true,
+      };
+
+      // Step 4: Update Firestore (remove old app, add updated app)
+      await updateDoc(userDocRef, {
+        applications: arrayRemove(targetApplication),
+      });
+
+      await updateDoc(userDocRef, {
+        applications: arrayUnion(updatedApplication),
+      });
+
+      console.log("Application approval updated successfully.");
+    } catch (error) {
+      console.error("Error updating application approval:", error);
     }
   };
 
@@ -176,7 +243,11 @@ export default function NannyApplications() {
 
                     {/* Buttons */}
                     <div className="d-flex justify-content-end mt-3">
-                      <Button variant="success" className="me-2">
+                      <Button
+                        variant="success"
+                        className="me-2"
+                        onClick={() => handleAcceptClick(index)}
+                      >
                         Αποδοχή
                       </Button>
                       <Button variant="danger">Απόρριψη</Button>

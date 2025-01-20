@@ -620,6 +620,24 @@ export default function NannyProfile() {
                   />
                 </div>
               </div>
+              <div className="row">
+                <div>
+                  <label
+                    htmlFor="textBox"
+                    className="form-label"
+                    style={{ fontSize: "16px" }}
+                  >
+                    Επισύναψη Συστατικών Επιστολών
+                  </label>
+                  <input
+                    id="biografiko"
+                    type="file"
+                    className="form-control"
+                    //onChange={handleFileUploadFirstAid}
+                    style={{ marginBottom: "8px" }}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>

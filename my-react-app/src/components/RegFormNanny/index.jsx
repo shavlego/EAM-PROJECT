@@ -418,11 +418,17 @@ export default function RegFormNanny() {
 
   // Handle validation when the field loses focus
   const handleTilefwnoBlur = () => {
-    if (isValidNumber(tilefwno)) setTilefwnoError(""); // Update error state
+    if (isValidNumber(tilefwno) && tilefwno.length == 10)
+      setTilefwnoError(""); // Update error state
+    else if (tilefwno.length != 10)
+      setTilefwnoError("Πρέπει να συμπληρώσετε 10 ψηφία.");
   };
 
   const handleKinitoBlur = () => {
-    if (isValidNumber(kinito)) setKinitoError(""); // Update error state
+    if (isValidNumber(kinito) && kinito.length == 10)
+      setKinitoError(""); // Update error state
+    else if (kinito.length != 10)
+      setKinitoError("Πρέπει να συμπληρώσετε 10 ψηφία.");
   };
 
   const handleMailChange = (e) => {
@@ -1004,7 +1010,7 @@ export default function RegFormNanny() {
                       />
                     </FormControl>
                     <FormControl
-                      style={{ flexGrow: 2, minWidth: "280px" }}
+                      style={{ flexGrow: 2, minWidth: "380px" }}
                       fullWidth
                       variant="outlined"
                     >
@@ -1027,7 +1033,7 @@ export default function RegFormNanny() {
                       />
                     </FormControl>
                     <FormControl
-                      style={{ flexGrow: 2, minWidth: "280px" }}
+                      style={{ flexGrow: 2, minWidth: "340px" }}
                       fullWidth
                       variant="outlined"
                     >
@@ -1044,8 +1050,8 @@ export default function RegFormNanny() {
                         value={city}
                         onChange={handleCityChange}
                         fullWidth
-                        error={Boolean(tkError)} // Highlight input if there's an error
-                        helperText={tkError} // Display error message below the input
+                        error={Boolean(cityError)} // Highlight input if there's an error
+                        helperText={cityError} // Display error message below the input
                       />
                     </FormControl>
                   </div>
@@ -1668,7 +1674,6 @@ export default function RegFormNanny() {
                 Data saved successfully!
               </Alert>
             </Snackbar>
-            ;
           </Box>
         </Box>
       </div>
